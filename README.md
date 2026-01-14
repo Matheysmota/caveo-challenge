@@ -11,7 +11,7 @@ Bem-vindo ao repositório do **Caveo Flutter Challenge**. Este projeto é uma ap
 Toda a evolução técnica deste projeto é pautada em documentação e ADRs (Architecture Decision Records). Antes de codificar, leia:
 
 - [**Especificações Funcionais**](documents/functional-specs.md): Detalhamento das features (Splash, Feed, Offline).
-- [**ADR 002: Estrutura de Pastas**](documents/adrs/002-estrutura-de-pastas-padrao.md): Entenda o *Package by Layer*.
+- [**ADR 002: Estrutura de Pastas**](documents/adrs/002-estrutura-de-pastas-padrao.md): Entenda a modularização híbrida.
 - [**ADR 003: Governança de Bibliotecas**](documents/adrs/003-abstracao-e-governanca-bibliotecas.md): Regras estritas de *imports*.
 - [**ADR 005: CI/CD & Quality Gates**](documents/adrs/005-esteira-ci-cd.md): Como funciona nossa esteira de validação.
 
@@ -21,27 +21,46 @@ Toda a evolução técnica deste projeto é pautada em documentação e ADRs (Ar
 
 ## 🏗️ Arquitetura
 
-O projeto utiliza **Clean Architecture** organizada por camadas funcionais (*Package by Layer*), garantindo desacoplamento e testabilidade.
+O projeto adota uma **estrutura híbrida** que combina:
+- **Monorepo organizado:** Raiz limpa com `app/`, `packages/`, `documents/` e `scripts/`.
+- **Package by Feature interno:** Cada feature (`splash`, `product`) encapsula suas próprias camadas.
+- **Packages reutilizáveis:** `shared` e `design_system` são módulos independentes.
 
 ```
-lib/
-├── application/     # UseCases, DTOs
-├── domain/          # Entities, Repository Interfaces
-├── infrastructure/  # Repository Impl, Data Sources, Drivers
-├── presentation/    # Widgets, Pages, Controllers (Riverpod)
-└── shared/          # Bibliotecas, Utils, Design System
+/ (root)
+├── app/                      # App Shell (Projeto Flutter)
+│   └── lib/
+│       ├── main.dart         # Bootstrap
+│       ├── app/              # Configuração (Routes, Theme, Providers)
+│       └── features/         # Features isoladas
+│           ├── splash/
+│           └── product/
+│               ├── application/
+│               ├── domain/
+│               ├── infrastructure/
+│               └── presentation/
+│
+├── packages/                 # Módulos reutilizáveis
+│   ├── shared/               # Core, Utils, Library Exports
+│   └── design_system/        # Tokens, Componentes de UI
+│
+├── documents/                # Documentação e ADRs
+└── scripts/                  # Automação e CI
 ```
 
 ### Stack Tecnológica
 - **Linguagem:** Dart (SDK >=3.0.0)
-- **Framework:** Flutter (3.38.6 Stable)
-- **Gerência de Estado:** Riverpod `^3.1.0` (Providers manuais, sem code-gen)
+- **Framework:** Flutter 3.x (Stable)
+- **Gerência de Estado:** Riverpod (Providers manuais, sem code-gen)
+- **HTTP Client:** Dio (via abstração em `shared`)
+- **Navegação:** GoRouter
+
 ---
 
 ## 🚀 Como Rodar o Projeto
 
 ### Pré-requisitos
-- Flutter SDK 3.38.6 (Stable)
+- Flutter SDK 3.x (Stable)
 - Git
 
 ### Instalação
@@ -54,7 +73,7 @@ cd caveo-challenge
 
 2. Instale as dependências:
 ```bash
-flutter pub get
+cd app && flutter pub get
 ```
 
 3. Execute o projeto:
@@ -64,16 +83,16 @@ flutter run
 
 ---
 
-## ✅ Governança e Qualidade (Checklits)
+## ✅ Governança e Qualidade
 
 Este projeto possui scripts de *Compliance* que rodam no CI. Para garantir que seu código passe:
 
-1. **Imports:** Não importe pacotes externos diretamente na camada de domínio ou apresentação. Use os *exports* em `lib/shared/libraries/`.
+1. **Imports:** Não importe pacotes externos diretamente. Use os *exports* em `packages/shared/lib/libraries/`.
    - Verificar localmente: `./scripts/check_imports.sh`
 2. **Testes:** Todo código novo deve ter cobertura.
-   - Rodar testes: `flutter test --coverage`
+   - Rodar testes: `cd app && flutter test --coverage`
 3. **Lint:** Zero warnings permitidos.
-   - Verificar: `flutter analyze`
+   - Verificar: `cd app && flutter analyze`
 
 ---
 
