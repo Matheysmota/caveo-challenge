@@ -42,7 +42,9 @@
 **/android/local.properties
 **/android/**/generated/
 **/android/**/gradle/
-**/android/**/gradle.properties
+# gradle.properties é necessário para AndroidX - não ignorar o do projeto
+# **/android/**/gradle.properties
+!**/android/gradle.properties
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
