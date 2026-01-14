@@ -14,6 +14,22 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   - Props: `label`, `variant`, `color`, `maxLines`, `overflow`, `textAlign`
   - Default variant: `description` (14px Medium)
   - Widgetbook story with all variants showcase
+- 🔣 `DoriIcon` — Icon widget with restricted icon set
+  - Props: `icon`, `size`, `color`, `semanticLabel`
+  - Sizes based on spacing tokens: sm (16dp), md (24dp), lg (32dp)
+  - Built-in accessibility with semantic labels
+  - Widgetbook story with icon gallery
+- 🎯 `DoriIconData` — Enum of allowed icons
+  - search, close, lightMode, darkMode, arrowBack, error, refresh
+  - chevronRight, info, check, warning
+  - Each icon has default semantic label for accessibility
+- 🔘 `DoriIconButton` — Circular icon button
+  - Props: `icon`, `onPressed`, `size`, `backgroundColor`, `iconColor`, `semanticLabel`
+  - Sizes: sm (32dp total, 16dp icon), md (40dp total, 24dp icon)
+  - 8dp padding between icon and border
+  - Disabled state support with 0.5 opacity
+  - Built-in accessibility with semantic labels
+  - Widgetbook story with size variants and states
 
 ---
 
