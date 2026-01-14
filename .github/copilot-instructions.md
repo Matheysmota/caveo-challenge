@@ -63,8 +63,8 @@ O projeto segue uma **estrutura híbrida de monorepo**:
 - **Documentação:** Use `///` para Classes e Métodos públicos.
 - **Finalização:** Execute `dart fix --apply` ao final.
 
-## Validação Obrigatória Pré-Commit (CRÍTICO)
-**ANTES de realizar qualquer commit**, execute os seguintes comandos para garantir que a CI/CD passará:
+## Validação Obrigatória Antes de Finalizar Tarefas (CRÍTICO)
+**ANTES de informar ao usuário que a tarefa está concluída**, execute os seguintes comandos para garantir que a CI/CD passará:
 
 ```bash
 # 1. Formatação (da raiz do repositório)
@@ -80,7 +80,7 @@ cd app && flutter test && cd ..
 ./scripts/check_imports.sh
 ```
 
-**Se qualquer comando falhar, corrija antes de commitar.** Nunca assuma que o código está pronto sem validar localmente.
+**Se qualquer comando falhar, corrija os problemas antes de considerar a tarefa finalizada.** O desenvolvedor é responsável pelo commit — o Copilot apenas garante que o código está pronto para ser commitado.
 
 ## Regras de Testes (Baseado na ADR 008)
 - **Escopo:** Apenas Testes Unitários.
