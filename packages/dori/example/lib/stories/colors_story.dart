@@ -2,6 +2,8 @@ import 'package:dori/dori.dart';
 import 'package:flutter/material.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
+import '../helpers/color_extensions.dart';
+
 /// Story for visualizing the Dori color palette
 @widgetbook.UseCase(
   name: 'Color Palette',
@@ -124,16 +126,16 @@ class ColorPaletteShowcase extends StatelessWidget {
         Wrap(
           spacing: DoriSpacing.xs,
           runSpacing: DoriSpacing.xs,
-          children:
-              items.map((item) => _buildPantoneCard(item, colors)).toList(),
+          children: items
+              .map((item) => _buildPantoneCard(item, colors))
+              .toList(),
         ),
       ],
     );
   }
 
   Widget _buildPantoneCard(_ColorItem item, DoriColorScheme colors) {
-    final hexColor =
-        '#${item.color.toARGB32().toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}';
+    final hexColor = item.color.toHex();
 
     return Container(
       width: 100,

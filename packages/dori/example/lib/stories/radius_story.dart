@@ -41,28 +41,36 @@ class RadiusShowcase extends StatelessWidget {
       ),
     ];
 
-    return Container(
-      color: colors.surface.pure,
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(DoriSpacing.sm),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Border Radius',
-              style: DoriTypography.title5.copyWith(color: colors.content.one),
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: context.dori.spacing.xs),
+          child: Container(
+            color: colors.surface.pure,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Border Radius',
+                  style: DoriTypography.title5.copyWith(
+                    color: colors.content.one,
+                  ),
+                ),
+                SizedBox(height: DoriSpacing.xxxs),
+                Text(
+                  'Rounded corners scale',
+                  style: DoriTypography.caption.copyWith(
+                    color: colors.content.two,
+                  ),
+                ),
+                SizedBox(height: DoriSpacing.md),
+                ...radii.map((item) => _buildRadiusCard(item, colors)),
+                SizedBox(height: DoriSpacing.lg),
+              ],
             ),
-            SizedBox(height: DoriSpacing.xxxs),
-            Text(
-              'Rounded corners scale',
-              style: DoriTypography.caption.copyWith(color: colors.content.two),
-            ),
-            SizedBox(height: DoriSpacing.md),
-            ...radii.map((item) => _buildRadiusCard(item, colors)),
-            SizedBox(height: DoriSpacing.lg),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -105,9 +113,7 @@ class RadiusShowcase extends StatelessWidget {
             child: Center(
               child: Text(
                 '${item.value.toInt()}',
-                style: DoriTypography.title5.copyWith(
-                  color: Colors.white,
-                ),
+                style: DoriTypography.title5.copyWith(color: Colors.white),
               ),
             ),
           ),

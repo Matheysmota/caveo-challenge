@@ -30,26 +30,32 @@ class SpacingShowcase extends StatelessWidget {
       _SpacingItem('xl', DoriSpacing.xl, 'Large spaces'),
     ];
 
-    return Container(
-      color: colors.surface.pure,
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(DoriSpacing.sm),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Spacing Scale',
-              style: DoriTypography.title5.copyWith(color: colors.content.one),
-            ),
-            SizedBox(height: DoriSpacing.xxxs),
-            Text(
-              'Flat scale based on multiples of 4dp',
-              style: DoriTypography.caption.copyWith(color: colors.content.two),
-            ),
-            SizedBox(height: DoriSpacing.md),
-            ...spacings.map((item) => _buildSpacingCard(item, colors)),
-            SizedBox(height: DoriSpacing.lg),
-          ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: context.dori.spacing.xs),
+        child: Container(
+          color: colors.surface.pure,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Spacing Scale',
+                style: DoriTypography.title5.copyWith(
+                  color: colors.content.one,
+                ),
+              ),
+              SizedBox(height: DoriSpacing.xxxs),
+              Text(
+                'Flat scale based on multiples of 4dp',
+                style: DoriTypography.caption.copyWith(
+                  color: colors.content.two,
+                ),
+              ),
+              SizedBox(height: DoriSpacing.md),
+              ...spacings.map((item) => _buildSpacingCard(item, colors)),
+              SizedBox(height: DoriSpacing.lg),
+            ],
+          ),
         ),
       ),
     );

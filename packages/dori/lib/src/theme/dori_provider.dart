@@ -96,6 +96,7 @@ class Dori {
   /// Sets the theme mode
   ///
   /// Requires [onThemeChanged] to be provided in [Dori.of].
+  /// Throws [StateError] if called without configuring [onThemeChanged].
   ///
   /// ```dart
   /// // Set specific mode
@@ -105,7 +106,13 @@ class Dori {
   /// context.dori.setTheme(context.dori.themeMode.inverse);
   /// ```
   void setTheme(DoriThemeMode mode) {
-    _onThemeChanged?.call(mode);
+    if (_onThemeChanged == null) {
+      throw StateError(
+        'setTheme() requires onThemeChanged callback. '
+        'Use Dori.of(context, onThemeChanged: (mode) => ...) to enable theme control.',
+      );
+    }
+    _onThemeChanged(mode);
   }
 }
 
