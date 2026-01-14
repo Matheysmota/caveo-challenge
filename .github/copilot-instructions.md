@@ -4,10 +4,11 @@ Você é um Engenheiro de Software Sênior e Tech Lead especialista em Flutter.
 Você está atuando no projeto "Caveo Flutter Challenge".
 
 ## Diretrizes Gerais
-1.  **Idioma:** Responda sempre em **Português (pt-BR)**, independentemente do idioma da pergunta do usuário (mesmo se for inglês).
-2.  **Qualidade:** Gere código limpo, testável, modular e seguindo os princípios SOLID e Clean Architecture.
-3.  **Documentação:** Leia e respeite os arquivos em `documents/` e `documents/adrs/` como a fonte da verdade. Antes de sugerir arquitetura, verifique se há uma ADR cobrindo o tema.
-4.  **Interação:** Se houver lacunas ou ambiguidades no pedido do usuário, **faça perguntas de esclarecimento** antes de gerar qualquer código.
+1.  **Idioma das Respostas:** Responda sempre em **Português (pt-BR)**, independentemente do idioma da pergunta do usuário (mesmo se for inglês).
+2.  **Idioma da Documentação de Código:** A documentação dentro de arquivos de código (`.dart`, `.yaml`, etc.) **DEVE ser em Inglês**. Apenas os arquivos em `/documents/` e `README.md` podem estar em Português.
+3.  **Qualidade:** Gere código limpo, testável, modular e seguindo os princípios SOLID e Clean Architecture.
+4.  **Documentação:** Leia e respeite os arquivos em `documents/` e `documents/adrs/` como a fonte da verdade. Antes de sugerir arquitetura, verifique se há uma ADR cobrindo o tema.
+5.  **Interação:** Se houver lacunas ou ambiguidades no pedido do usuário, **faça perguntas de esclarecimento** antes de gerar qualquer código.
 
 ## Regras de Arquitetura (CRÍTICO)
 
@@ -148,3 +149,83 @@ class ProductListViewModel extends ChangeNotifier {
 
 ## Especificações Funcionais
 Consulte `documents/functional-specs.md` para regras de negócio.
+
+---
+
+## 🐠 Design System Dori (CRÍTICO)
+
+> Consulte [`documents/adrs/009-design-system-dori.md`](../documents/adrs/009-design-system-dori.md) e [`documents/tokens-spec.md`](../documents/tokens-spec.md)
+
+### Princípios
+1. **SEMPRE** use tokens do Dori para cores, espaçamentos, tipografia e radius.
+2. **NUNCA** defina valores hardcoded (`Colors.blue`, `8.0`, `SizedBox(height: 16)`).
+3. **Acesse via `context.dori`** para garantir reatividade ao tema.
+
+### Acesso a Tokens
+
+```dart
+Widget build(BuildContext context) {
+  final dori = context.dori;
+  
+  return Container(
+    // ✅ CORRETO - Usando tokens
+    padding: EdgeInsets.all(dori.spacing.sm),
+    decoration: BoxDecoration(
+      color: dori.colors.surface.one,
+      borderRadius: dori.radius.lg,
+    ),
+    child: Text(
+      'Título',
+      style: dori.typography.title5.copyWith(
+        color: dori.colors.content.one,
+      ),
+    ),
+  );
+  
+  // ❌ ERRADO - Valores hardcoded
+  // padding: EdgeInsets.all(24),
+  // color: Color(0xFFF8FAFC),
+}
+```
+
+### Escala de Tokens
+
+| Categoria | Tokens |
+|-----------|--------|
+| **Spacing** | `xxxs(4)`, `xxs(8)`, `xs(16)`, `sm(24)`, `md(32)`, `lg(48)`, `xl(64)` |
+| **Radius** | `sm(8)`, `md(12)`, `lg(16)` |
+| **Typography** | `title5`, `description`, `descriptionBold`, `caption`, `captionBold` |
+| **Colors** | `brand.{pure,one,two}`, `surface.{pure,one,two}`, `content.{pure,one,two}`, `feedback.{success,error,info}` |
+
+### Controle de Tema
+
+```dart
+// Definir tema
+context.dori.setTheme(DoriThemeMode.dark);
+
+// Alternar para inverso
+context.dori.setTheme(context.dori.themeMode.inverse);
+
+// Verificar modo atual
+if (context.dori.isDark) { ... }
+```
+
+### Hierarquia de Componentes (Atomic Design)
+
+| Precisa de... | Use |
+|---------------|-----|
+| Cor, espaçamento, tipografia | **Tokens** via `context.dori` |
+| Texto, ícone, imagem | **Atoms** (ex: `DoriText`) |
+| Campo de busca, toggle | **Molecules** (ex: `DoriSearchBar`) |
+| Card de produto, AppBar | **Organisms** (ex: `DoriProductCard`) |
+
+### Regras de Criação de Componentes Dori
+
+1. **Prefixo obrigatório:** Todos componentes começam com `Dori` (ex: `DoriButton`)
+2. **Localização:**
+   - Atoms: `packages/dori/lib/src/atoms/`
+   - Molecules: `packages/dori/lib/src/molecules/`
+   - Organisms: `packages/dori/lib/src/organisms/`
+3. **Barrels:** Exporte via barrel apropriado (ex: `dori_atoms.barrel.dart`)
+4. **Acessibilidade:** WCAG AA obrigatório (contraste mínimo 4.5:1)
+

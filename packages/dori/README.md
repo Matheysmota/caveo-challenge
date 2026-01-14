@@ -1,268 +1,533 @@
-# 🐠 Dori Design System
+# 🐠 Dori Design System# 🐠 Dori Design System
 
-> **D.O.R.I.** — Design Oriented Reusable Interface
 
-## Filosofia
 
-> **"We forget, it remembers."**  
-> (Nós esquecemos, ele lembra.)
+> **D.O.R.I.** — Design Oriented Reusable Interface> **D.O.R.I.** — Design Oriented Reusable Interface
 
-Assim como a personagem Dory do filme "Procurando Nemo" tem perda de memória recente, desenvolvedores frequentemente esquecem hex codes, paddings corretos e regras de acessibilidade. O Design System Dori existe como **memória persistente** — você não precisa decorar nada, apenas consultar.
 
----
 
-## 📦 Instalação
+## Filosofia## Filosofia
 
-No `pubspec.yaml` do seu projeto Flutter:
 
-```yaml
-dependencies:
-  dori:
-    path: ../packages/dori
-```
 
-Importe o barrel principal:
+> **"We forget, it remembers."**  > **"We forget, it remembers."**  
 
-```dart
-import 'package:dori/dori.dart';
-```
+> (Nós esquecemos, ele lembra.)> (Nós esquecemos, ele lembra.)
 
----
 
-## 🏗️ Arquitetura: Atomic Design
 
-O Dori segue o padrão **Atomic Design** de Brad Frost, adaptado para Flutter:
+Assim como a personagem Dory do filme "Procurando Nemo" tem perda de memória recente, desenvolvedores frequentemente esquecem hex codes, paddings corretos e regras de acessibilidade. O Design System Dori existe como **memória persistente** — você não precisa decorar nada, apenas consultar.Assim como a personagem Dory do filme "Procurando Nemo" tem perda de memória recente, desenvolvedores frequentemente esquecem hex codes, paddings corretos e regras de acessibilidade. O Design System Dori existe como **memória persistente** — você não precisa decorar nada, apenas consultar.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        ORGANISMS                            │
-│   Componentes autônomos e complexos com estado próprio      │
-│   Ex: DoriAppBar, DoriProductCard                           │
-├─────────────────────────────────────────────────────────────┤
-│                        MOLECULES                            │
-│   Combinações simples de atoms com uma função específica    │
-│   Ex: DoriSearchBar, DoriThemeToggle, DoriLoadingIndicator  │
-├─────────────────────────────────────────────────────────────┤
-│                          ATOMS                              │
-│   Elementos primitivos e indivisíveis                       │
-│   Ex: DoriText, DoriIcon, DoriImage, DoriBadge              │
-├─────────────────────────────────────────────────────────────┤
-│                         TOKENS                              │
-│   Valores fundamentais (não são widgets)                    │
-│   Ex: DoriColors, DoriTypography, DoriSpacing               │
-└─────────────────────────────────────────────────────────────┘
-```
 
-### Quando usar cada camada?
 
-| Precisa de... | Use |
+------
+
+
+
+## 📦 Instalação## 📦 Instalação
+
+
+
+No `pubspec.yaml` do seu projeto Flutter:No `pubspec.yaml` do seu projeto Flutter:
+
+
+
+```yaml```yaml
+
+dependencies:dependencies:
+
+  dori:  dori:
+
+    path: ../packages/dori    path: ../packages/dori
+
+``````
+
+
+
+Importe o barrel principal:Importe o barrel principal:
+
+
+
+```dart```dart
+
+import 'package:dori/dori.dart';import 'package:dori/dori.dart';
+
+``````
+
+
+
+------
+
+
+
+## 🏗️ Arquitetura: Atomic Design## 🏗️ Arquitetura: Atomic Design
+
+
+
+O Dori segue o padrão **Atomic Design** de Brad Frost, adaptado para Flutter:O Dori segue o padrão **Atomic Design** de Brad Frost, adaptado para Flutter:
+
+
+
+``````
+
+┌─────────────────────────────────────────────────────────────┐┌─────────────────────────────────────────────────────────────┐
+
+│                        ORGANISMS                            ││                        ORGANISMS                            │
+
+│   Componentes autônomos e complexos com estado próprio      ││   Componentes autônomos e complexos com estado próprio      │
+
+│   Ex: DoriAppBar, DoriProductCard                           ││   Ex: DoriAppBar, DoriProductCard                           │
+
+├─────────────────────────────────────────────────────────────┤├─────────────────────────────────────────────────────────────┤
+
+│                        MOLECULES                            ││                        MOLECULES                            │
+
+│   Combinações simples de atoms com uma função específica    ││   Combinações simples de atoms com uma função específica    │
+
+│   Ex: DoriSearchBar, DoriThemeToggle, DoriLoadingIndicator  ││   Ex: DoriSearchBar, DoriThemeToggle, DoriLoadingIndicator  │
+
+├─────────────────────────────────────────────────────────────┤├─────────────────────────────────────────────────────────────┤
+
+│                          ATOMS                              ││                          ATOMS                              │
+
+│   Elementos primitivos e indivisíveis                       ││   Elementos primitivos e indivisíveis                       │
+
+│   Ex: DoriText, DoriIcon, DoriImage, DoriBadge              ││   Ex: DoriText, DoriIcon, DoriImage, DoriBadge              │
+
+├─────────────────────────────────────────────────────────────┤├─────────────────────────────────────────────────────────────┤
+
+│                         TOKENS                              ││                         TOKENS                              │
+
+│   Valores fundamentais (não são widgets)                    ││   Valores fundamentais (não são widgets)                    │
+
+│   Ex: DoriColors, DoriTypography, DoriSpacing               ││   Ex: DoriColors, DoriTypography, DoriSpacing               │
+
+└─────────────────────────────────────────────────────────────┘└─────────────────────────────────────────────────────────────┘
+
+``````
+
+
+
+---### Quando usar cada camada?
+
+
+
+## 🎨 Tokens| Precisa de... | Use |
+
 |---------------|-----|
-| Uma cor, espaçamento ou valor de tipografia | **Tokens** |
+
+> 📖 **Especificação completa:** [`documents/tokens-spec.md`](../../documents/tokens-spec.md)| Uma cor, espaçamento ou valor de tipografia | **Tokens** |
+
 | Exibir texto, ícone ou imagem | **Atoms** |
-| Um campo de busca, toggle de tema | **Molecules** |
+
+### Acesso via Context| Um campo de busca, toggle de tema | **Molecules** |
+
 | Um card de produto completo, uma AppBar | **Organisms** |
 
----
-
-## 🎨 Tokens
-
-> 📖 **Especificação completa:** [`documents/tokens-spec.md`](../../documents/tokens-spec.md)
-
-### Acesso via Context
-
 ```dart
-Widget build(BuildContext context) {
-  final tokens = context.dori.tokens;
-  
+
+Widget build(BuildContext context) {---
+
+  final dori = context.dori;
+
+  ## 🎨 Tokens
+
   return Container(
-    padding: EdgeInsets.all(tokens.spacing.inset.sm),
+
+    padding: EdgeInsets.all(dori.spacing.sm),> 📖 **Especificação completa:** [`documents/tokens-spec.md`](../../documents/tokens-spec.md)
+
     decoration: BoxDecoration(
-      color: tokens.colors.surface.one,
-      borderRadius: tokens.radius.lg,
-    ),
-    child: Column(
-      children: [
-        SizedBox(height: tokens.spacing.stack.xxxs),
-        DoriText(
-          label: 'Produtos',
+
+      color: dori.colors.surface.one,### Acesso via Context
+
+      borderRadius: dori.radius.lg,
+
+    ),```dart
+
+    child: Column(Widget build(BuildContext context) {
+
+      children: [  final tokens = context.dori.tokens;
+
+        SizedBox(height: dori.spacing.xxxs),  
+
+        Text(  return Container(
+
+          'Produtos',    padding: EdgeInsets.all(tokens.spacing.inset.sm),
+
+          style: dori.typography.title5.copyWith(    decoration: BoxDecoration(
+
+            color: dori.colors.content.one,      color: tokens.colors.surface.one,
+
+          ),      borderRadius: tokens.radius.lg,
+
+        ),    ),
+
+      ],    child: Column(
+
+    ),      children: [
+
+  );        SizedBox(height: tokens.spacing.stack.xxxs),
+
+}        DoriText(
+
+```          label: 'Produtos',
+
           type: DoriTypography.title5,
-        ),
+
+### Cores        ),
+
       ],
-    ),
-  );
-}
-```
+
+```dart    ),
+
+// Brand (Identidade visual)  );
+
+dori.colors.brand.pure    // Cor pura da marca}
+
+dori.colors.brand.one     // Variação primária```
+
+dori.colors.brand.two     // Variação secundária
 
 ### Cores
 
-```dart
-// Brand (Identidade visual)
-tokens.colors.brand.pure    // Cor pura da marca
-tokens.colors.brand.one     // Variação primária
-tokens.colors.brand.two     // Variação secundária
-
 // Surface (Fundos)
-tokens.colors.surface.pure  // Máximo contraste (white/black)
-tokens.colors.surface.one   // Fundo de cards
-tokens.colors.surface.two   // Fundo secundário
 
-// Content (Textos)
-tokens.colors.content.pure  // Texto máximo contraste
-tokens.colors.content.one   // Texto primário (default)
+dori.colors.surface.pure  // Máximo contraste (white/black)```dart
+
+dori.colors.surface.one   // Fundo de cards// Brand (Identidade visual)
+
+dori.colors.surface.two   // Fundo secundáriotokens.colors.brand.pure    // Cor pura da marca
+
+tokens.colors.brand.one     // Variação primária
+
+// Content (Textos)tokens.colors.brand.two     // Variação secundária
+
+dori.colors.content.pure  // Texto máximo contraste
+
+dori.colors.content.one   // Texto primário (default)// Surface (Fundos)
+
+dori.colors.content.two   // Texto secundáriotokens.colors.surface.pure  // Máximo contraste (white/black)
+
+tokens.colors.surface.one   // Fundo de cards
+
+// Feedbacktokens.colors.surface.two   // Fundo secundário
+
+dori.colors.feedback.success
+
+dori.colors.feedback.error// Content (Textos)
+
+dori.colors.feedback.infotokens.colors.content.pure  // Texto máximo contraste
+
+```tokens.colors.content.one   // Texto primário (default)
+
 tokens.colors.content.two   // Texto secundário
 
+### Espaçamentos (Escala Flat)
+
 // Feedback
-tokens.colors.feedback.success
-tokens.colors.feedback.error
-tokens.colors.feedback.info
-```
+
+```darttokens.colors.feedback.success
+
+// Uso simples — mesmo token para qualquer direçãotokens.colors.feedback.error
+
+SizedBox(width: dori.spacing.xxs);   // horizontaltokens.colors.feedback.info
+
+SizedBox(height: dori.spacing.xs);   // vertical```
+
+EdgeInsets.all(dori.spacing.sm);     // padding
 
 ### Espaçamentos
 
-```dart
-// Horizontal (entre elementos lado a lado)
+// Escala:
+
+// xxxs (4dp) | xxs (8dp) | xs (16dp) | sm (24dp) | md (32dp) | lg (48dp) | xl (64dp)```dart
+
+```// Horizontal (entre elementos lado a lado)
+
 SizedBox(width: tokens.spacing.inline.xxs);
 
+### Tipografia
+
 // Vertical (entre elementos empilhados)
-SizedBox(height: tokens.spacing.stack.xs);
 
-// Padding interno
-EdgeInsets.all(tokens.spacing.inset.sm);
+```dartSizedBox(height: tokens.spacing.stack.xs);
 
-// Escala completa:
-// xxxs (4dp) | xxs (8dp) | xs (16dp) | sm (24dp) | md (32dp) | lg (48dp) | xl (64dp)
+// 5 variantes disponíveis
+
+dori.typography.title5          // 24px ExtraBold — Títulos// Padding interno
+
+dori.typography.description     // 14px Medium — Texto padrãoEdgeInsets.all(tokens.spacing.inset.sm);
+
+dori.typography.descriptionBold // 14px Bold — Texto com destaque
+
+dori.typography.caption         // 12px Medium — Texto pequeno// Escala completa:
+
+dori.typography.captionBold     // 12px Bold — Texto pequeno destaque// xxxs (4dp) | xxs (8dp) | xs (16dp) | sm (24dp) | md (32dp) | lg (48dp) | xl (64dp)
+
 ```
 
-### Bordas
+// Uso com cor
 
-```dart
-Container(
-  decoration: BoxDecoration(
-    borderRadius: tokens.radius.sm,   // 8dp
-    borderRadius: tokens.radius.md,   // 12dp
+Text(### Bordas
+
+  'Olá mundo',
+
+  style: dori.typography.description.copyWith(```dart
+
+    color: dori.colors.content.one,Container(
+
+  ),  decoration: BoxDecoration(
+
+);    borderRadius: tokens.radius.sm,   // 8dp
+
+```    borderRadius: tokens.radius.md,   // 12dp
+
     borderRadius: tokens.radius.lg,   // 16dp
-  ),
+
+### Border Radius  ),
+
 );
-```
 
----
+```dart```
 
-## ⚛️ Atoms
+Container(
 
-### DoriText
+  decoration: BoxDecoration(---
+
+    borderRadius: dori.radius.sm,   // 8dp  — Botões, inputs
+
+    borderRadius: dori.radius.md,   // 12dp — Cards pequenos## ⚛️ Atoms
+
+    borderRadius: dori.radius.lg,   // 16dp — Cards principais
+
+  ),### DoriText
+
+);
 
 ```dart
-// Uso básico (defaults: type=description, color=content.one)
-DoriText(label: 'Hello, World!');
+
+// Valor numérico// Uso básico (defaults: type=description, color=content.one)
+
+BorderRadius.circular(dori.radius.lgValue)DoriText(label: 'Hello, World!');
+
+```
 
 // Com customização
-DoriText(
+
+---DoriText(
+
   label: 'Produtos',                        // required
-  type: DoriTypography.title5,              // default: description
+
+## 🎭 Temas  type: DoriTypography.title5,              // default: description
+
   color: tokens.colors.content.one,         // default: content.one
-  maxLines: 2,                              // opcional
+
+O Dori suporta **Light Mode** e **Dark Mode**. Configure no `MaterialApp`:  maxLines: 2,                              // opcional
+
   overflow: TextOverflow.ellipsis,          // opcional
-);
 
-// Variantes de tipografia
-DoriText(label: 'Título', type: DoriTypography.title5);
-DoriText(label: 'Texto normal', type: DoriTypography.description);
-DoriText(label: 'Texto destaque', type: DoriTypography.descriptionBold);
-DoriText(label: 'Legenda', type: DoriTypography.caption);
+```dart);
+
+MaterialApp(
+
+  theme: DoriTheme.light,// Variantes de tipografia
+
+  darkTheme: DoriTheme.dark,DoriText(label: 'Título', type: DoriTypography.title5);
+
+  themeMode: ThemeMode.system,DoriText(label: 'Texto normal', type: DoriTypography.description);
+
+);DoriText(label: 'Texto destaque', type: DoriTypography.descriptionBold);
+
+```DoriText(label: 'Legenda', type: DoriTypography.caption);
+
 DoriText(label: 'Legenda destaque', type: DoriTypography.captionBold);
-```
 
-### DoriIcon
+### Controle de Tema```
 
-```dart
-DoriIcon(
+
+
+```dart### DoriIcon
+
+// Definir tema específico
+
+context.dori.setTheme(DoriThemeMode.dark);```dart
+
+context.dori.setTheme(DoriThemeMode.light);DoriIcon(
+
   icon: Icons.search,
-  size: DoriIconSize.md,
-  color: tokens.colors.content.two,
+
+// Alternar para o inverso  size: DoriIconSize.md,
+
+context.dori.setTheme(context.dori.themeMode.inverse);  color: tokens.colors.content.two,
+
 );
+
+// Verificações```
+
+context.dori.isDark    // bool
+
+context.dori.isLight   // bool### DoriImage
+
 ```
 
-### DoriImage
-
 ```dart
-DoriImage(
+
+### Integração com RiverpodDoriImage(
+
   url: 'https://example.com/product.jpg',
-  width: 200,
+
+Para habilitar `setTheme`, configure com callbacks:  width: 200,
+
   height: 300,
-  fit: BoxFit.cover,
-  borderRadius: DoriRadius.md,
-);
+
+```dart  fit: BoxFit.cover,
+
+// Crie um provider  borderRadius: DoriRadius.md,
+
+final themeModeProvider = StateProvider<DoriThemeMode>((ref) => DoriThemeMode.system););
+
 ```
 
-### DoriBadge
+// Configure no widget
 
-```dart
-DoriBadge(
-  text: 'NOVO',
-  variant: DoriBadgeVariant.primary,
+final dori = Dori.of(### DoriBadge
+
+  context,
+
+  onThemeChanged: (mode) => ref.read(themeModeProvider.notifier).state = mode,```dart
+
+  themeModeGetter: () => ref.read(themeModeProvider),DoriBadge(
+
+);  text: 'NOVO',
+
+```  variant: DoriBadgeVariant.primary,
+
 );
-```
 
----
+---```
 
-## 🧬 Molecules
 
-### DoriSearchBar
 
-```dart
+## ♿ Acessibilidade---
+
+
+
+O Dori foi projetado com acessibilidade em mente:## 🧬 Molecules
+
+
+
+- **Contraste WCAG AA**: Todas as combinações de cores atendem o mínimo de 4.5:1### DoriSearchBar
+
+- **Tipografia legível**: Tamanhos mínimos de 12px para garantir leitura
+
+- **Espaçamentos consistentes**: Touch targets adequados para motor impairment```dart
+
 DoriSearchBar(
-  onChanged: (query) => print('Buscando: $query'),
+
+---  onChanged: (query) => print('Buscando: $query'),
+
   onClear: () => print('Busca limpa'),
-  placeholder: 'Buscar produtos...',
+
+## 📁 Estrutura de Arquivos  placeholder: 'Buscar produtos...',
+
 );
-```
 
-### DoriThemeToggle
+``````
 
-```dart
-DoriThemeToggle(
-  isDarkMode: false,
-  onToggle: (isDark) => print('Dark mode: $isDark'),
-);
-```
+packages/dori/
 
-### DoriLoadingIndicator
+├── lib/### DoriThemeToggle
 
-```dart
-DoriLoadingIndicator(
-  size: DoriLoadingSize.md,
-  color: DoriColors.accent,
-);
-```
+│   ├── dori.dart                          # Barrel principal
 
-### DoriCategoryLabel
+│   └── src/```dart
 
-```dart
+│       ├── tokens/DoriThemeToggle(
+
+│       │   ├── dori_colors.dart           # Esquema de cores  isDarkMode: false,
+
+│       │   ├── dori_spacing.dart          # Escala de espaçamento  onToggle: (isDark) => print('Dark mode: $isDark'),
+
+│       │   ├── dori_radius.dart           # Border radius);
+
+│       │   ├── dori_typography.dart       # Variantes tipográficas```
+
+│       │   └── dori_tokens.barrel.dart    # Barrel de tokens
+
+│       ├── theme/### DoriLoadingIndicator
+
+│       │   ├── dori_theme.dart            # ThemeData light/dark
+
+│       │   ├── dori_theme_mode.dart       # Enum de modos```dart
+
+│       │   ├── dori_provider.dart         # Context extensionDoriLoadingIndicator(
+
+│       │   └── dori_theme.barrel.dart     # Barrel de theme  size: DoriLoadingSize.md,
+
+│       ├── atoms/                         # (futuro)  color: DoriColors.accent,
+
+│       ├── molecules/                     # (futuro));
+
+│       └── organisms/                     # (futuro)```
+
+├── pubspec.yaml
+
+├── CHANGELOG.md### DoriCategoryLabel
+
+└── README.md
+
+``````dart
+
 DoriCategoryLabel(
-  text: 'Electronics',
+
+---  text: 'Electronics',
+
   color: DoriColors.accent,
-);
+
+## 🚀 Widgetbook);
+
 ```
+
+Visualize os componentes no catálogo interativo:
 
 ---
 
-## 🦠 Organisms
+```bash
 
-### DoriProductCard
+cd app/widgetbook## 🦠 Organisms
 
-```dart
+flutter pub get
+
+dart run build_runner build --delete-conflicting-outputs### DoriProductCard
+
+flutter run -d chrome
+
+``````dart
+
 DoriProductCard(
-  imageUrl: 'https://example.com/product.jpg',
-  title: 'Wireless Headphones',
-  price: 299.90,
-  category: 'Electronics',
-  badge: 'NOVO',
-  size: DoriCardSize.large,  // ou .small
-  onTap: () => print('Card clicado!'),
-);
-```
 
-### DoriAppBar
+---  imageUrl: 'https://example.com/product.jpg',
+
+  title: 'Wireless Headphones',
+
+## 📚 Referências  price: 299.90,
+
+  category: 'Electronics',
+
+- [ADR 009 - Design System Dori](../../documents/adrs/009-design-system-dori.md)  badge: 'NOVO',
+
+- [Tokens Specification](../../documents/tokens-spec.md)  size: DoriCardSize.large,  // ou .small
+
+- [Atomic Design - Brad Frost](https://bradfrost.com/blog/post/atomic-web-design/)  onTap: () => print('Card clicado!'),
+
+);
+
+---```
+
+
+
+*Mantido pelo time de Design System — Caveo Flutter Challenge*### DoriAppBar
+
 
 ```dart
 DoriAppBar(
