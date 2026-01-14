@@ -110,34 +110,43 @@ class DoriIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final dori = context.dori;
     final effectiveSemanticLabel = semanticLabel ?? icon.semanticLabel;
-    final effectiveBackgroundColor =
-        backgroundColor ?? dori.colors.content.two.withValues(alpha: 0.12);
-
     final isDisabled = onPressed == null;
+
+    // Apply opacity to colors directly instead of wrapping the widget tree
+    // This preserves the InkWell ripple effect when enabled
+    final disabledAlpha = isDisabled ? 0.5 : 1.0;
+    final defaultBackgroundColor = dori.colors.content.two.withValues(
+      alpha: 0.12 * disabledAlpha,
+    );
+    final effectiveBackgroundColor = backgroundColor != null
+        ? backgroundColor!.withValues(
+            alpha: (backgroundColor!.a * disabledAlpha).clamp(0.0, 1.0),
+          )
+        : defaultBackgroundColor;
+    final effectiveIconColor = iconColor?.withValues(
+      alpha: (iconColor!.a * disabledAlpha).clamp(0.0, 1.0),
+    );
 
     return Semantics(
       label: effectiveSemanticLabel,
       button: true,
       enabled: !isDisabled,
-      child: Opacity(
-        opacity: isDisabled ? 0.5 : 1.0,
-        child: Material(
-          color: effectiveBackgroundColor,
-          shape: const CircleBorder(),
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: onPressed,
-            customBorder: const CircleBorder(),
-            child: SizedBox(
-              width: size.totalSize,
-              height: size.totalSize,
-              child: Center(
-                child: DoriIcon(
-                  icon: icon,
-                  size: size.iconSize,
-                  color: iconColor,
-                  semanticLabel: effectiveSemanticLabel,
-                ),
+      excludeSemantics: true,
+      child: Material(
+        color: effectiveBackgroundColor,
+        shape: const CircleBorder(),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onPressed,
+          customBorder: const CircleBorder(),
+          child: SizedBox(
+            width: size.totalSize,
+            height: size.totalSize,
+            child: Center(
+              child: DoriIcon(
+                icon: icon,
+                size: size.iconSize,
+                color: effectiveIconColor,
               ),
             ),
           ),

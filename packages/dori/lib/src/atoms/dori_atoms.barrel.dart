@@ -5,15 +5,18 @@
 ///
 /// ## Available Atoms
 ///
-/// - [DoriText] — Text with typography tokens
-/// - [DoriIcon] — Icon with restricted icon set
 /// - [DoriIconData] — Enum of allowed icons
+/// - [DoriIcon] — Icon with restricted icon set
 /// - [DoriIconButton] — Circular icon button
+/// - [DoriText] — Text with typography tokens
 ///
 /// {@category Atoms}
 library;
 
-export 'dori_icon.dart';
-export 'dori_icon_button.dart';
-export 'dori_icon_data.dart';
-export 'dori_text.dart';
+// Icon (ordered by dependency hierarchy)
+export 'icon/dori_icon_data.dart';
+export 'icon/dori_icon.dart';
+export 'icon_button/dori_icon_button.dart';
+
+// Text
+export 'text/dori_text.dart';
