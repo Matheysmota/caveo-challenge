@@ -17,10 +17,26 @@ import 'package:widgetbook_caveo/stories/radius_story.dart'
     as _widgetbook_caveo_stories_radius_story;
 import 'package:widgetbook_caveo/stories/spacing_story.dart'
     as _widgetbook_caveo_stories_spacing_story;
+import 'package:widgetbook_caveo/stories/text_story.dart'
+    as _widgetbook_caveo_stories_text_story;
 import 'package:widgetbook_caveo/stories/typography_story.dart'
     as _widgetbook_caveo_stories_typography_story;
 
 final directories = <_widgetbook.WidgetbookNode>[
+  _widgetbook.WidgetbookCategory(
+    name: 'Atoms',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'DoriTextShowcase',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Text Variants',
+            builder: _widgetbook_caveo_stories_text_story.buildDoriTextShowcase,
+          ),
+        ],
+      ),
+    ],
+  ),
   _widgetbook.WidgetbookCategory(
     name: 'Tokens',
     children: [
