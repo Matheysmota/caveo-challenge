@@ -120,7 +120,10 @@ class DoriIconButton extends StatelessWidget {
     );
     final effectiveBackgroundColor = backgroundColor != null
         ? backgroundColor!.withValues(
-            alpha: (backgroundColor!.a * disabledOpacityMultiplier).clamp(0.0, 1.0),
+            alpha: (backgroundColor!.a * disabledOpacityMultiplier).clamp(
+              0.0,
+              1.0,
+            ),
           )
         : defaultBackgroundColor;
     final effectiveIconColor = iconColor?.withValues(
