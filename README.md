@@ -33,17 +33,15 @@ lib/
 ```
 
 ### Stack Tecnológica
-- **Linguagem:** Dart
-- **Framework:** Flutter
-- **Gerência de Estado:** Riverpod (Providers manuais, sem code-gen)
-- **Padrões:** Repository Pattern, Command Pattern, Result Pattern.
-
+- **Linguagem:** Dart (SDK >=3.0.0)
+- **Framework:** Flutter (3.38.6 Stable)
+- **Gerência de Estado:** Riverpod `^3.1.0` (Providers manuais, sem code-gen)
 ---
 
 ## 🚀 Como Rodar o Projeto
 
 ### Pré-requisitos
-- Flutter SDK (Stable Channel)
+- Flutter SDK 3.38.6 (Stable)
 - Git
 
 ### Instalação
