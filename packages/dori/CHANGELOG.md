@@ -5,6 +5,18 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [Unreleased]
+
+### Adicionado
+
+#### Atoms
+- ⚛️ `DoriText` — Text widget with typography tokens
+  - Props: `label`, `variant`, `color`, `maxLines`, `overflow`, `textAlign`
+  - Default variant: `description` (14px Medium)
+  - Widgetbook story with all variants showcase
+
+---
+
 ## [0.1.0] - 2025-01
 
 ### Adicionado

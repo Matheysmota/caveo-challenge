@@ -162,6 +162,48 @@ flutter:
 
 ---
 
+## ⚛️ Atoms
+
+### DoriText
+
+Text widget with Dori typography tokens.
+
+```dart
+// Basic usage (defaults to description style)
+DoriText(label: 'Hello, World!')
+
+// With typography variant
+DoriText(
+  label: 'Products',
+  variant: DoriTypographyVariant.title5,
+)
+
+// With custom color
+DoriText(
+  label: 'Subtitle',
+  variant: DoriTypographyVariant.caption,
+  color: context.dori.colors.content.two,
+)
+
+// With overflow handling
+DoriText(
+  label: 'Very long text that might overflow...',
+  maxLines: 2,
+  overflow: TextOverflow.ellipsis,
+)
+```
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `label` | `String` | **required** | Text to display |
+| `variant` | `DoriTypographyVariant` | `description` | Typography style |
+| `color` | `Color?` | `null` | Text color |
+| `maxLines` | `int?` | `null` | Max lines |
+| `overflow` | `TextOverflow?` | `null` | Overflow behavior |
+| `textAlign` | `TextAlign?` | `null` | Text alignment |
+
+---
+
 ## 📚 Documentação
 
 - **ADR 009:** [Design System Dori — Arquitetura e Convenções](../../documents/adrs/009-design-system-dori.md)
@@ -176,6 +218,7 @@ flutter:
 packages/dori/
 ├── lib/
 │   ├── src/
+│   │   ├── atoms/        # DoriText, DoriIcon, DoriBadge, DoriButton
 │   │   ├── tokens/       # Colors, Spacing, Radius, Typography
 │   │   └── theme/        # DoriTheme, DoriProvider
 │   └── dori.dart         # Barrel principal
