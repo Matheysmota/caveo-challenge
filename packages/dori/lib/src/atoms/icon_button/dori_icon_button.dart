@@ -118,17 +118,17 @@ class DoriIconButton extends StatelessWidget {
     final defaultBackgroundColor = dori.colors.content.two.withValues(
       alpha: 0.12 * disabledOpacityMultiplier,
     );
-    final effectiveBackgroundColor = backgroundColor != null
-        ? backgroundColor!.withValues(
-            alpha: (backgroundColor!.a * disabledOpacityMultiplier).clamp(
-              0.0,
-              1.0,
-            ),
+    final bgColor = backgroundColor;
+    final effectiveBackgroundColor = bgColor != null
+        ? bgColor.withValues(
+            alpha: (bgColor.a * disabledOpacityMultiplier).clamp(0.0, 1.0),
           )
         : defaultBackgroundColor;
-    final effectiveIconColor = iconColor?.withValues(
-      alpha: (iconColor!.a * disabledOpacityMultiplier).clamp(0.0, 1.0),
-    );
+
+    final iColor = iconColor;
+    final effectiveIconColor = iColor?.withValues(
+            alpha: (iColor.a * disabledOpacityMultiplier).clamp(0.0, 1.0),
+          );
 
     return Semantics(
       label: effectiveSemanticLabel,
