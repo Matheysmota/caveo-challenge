@@ -44,7 +44,7 @@ Cada feature (`splash`, `product`) seria um package separado em `/packages/featu
 Combinar o melhor das abordagens:
 *   **App Shell** em `/app/` — projeto Flutter que orquestra o app.
 *   **Features internas** em `/app/lib/features/` — cada feature encapsula suas camadas (Clean Architecture vertical).
-*   **Packages externos** em `/packages/` — apenas código genuinamente cross-cutting (`shared`, `design_system`).
+*   **Packages externos** em `/packages/` — apenas código genuinamente cross-cutting (`shared`, `dori`).
 
 ## Decisão
 
@@ -80,12 +80,12 @@ Adotamos a **Estrutura Híbrida (Opção 3)**, que respeita a essência do requi
 │   │   │   ├── utils/            # Utilitários (formatters, extensions)
 │   │   │   └── shared.dart       # Barrel file
 │   │   └── pubspec.yaml
-│   └── design_system/            # Biblioteca de UI
+│   └── dori/                     # 🐠 Design System Dori
 │       ├── lib/
 │       │   ├── tokens/           # Cores, tipografia, espaçamentos
 │       │   ├── atoms/            # Widgets primitivos
 │       │   ├── molecules/        # Widgets compostos
-│       │   └── design_system.dart
+│       │   └── dori.dart
 │       └── pubspec.yaml
 │
 ├── documents/                    # Documentação e ADRs
@@ -103,7 +103,7 @@ Adotamos a **Estrutura Híbrida (Opção 3)**, que respeita a essência do requi
 | `/app/lib/app/` | Configurações globais do app (rotas, tema, DI bootstrap). Não é "core" exportável. |
 | `/app/lib/features/` | Cada feature é autocontida com suas camadas. Facilita navegação e ownership. |
 | `/packages/shared/` | Código agnóstico de feature: Result, Command, exports de libs. Pode ser usado em outros apps. |
-| `/packages/design_system/` | UI agnóstica de lógica. Tokens e componentes reutilizáveis. |
+| `/packages/dori/` | 🐠 Design System Dori. UI agnóstica de lógica. Tokens e componentes reutilizáveis. |
 
 ### Regras de Dependência
 
@@ -122,22 +122,21 @@ Adotamos a **Estrutura Híbrida (Opção 3)**, que respeita a essência do requi
 │                         ▼                              │
 │              ┌─────────────────────┐                   │
 │              │  packages/shared    │                   │
-│              │  packages/design_   │                   │
-│              │       system        │                   │
+│              │  packages/dori      │                   │
 │              └─────────────────────┘                   │
 └─────────────────────────────────────────────────────────┘
 ```
 
-*   **Features** dependem de `shared` e `design_system`.
+*   **Features** dependem de `shared` e `dori`.
 *   **Shared** não depende de nenhum outro package do projeto.
-*   **Design System** pode depender apenas de `shared` (para utils).
+*   **Dori** pode depender apenas de `shared` (para utils).
 *   **Features não podem depender de outras features** (isolamento).
 
 ## Consequências
 
 *   **Positivo:** Raiz do repositório limpa e profissional.
 *   **Positivo:** Features isoladas facilitam manutenção e testes.
-*   **Positivo:** `shared` e `design_system` são reutilizáveis em outros projetos.
+*   **Positivo:** `shared` e `dori` são reutilizáveis em outros projetos.
 *   **Positivo:** Respeita a essência do requisito (Clean Arch com camadas) sem ser literal.
 *   **Trade-off:** Requer gerenciamento de `pubspec.yaml` em múltiplos diretórios.
 *   **Mitigação:** Usamos `path` dependencies para desenvolvimento local, simplificando o workflow.

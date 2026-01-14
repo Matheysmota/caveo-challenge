@@ -31,8 +31,8 @@ jobs:
         working-directory: packages/shared
         run: flutter pub get
         
-      - name: Install Dependencies (design_system)
-        working-directory: packages/design_system
+      - name: Install Dependencies (dori)
+        working-directory: packages/dori
         run: flutter pub get
         
       - name: Install Dependencies (app)
@@ -50,7 +50,7 @@ jobs:
       - name: Flutter Analyze (Lint) - Packages
         run: |
           cd packages/shared && flutter analyze --fatal-infos --fatal-warnings
-          cd ../design_system && flutter analyze --fatal-infos --fatal-warnings
+          cd ../dori && flutter analyze --fatal-infos --fatal-warnings
         
       - name: Flutter Analyze (Lint) - App
         working-directory: app
@@ -59,7 +59,7 @@ jobs:
       - name: Run Tests - Packages
         run: |
           cd packages/shared && flutter test
-          cd ../design_system && flutter test
+          cd ../dori && flutter test
         
       - name: Run Tests & Coverage - App (ADR 008)
         working-directory: app

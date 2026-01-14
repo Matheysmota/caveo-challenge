@@ -2,6 +2,29 @@
 
 Este documento detalha o comportamento esperado das funcionalidades do aplicativo, servindo como referência para desenvolvimento e QA.
 
+---
+
+## Escopo do Aplicativo
+
+O aplicativo possui **3 telas principais**:
+
+```
+┌──────────────┐     ┌─────────────────┐     ┌──────────────────┐
+│    Splash    │ ──► │  Product List   │ ──► │ Product Details  │
+│   Screen     │     │  (Feed/Grid)    │     │    (Detalhes)    │
+└──────────────┘     └─────────────────┘     └──────────────────┘
+                            │
+                            ▼
+                     ┌─────────────────┐
+                     │  Error Screen   │
+                     │ (fallback only) │
+                     └─────────────────┘
+```
+
+**Nota:** O aplicativo **NÃO possui** Bottom Navigation Bar. A navegação é linear (Splash → Lista → Detalhes) com possibilidade de retorno.
+
+---
+
 ## 1. Splash Screen e Inicialização
 
 ### User Story
@@ -31,6 +54,82 @@ Este documento detalha o comportamento esperado das funcionalidades do aplicativ
 > **Como** usuário, na listagem de produtos,  
 > **Quero** navegar por uma lista infinita de itens e ser notificado de atualizações de forma não intrusiva,  
 > **Para** ter uma experiência fluida de consumo de conteúdo.
+
+### Layout: Masonry Grid
+
+A listagem utiliza um layout **Masonry (Pinterest-like)** com 2 colunas:
+
+```
+┌─────────────────────────────────────────┐
+│           [  DoriAppBar  ]              │
+│  "Produtos"    🔍 Search    🌙 Toggle   │
+├──────────────────┬──────────────────────┤
+│  ┌────────────┐  │  ┌────────────────┐  │
+│  │   Card     │  │  │     Card       │  │
+│  │   Small    │  │  │     Large      │  │
+│  │            │  │  │                │  │
+│  └────────────┘  │  │                │  │
+│  ┌────────────┐  │  └────────────────┘  │
+│  │   Card     │  │  ┌────────────────┐  │
+│  │   Large    │  │  │     Card       │  │
+│  │            │  │  │     Small      │  │
+│  │            │  │  └────────────────┘  │
+│  └────────────┘  │                      │
+└──────────────────┴──────────────────────┘
+```
+
+**Regras do Layout:**
+- **Colunas:** 2 (fixo)
+- **Espaçamento:** Definido por `DoriSpacing.md` (16dp)
+- **Cards:** Alternam entre tamanhos `large` e `small` para criar efeito visual dinâmico
+- **Implementação:** Utilizar `flutter_staggered_grid_view` ou equivalente
+
+### Componentes da AppBar (`DoriAppBar`)
+
+A AppBar contém 3 elementos principais:
+
+#### 2.1. Título "Produtos"
+- Exibido no estado padrão (quando busca não está expandida)
+- Tipografia: `DoriTypography.display`
+- Alinhamento: Leading (esquerda)
+
+#### 2.2. Busca Expandível (`DoriSearchBar`)
+
+**Estado Inicial (Colapsado):**
+- Apenas ícone de lupa visível na AppBar
+- Toque no ícone expande o campo de busca
+
+**Estado Expandido:**
+- O campo de busca **substitui completamente** o título "Produtos"
+- Animação suave de expansão (300ms, EaseInOut)
+- TextField com autofocus ativado
+- Placeholder: "Buscar produtos..."
+- Ícone de "X" para limpar/fechar a busca
+
+**Comportamento de Filtragem:**
+- Filtragem **client-side** (dados já carregados em memória)
+- Busca por: título do produto, descrição, categoria
+- Debounce de 300ms antes de aplicar filtro
+- Lista atualiza em tempo real conforme digitação
+
+**Regras:**
+- Se a busca estiver vazia e o usuário clicar no "X", o campo colapsa e o título "Produtos" reaparece
+- Se houver texto e o usuário clicar no "X", apenas o texto é limpo (campo permanece expandido)
+- Segundo clique no "X" (campo vazio) colapsa a busca
+
+#### 2.3. Toggle de Tema (`DoriThemeToggle`)
+
+**Posição:** Trailing (direita) da AppBar, sempre visível
+
+**Comportamento:**
+- Ícone de lua (🌙) no Light Mode
+- Ícone de sol (☀️) no Dark Mode
+- Toque alterna entre temas instantaneamente
+- Animação de rotação/transição no ícone (300ms)
+
+**Persistência:**
+- A preferência de tema é salva em cache local (`LocalCacheSource`)
+- Ao reabrir o app, o tema selecionado é restaurado
 
 ### Features e Comportamentos
 

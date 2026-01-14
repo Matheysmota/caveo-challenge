@@ -24,7 +24,7 @@ Toda a evolução técnica deste projeto é pautada em documentação e ADRs (Ar
 O projeto adota uma **estrutura híbrida** que combina:
 - **Monorepo organizado:** Raiz limpa com `app/`, `packages/`, `documents/` e `scripts/`.
 - **Package by Feature interno:** Cada feature (`splash`, `product`) encapsula suas próprias camadas.
-- **Packages reutilizáveis:** `shared` e `design_system` são módulos independentes.
+- **Packages reutilizáveis:** `shared` e `dori` (Design System) são módulos independentes.
 
 ```
 / (root)
@@ -42,11 +42,23 @@ O projeto adota uma **estrutura híbrida** que combina:
 │
 ├── packages/                 # Módulos reutilizáveis
 │   ├── shared/               # Core, Utils, Library Exports
-│   └── design_system/        # Tokens, Componentes de UI
+│   └── dori/                 # 🐠 Design System Dori
 │
 ├── documents/                # Documentação e ADRs
 └── scripts/                  # Automação e CI
 ```
+
+### 🐠 Design System Dori
+
+O projeto utiliza o **Dori** (D.O.R.I. — Design Oriented Reusable Interface), um Design System baseado em Atomic Design com foco em:
+
+- **Consistência Visual:** Tokens centralizados (cores, tipografia, espaçamentos)
+- **Acessibilidade:** Todos os componentes são acessíveis por padrão (WCAG 2.1 AA)
+- **Reutilização:** Componentes prontos para uso (Atoms, Molecules, Organisms)
+
+> *"We forget, it remembers."* — O desenvolvedor não precisa decorar padrões visuais, o Dori lembra por ele.
+
+📖 **Documentação completa:** [`packages/dori/README.md`](packages/dori/README.md)
 
 ### Stack Tecnológica
 - **Linguagem:** Dart (SDK >=3.0.0)

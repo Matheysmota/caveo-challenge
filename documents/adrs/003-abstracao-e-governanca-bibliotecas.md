@@ -54,7 +54,7 @@ Decidimos implementar uma política estrita de **Gerenciamento Centralizado de D
         *   `package:flutter/*` (Framework)
         *   `package:dart/*` (Linguagem)
         *   `package:shared/*` (Package compartilhado)
-        *   `package:design_system/*` (Módulo interno de componentes)
+        *   `package:dori/*` (Design System Dori)
         *   `package:caveo_challenge/*` (Imports internos do próprio app)
     *   Isso garante que módulos internos como o Design System possam ser consumidos livremente, enquanto dependências de terceiros (http, bloc, provider) sejam estritamente controladas.
 

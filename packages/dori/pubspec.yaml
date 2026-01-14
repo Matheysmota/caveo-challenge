@@ -1,0 +1,31 @@
+name: dori
+description: "🐠 Dori Design System - Design Oriented Reusable Interface"
+version: 0.0.1
+publish_to: 'none'
+
+environment:
+  sdk: ^3.10.7
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  # Fonts serão adicionadas quando implementarmos os tokens de tipografia
+  # fonts:
+  #   - family: PlusJakartaSans
+  #     fonts:
+  #       - asset: fonts/PlusJakartaSans-Medium.ttf
+  #         weight: 500
+  #       - asset: fonts/PlusJakartaSans-Bold.ttf
+  #         weight: 700
+  #       - asset: fonts/PlusJakartaSans-ExtraBold.ttf
+  #         weight: 800
+  #       - asset: fonts/PlusJakartaSans-Black.ttf
+  #         weight: 900
