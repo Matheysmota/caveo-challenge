@@ -40,7 +40,7 @@ Cada feature (`splash`, `product`) seria um package separado em `/packages/featu
 *   **Pros:** Máxima modularização, build times otimizados.
 *   **Cons:** Over-engineering para o escopo do challenge (2 telas), complexidade de setup.
 
-### 3. Estrutura Híbrida (Monorepo Pragmático) - **Opção Escolhida**
+### 3. Estrutura Híbrida (Monorepo Modularizado) - **Opção Escolhida**
 Combinar o melhor das abordagens:
 *   **App Shell** em `/app/` — projeto Flutter que orquestra o app.
 *   **Features internas** em `/app/lib/features/` — cada feature encapsula suas camadas (Clean Architecture vertical).

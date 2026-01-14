@@ -63,6 +63,25 @@ O projeto segue uma **estrutura híbrida de monorepo**:
 - **Documentação:** Use `///` para Classes e Métodos públicos.
 - **Finalização:** Execute `dart fix --apply` ao final.
 
+## Validação Obrigatória Pré-Commit (CRÍTICO)
+**ANTES de realizar qualquer commit**, execute os seguintes comandos para garantir que a CI/CD passará:
+
+```bash
+# 1. Formatação (da raiz do repositório)
+dart format .
+
+# 2. Análise estática
+cd app && flutter analyze && cd ..
+
+# 3. Testes
+cd app && flutter test && cd ..
+
+# 4. Governança de imports
+./scripts/check_imports.sh
+```
+
+**Se qualquer comando falhar, corrija antes de commitar.** Nunca assuma que o código está pronto sem validar localmente.
+
 ## Regras de Testes (Baseado na ADR 008)
 - **Escopo:** Apenas Testes Unitários.
 - **Stack:** `mocktail_export.dart`, Pattern AAA.

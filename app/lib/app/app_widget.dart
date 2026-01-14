@@ -12,9 +12,7 @@ class AppWidget extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const Scaffold(
-        body: Center(
-          child: Text('Caveo Flutter Challenge'),
-        ),
+        body: Center(child: Text('Caveo Flutter Challenge')),
       ),
     );
   }
