@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../theme/dori_theme.barrel.dart';
-import 'dori_icon.dart';
-import 'dori_icon_data.dart';
+import '../../theme/dori_theme.barrel.dart';
+import '../icon/dori_icon.dart';
+import '../icon/dori_icon_data.dart';
 
 /// Size variants for DoriIconButton.
 ///

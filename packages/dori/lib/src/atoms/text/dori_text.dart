@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../tokens/dori_typography.dart';
+import '../../tokens/dori_typography.dart';
 
 /// A text widget that uses Dori typography tokens.
 ///

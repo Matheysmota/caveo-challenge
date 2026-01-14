@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../tokens/dori_spacing.dart';
+import '../../tokens/dori_spacing.dart';
 import 'dori_icon_data.dart';
 
 /// Icon sizes based on Dori spacing tokens.
