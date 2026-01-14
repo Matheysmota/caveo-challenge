@@ -42,6 +42,13 @@ jobs:
         
       - name: Run Tests & Coverage (ADR 008)
         run: flutter test --coverage
+
+      - name: Check Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v3
+        with:
+          path: './coverage/lcov.info'
+          min_coverage: 80
+          exclude: '**/*.g.dart **/*.freezed.dart'
         
       - name: Build Android (Health Check)
         run: flutter build apk --debug --no-pub
