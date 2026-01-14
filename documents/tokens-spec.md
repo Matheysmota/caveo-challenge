@@ -22,47 +22,39 @@ Este documento serve como **fonte da verdade** para implementação dos tokens. 
 ### API Principal
 
 ```dart
-// Padrão Flutter
-final dori = Dori.of(context);
-
-// Syntax sugar (extension)
+// Via extension (recomendado)
 final dori = context.dori;
 
+// Via método estático
+final dori = Dori.of(context);
+
 // Acessando tokens
-final spacing = dori.tokens.spacing;
-final colors = dori.tokens.colors;
-final radius = dori.tokens.radius;
+final colors = dori.colors;
+final spacing = dori.spacing;
+final radius = dori.radius;
+final typography = dori.typography;
 
 // Verificando tema atual
-final isDark = dori.brightness == Brightness.dark;
+final isDark = dori.isDark;
 ```
 
 ### Exemplo Completo
 
 ```dart
 Widget build(BuildContext context) {
-  final tokens = context.dori.tokens;
-  
+  final dori = context.dori;
+
   return Container(
-    padding: EdgeInsets.all(tokens.spacing.inset.sm),
+    padding: EdgeInsets.all(dori.spacing.sm),
     decoration: BoxDecoration(
-      color: tokens.colors.surface.one,
-      borderRadius: tokens.radius.lg,
+      color: dori.colors.surface.one,
+      borderRadius: dori.radius.lg,
     ),
-    child: Column(
-      children: [
-        SizedBox(height: tokens.spacing.stack.xxxs),
-        DoriText(
-          label: 'Produtos',
-          type: DoriTypography.title5,
-        ),
-        SizedBox(height: tokens.spacing.stack.xxs),
-        DoriText(
-          label: 'Confira nossa seleção',
-          type: DoriTypography.description,
-          color: tokens.colors.content.two,
-        ),
-      ],
+    child: Text(
+      'Produtos',
+      style: dori.typography.title5.copyWith(
+        color: dori.colors.content.one,
+      ),
     ),
   );
 }
@@ -86,19 +78,18 @@ Widget build(BuildContext context) {
 
 **Plus Jakarta Sans** — Pesos: 500, 700, 800
 
-### Componente DoriText
+> **Nota:** A fonte deve ser configurada pelo app consumidor. Se não configurada, será usada a fonte padrão do sistema.
+
+### Uso
 
 ```dart
-DoriText(
-  label: 'Texto obrigatório',           // required
-  type: DoriTypography.description,     // default: description
-  color: tokens.colors.content.one,     // default: content.one
-  maxLines: 2,                          // opcional
-  overflow: TextOverflow.ellipsis,      // opcional
+Text(
+  'Meu título',
+  style: context.dori.typography.title5.copyWith(
+    color: context.dori.colors.content.one,
+  ),
 );
 ```
-
-**Nota:** O componente é **agnóstico a formatação de negócio**. Formatação de preços, datas, moedas, etc. é responsabilidade do domínio/feature, não do Design System.
 
 ---
 
@@ -150,19 +141,10 @@ colors
 
 ## Spacing
 
-### Estrutura
-
-```
-spacing
-├── inline    → Espaçamento horizontal (entre elementos lado a lado)
-├── stack     → Espaçamento vertical (entre elementos empilhados)
-└── inset     → Padding interno (todos os lados)
-```
-
 ### Escala
 
-| Token | Valor | Exemplo de Uso |
-|-------|-------|----------------|
+| Token | Valor | Uso |
+|-------|-------|-----|
 | `xxxs` | 4dp | Micro espaço, entre ícone e texto |
 | `xxs` | 8dp | Entre itens muito próximos |
 | `xs` | 16dp | Entre itens de lista |
@@ -174,27 +156,27 @@ spacing
 ### Uso
 
 ```dart
-// Horizontal (entre botões lado a lado)
+// Espaçamento horizontal
 Row(
   children: [
     Button1(),
-    SizedBox(width: tokens.spacing.inline.xxs),
+    SizedBox(width: context.dori.spacing.xxs),
     Button2(),
   ],
 );
 
-// Vertical (entre título e conteúdo)
+// Espaçamento vertical
 Column(
   children: [
     Title(),
-    SizedBox(height: tokens.spacing.stack.xs),
+    SizedBox(height: context.dori.spacing.xs),
     Content(),
   ],
 );
 
 // Padding interno
 Container(
-  padding: EdgeInsets.all(tokens.spacing.inset.sm),
+  padding: EdgeInsets.all(context.dori.spacing.sm),
   child: CardContent(),
 );
 ```
@@ -216,13 +198,13 @@ Container(
 ```dart
 Container(
   decoration: BoxDecoration(
-    borderRadius: tokens.radius.md,
+    borderRadius: context.dori.radius.md,
   ),
 );
 
-// Ou via helper
+// Ou via valor numérico
 ClipRRect(
-  borderRadius: tokens.radius.lg,
+  borderRadius: BorderRadius.circular(context.dori.radius.lgValue),
   child: Image(...),
 );
 ```
@@ -230,56 +212,6 @@ ClipRRect(
 ---
 
 ## Theme Management
-
-### Filosofia
-
-O Dori **reage** ao tema, não o controla. O controle fica no App via state management (Riverpod).
-
-### Interface Fornecida pelo Dori
-
-```dart
-/// Contrato que o App deve implementar para controle de tema
-abstract class DoriThemeModeProvider {
-  /// Tema atual
-  ThemeMode get themeMode;
-  
-  /// Define um tema específico
-  void setThemeMode(ThemeMode mode);
-  
-  /// Alterna entre light e dark
-  void toggleThemeMode();
-}
-```
-
-### Implementação no App (Riverpod)
-
-```dart
-// providers/theme_provider.dart
-final themeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.system);
-
-// Implementação do contrato Dori
-class AppThemeModeProvider implements DoriThemeModeProvider {
-  final Ref _ref;
-  
-  AppThemeModeProvider(this._ref);
-  
-  @override
-  ThemeMode get themeMode => _ref.read(themeModeProvider);
-  
-  @override
-  void setThemeMode(ThemeMode mode) {
-    _ref.read(themeModeProvider.notifier).state = mode;
-  }
-  
-  @override
-  void toggleThemeMode() {
-    final current = themeMode;
-    setThemeMode(
-      current == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark,
-    );
-  }
-}
-```
 
 ### Configuração no MaterialApp
 
@@ -291,28 +223,48 @@ MaterialApp(
 );
 ```
 
-### Uso do DoriThemeToggle
+### Verificar Tema Atual
 
 ```dart
-DoriThemeToggle(
-  themeModeProvider: ref.read(appThemeModeProvider),
+final isDark = context.dori.isDark;
+final isLight = context.dori.isLight;
+```
+
+### Alterar Tema
+
+Para habilitar `setTheme()`, configure com callbacks:
+
+```dart
+final dori = Dori.of(
+  context,
+  onThemeChanged: (mode) => ref.read(themeModeProvider.notifier).state = mode.toThemeMode(),
+  themeModeGetter: () => DoriThemeMode.fromThemeMode(ref.read(themeModeProvider)),
 );
+
+// Definir tema específico
+dori.setTheme(DoriThemeMode.dark);
+dori.setTheme(DoriThemeMode.light);
+
+// Alternar para o inverso
+dori.setTheme(dori.themeMode.inverse);
 ```
 
 ---
 
 ## Checklist de Implementação
 
-- [ ] Criar `DoriTokens` class com subclasses (colors, spacing, radius)
-- [ ] Criar `DoriTheme.light` e `DoriTheme.dark`
-- [ ] Criar `DoriThemeExtension` para acesso via context
-- [ ] Criar extension `context.dori`
-- [ ] Criar `DoriThemeModeProvider` interface
-- [ ] Criar `DoriText` component
-- [ ] Adicionar fonte Plus Jakarta Sans
+- [x] `DoriColors` com light/dark schemes
+- [x] `DoriSpacing` com escala flat
+- [x] `DoriRadius` com sm/md/lg
+- [x] `DoriTypography` com 5 variantes
+- [x] `DoriTheme.light` e `DoriTheme.dark`
+- [x] `DoriThemeExtension` para acesso via context
+- [x] Extension `context.dori`
+- [x] `DoriThemeMode` enum com `inverse`
+- [ ] Adicionar fonte Plus Jakarta Sans (responsabilidade do app)
 - [ ] Testes unitários para tokens
 - [ ] Testes de acessibilidade (contraste)
 
 ---
 
-*Documento mantido pelo time de Design System. Última atualização: 14/01/2026*
+*Documento mantido pelo time de Design System. Última atualização: Janeiro/2026*
