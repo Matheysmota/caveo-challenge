@@ -1,51 +1,143 @@
-# ADR 002: Estrutura de Pastas Padrão do Projeto
+# ADR 002: Estrutura de Pastas e Modularização do Projeto
 
 | Metadado | Valor |
 | :--- | :--- |
-| **Status** | Aceito |
-| **Data** | 13-01-2026 |
+| **Status** | Aceito (Revisado) |
+| **Data** | 14-01-2026 |
 | **Decisores** | Matheus Mota |
-| **Tags** | arquitetura, estrutura, organização |
+| **Tags** | arquitetura, estrutura, modularização, monorepo |
 
 ## Contexto e Problema
+
 Precisamos definir a organização fundamental do código fonte do projeto Flutter. A estrutura de pastas dita como os módulos se comunicam e como a aplicação escala.
 
-Como premissa inicial do projeto, foi solicitada uma árvore de diretórios baseada em camadas técnicas (`layer-based`), contendo estritamente: `application`, `domain`, `infrastructure`, `presentation`.
+O documento de requisitos do challenge (`documents/requirements-challenge.md`) sugere uma estrutura baseada em camadas técnicas (*Package by Layer*):
 
-No entanto, em cenários de alta complexidade e escala (ex: Super Apps com contextos de Banking, Investimentos, Marketplace), arquiteturas baseadas puramente em camadas técnicas tendem a sofrer com baixa coesão de domínio. Em outras palavras, à medida que novos verticais de negócio são adicionados, a estrutura técnica se torna um "gaveteiro misturado": arquivos de funcionalidades distintas (ex: Pix e Crédito) residem lado a lado nas mesmas pastas. Isso obriga desenvolvedores a navegar por toda a árvore para alterar uma única feature, aumenta conflitos de merge entre times e eleva drasticamente a carga cognitiva para entender o impacto de uma mudança. 
+```
+lib/
+├── app/
+├── application/
+├── domain/
+├── infrastructure/
+├── presentation/
+└── shared/
+```
+
+Essa abordagem é válida para projetos pequenos, mas apresenta limitações:
+1.  **Raiz do repositório poluída:** Mistura arquivos de configuração do Flutter com documentação e scripts.
+2.  **Baixa coesão de domínio:** Arquivos de funcionalidades distintas residem lado a lado.
+3.  **Dificuldade de modularização:** Código compartilhável (`shared`) fica acoplado ao app.
 
 ## Alternativas Consideradas
 
-### 1. Package by Feature (Modularização por Funcionalidade)
-Organizar o código por contextos de negócio (ex: `features/products`, `features/cart`, `features/auth`), onde cada feature encapsula suas próprias camadas (Domain, Data, Presentation).
-*   **Pros:** Alta coesão, baixo acoplamento entre features, facilita deleção de código antigo, escala horizontalmente com times.
-*   **Cons:** Requer mais *boilerplate* inicial, desvia das premissas iniciais estipuladas para este projeto.
+### 1. Package by Layer Puro (Estrutura do Requirements)
+Manter tudo em `lib/` com camadas globais.
+*   **Pros:** Simplicidade, alinhamento literal com o documento de requisitos.
+*   **Cons:** Não escala, `shared` não é reutilizável, raiz do repositório desorganizada.
 
-### 2. Package by Layer (Modularização por Camada Técnica) - **Opção Escolhida**
-Organizar o código por responsabilidade técnica global (ex: `domain/entitites` contém entidades de *todos* os contextos).
-*   **Pros:** Separação clara de responsabilidades técnicas, fácil para times pequenos entenderem onde colocar um arquivo específico, atende diretamente às restrições do projeto.
-*   **Cons:** Em escala, mistura contextos de negócio (ex: Entidades de Produto misturadas com Entidades de Usuário), dificultando a modularização futura.
+### 2. Package by Feature (Features como Packages Externos)
+Cada feature (`splash`, `product`) seria um package separado em `/packages/features/`.
+*   **Pros:** Máxima modularização, build times otimizados.
+*   **Cons:** Over-engineering para o escopo do challenge (2 telas), complexidade de setup.
+
+### 3. Estrutura Híbrida (Monorepo Pragmático) - **Opção Escolhida**
+Combinar o melhor das abordagens:
+*   **App Shell** em `/app/` — projeto Flutter que orquestra o app.
+*   **Features internas** em `/app/lib/features/` — cada feature encapsula suas camadas (Clean Architecture vertical).
+*   **Packages externos** em `/packages/` — apenas código genuinamente cross-cutting (`shared`, `design_system`).
 
 ## Decisão
-Decidimos **seguir a estrutura Package by Layer (Opção 2)**, em conformidade com as restrições arquiteturais definidas para o escopo deste projeto.
 
-Embora reconheçamos que a abordagem *Package by Feature* seja superior para escalabilidade de longo prazo em grandes produtos, a adesão estrita ao design de arquitetura solicitado demonstra disciplina e capacidade de entrega dentro de conformidade técnica.
+Adotamos a **Estrutura Híbrida (Opção 3)**, que respeita a essência do requisito (Clean Architecture com camadas) enquanto aplica boas práticas de modularização.
 
-A estrutura final será:
+### Estrutura Final do Repositório
+
 ```
-/
-├── documents/         # Documentação Arquitetural e de Processos (ADRs)
-├── lib/
-│   ├── app/
-│   ├── application/       # Use-cases, DTOs
-│   ├── domain/            # Entities, Interfaces de Repositories
-│   ├── infrastructure/    # Implementações de Repositories, Data Sources
-│   ├── presentation/      # Pages, Widgets, Providers (State Management)
-│   └── shared/
+/ (root)
+├── app/                          # App Shell (Projeto Flutter principal)
+│   ├── lib/
+│   │   ├── main.dart             # Ponto de entrada (bootstrap)
+│   │   ├── app/                  # Configuração do App
+│   │   │   ├── app_widget.dart   # MaterialApp, Theme, Router
+│   │   │   ├── routes/           # Definição de rotas (GoRouter)
+│   │   │   └── providers/        # Providers globais (Riverpod)
+│   │   └── features/             # Features do App (Package by Feature interno)
+│   │       ├── splash/
+│   │       │   ├── presentation/ # UI da Splash
+│   │       │   └── ...
+│   │       └── product/
+│   │           ├── application/  # UseCases, DTOs
+│   │           ├── domain/       # Entities, Repository Interfaces
+│   │           ├── infrastructure/ # Repository Impl, Data Sources
+│   │           └── presentation/ # Pages, Widgets, ViewModels
+│   ├── test/                     # Testes do App
+│   └── pubspec.yaml              # Dependências (inclui packages locais)
+│
+├── packages/                     # Módulos isolados e reutilizáveis
+│   ├── shared/                   # Núcleo compartilhado
+│   │   ├── lib/
+│   │   │   ├── libraries/        # Exports de libs externas (Governança ADR 003)
+│   │   │   ├── utils/            # Utilitários (formatters, extensions)
+│   │   │   └── shared.dart       # Barrel file
+│   │   └── pubspec.yaml
+│   └── design_system/            # Biblioteca de UI
+│       ├── lib/
+│       │   ├── tokens/           # Cores, tipografia, espaçamentos
+│       │   ├── atoms/            # Widgets primitivos
+│       │   ├── molecules/        # Widgets compostos
+│       │   └── design_system.dart
+│       └── pubspec.yaml
+│
+├── documents/                    # Documentação e ADRs
+│   ├── adrs/
+│   └── functional-specs.md
+│
+└── scripts/                      # Automação e CI
 ```
+
+### Justificativas da Estrutura
+
+| Diretório | Justificativa |
+|-----------|---------------|
+| `/app/` | Isola o projeto Flutter da raiz, mantendo-a limpa para docs e scripts. |
+| `/app/lib/app/` | Configurações globais do app (rotas, tema, DI bootstrap). Não é "core" exportável. |
+| `/app/lib/features/` | Cada feature é autocontida com suas camadas. Facilita navegação e ownership. |
+| `/packages/shared/` | Código agnóstico de feature: Result, Command, exports de libs. Pode ser usado em outros apps. |
+| `/packages/design_system/` | UI agnóstica de lógica. Tokens e componentes reutilizáveis. |
+
+### Regras de Dependência
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                         app/                            │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │              features/product/                   │   │
+│  │  presentation → application → domain            │   │
+│  │       │              │            │             │   │
+│  │       └──────────────┴────────────┘             │   │
+│  │                      │                          │   │
+│  │              infrastructure                      │   │
+│  └─────────────────────────────────────────────────┘   │
+│                         │                              │
+│                         ▼                              │
+│              ┌─────────────────────┐                   │
+│              │  packages/shared    │                   │
+│              │  packages/design_   │                   │
+│              │       system        │                   │
+│              └─────────────────────┘                   │
+└─────────────────────────────────────────────────────────┘
+```
+
+*   **Features** dependem de `shared` e `design_system`.
+*   **Shared** não depende de nenhum outro package do projeto.
+*   **Design System** pode depender apenas de `shared` (para utils).
+*   **Features não podem depender de outras features** (isolamento).
 
 ## Consequências
-*   **Positivo:** Total alinhamento com a expectativa dos avaliadores.
-*   **Positivo:** Facilidade de navegação para quem conhece Clean Architecture padrão.
-*   **Neutro:** Para o escopo limitado deste desafio (Fake Store), os problemas de escala da abordagem *Layer-based* não serão sentidos drasticamente.
-*   **Mitigação:** Manteremos uma separação lógica rigorosa dentro das pastas (ex: prefixos ou subpastas de domínio dentro de `domain/usecases`) para minimizar a mistura de contextos.
+
+*   **Positivo:** Raiz do repositório limpa e profissional.
+*   **Positivo:** Features isoladas facilitam manutenção e testes.
+*   **Positivo:** `shared` e `design_system` são reutilizáveis em outros projetos.
+*   **Positivo:** Respeita a essência do requisito (Clean Arch com camadas) sem ser literal.
+*   **Trade-off:** Requer gerenciamento de `pubspec.yaml` em múltiplos diretórios.
+*   **Mitigação:** Usamos `path` dependencies para desenvolvimento local, simplificando o workflow.

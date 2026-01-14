@@ -33,12 +33,12 @@ Criar uma camada intermediária em `shared/libraries/` que re-exporta apenas os 
 Decidimos implementar uma política estrita de **Gerenciamento Centralizado de Dependências**.
 
 1.  **Camada de Abstração:**
-    *   Toda biblioteca externa deve ser encapsulada em um arquivo dentro de `lib/shared/libraries/`.
+    *   Toda biblioteca externa deve ser encapsulada em um arquivo dentro de `packages/shared/lib/libraries/`.
     *   O padrão de nomenclatura será: `[nome_lib]_export.dart`.
     *   Este arquivo utilizará o modificador `show` para expor estritamente o necessário.
-    *   *Exemplo:* Para uso de paginação, não importaremos `infinite_scroll_pagination` diretamente nas views. Criaremos `lib/shared/libraries/pagination_export.dart` contendo:
+    *   *Exemplo:* Para uso de paginação, não importaremos `infinite_scroll_pagination` diretamente nas views. Criaremos `packages/shared/lib/libraries/pagination_export.dart` contendo:
         ```dart
-        // lib/shared/libraries/pagination_export.dart
+        // packages/shared/lib/libraries/pagination_export.dart
         export 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart' 
           show PagingController, PagedChildBuilderDelegate, PagedListView;
         ```
@@ -48,13 +48,14 @@ Decidimos implementar uma política estrita de **Gerenciamento Centralizado de D
 
 3.  **Enforcement via CI/CD (Mecanismo de Allowlist):**
     *   Será implementado um script de validação (`check_imports.sh`) no pipeline.
-    *   **Regra de Bloqueio:** O script analisará estaticamente todos os arquivos `.dart` dentro de `lib/` (exceto `lib/shared/libraries/`).
+    *   **Regra de Bloqueio:** O script analisará estaticamente todos os arquivos `.dart` dentro de `app/lib/` (exceto arquivos de teste).
     *   Se encontrar qualquer import que comece com `package:` mas NÃO esteja na **Allowlist** (lista de exceções permitidas), o build falhará.
     *   **Allowlist Inicial:**
         *   `package:flutter/*` (Framework)
         *   `package:dart/*` (Linguagem)
-        *   `package:app/*` (Imports internos do próprio projeto)
+        *   `package:shared/*` (Package compartilhado)
         *   `package:design_system/*` (Módulo interno de componentes)
+        *   `package:caveo_challenge/*` (Imports internos do próprio app)
     *   Isso garante que módulos internos como o Design System possam ser consumidos livremente, enquanto dependências de terceiros (http, bloc, provider) sejam estritamente controladas.
 
 ## Consequências

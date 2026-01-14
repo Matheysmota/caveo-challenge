@@ -26,9 +26,9 @@ Definir um contrato (Interface/Protocolo) próprio do projeto para operações d
 Decidimos implementar o padrão **ApiDataSourceDelegate** para toda comunicação HTTP.
 
 1.  **Contrato Único:**
-    Criaremos uma interface abstrata (ex: `IApiDataSourceDelegate`) que define métodos agnósticos à biblioteca, utilizando tipos primitivos ou DTOs próprios do projeto.
+    Criaremos uma interface abstrata (ex: `ApiDataSourceDelegate`) que define métodos agnósticos à biblioteca, utilizando tipos primitivos ou DTOs próprios do projeto.
     ```dart
-    abstract class IApiDataSourceDelegate {
+    abstract class ApiDataSourceDelegate {
       Future<AppResponse> get(String path, {Map<String, dynamic>? query});
       Future<AppResponse> post(String path, {dynamic body});
       // ...
@@ -36,13 +36,13 @@ Decidimos implementar o padrão **ApiDataSourceDelegate** para toda comunicaçã
     ```
 
 2.  **Uso nos Repositórios:**
-    Os Repositórios (`infrastructure/repositories`) devem depender **exclusivamente** de `IApiDataSourceDelegate`. É estritamente proibido importar `dio`, `http` ou qualquer pacote externo dentro de uma classe de repositório.
+    Os Repositórios (`app/lib/features/{feature}/infrastructure/repositories`) devem depender **exclusivamente** de `ApiDataSourceDelegate`. É estritamente proibido importar `dio`, `http` ou qualquer pacote externo dentro de uma classe de repositório.
 
 3.  **Implementação Injetada:**
-    A implementação concreta (ex: `DioApiDataSourceDelegate`) residirá na camada de `infrastructure/driver/networking` e será injetada via Injeção de Dependência. É neste único ponto que a biblioteca externa (Dio) será importada e configurada.
+    A implementação concreta (ex: `DioApiDataSourceDelegate`) residirá em `packages/shared/lib/drivers/` e será injetada via Injeção de Dependência (Riverpod). É neste único ponto que a biblioteca externa (Dio) será importada e configurada.
 
 4.  **Bloqueio via CI/CD:**
-    Reforçando a ADR 003, o script de CI/CD bloqueará qualquer importação de bibliotecas de rede (`package:dio`, `package:http`) em arquivos que não sejam a implementação específica do Delegate.
+    Reforçando a ADR 003, o script de CI/CD bloqueará qualquer importação de bibliotecas de rede (`package:dio`, `package:http`) em arquivos dentro de `app/lib/`.
 
 ## Consequências
 *   **Desacoplamento Real:** O código da aplicação "não sabe" que o Dio existe. Podemos substituir o Dio pelo cliente nativo do Dart ou outra lib em 1 dia, alterando apenas 1 arquivo.

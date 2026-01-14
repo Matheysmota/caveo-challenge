@@ -5,4 +5,4 @@
 **/.dart_tool/
 **/*.iml
 **/.pub/
-**/pubspec.lock
+**/pubspec.lockbuild/
