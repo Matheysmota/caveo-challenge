@@ -36,8 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   shared:
     path: ../packages/shared
-  design_system:
-    path: ../packages/design_system
+  dori:
+    path: ../packages/dori
 
 dev_dependencies:
   flutter_test:

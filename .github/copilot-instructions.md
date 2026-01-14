@@ -29,19 +29,19 @@ O projeto segue uma **estrutura híbrida de monorepo**:
 │
 ├── packages/                 # Módulos reutilizáveis
 │   ├── shared/               # Core, Utils, Library Exports
-│   └── design_system/        # Tokens, Componentes de UI
+│   └── dori/                 # 🐠 Design System Dori
 ```
 
 **Regras:**
 - **Features** ficam em `app/lib/features/` com camadas internas (Clean Arch vertical).
-- **Shared** e **Design System** são packages separados em `/packages/`.
+- **Shared** e **Dori** são packages separados em `/packages/`.
 - **NÃO existe** pasta `core/` ou `shared/` dentro de `app/lib/`.
 
 ### 2. Governança de Dependências (Baseado na ADR 003)
 - **PROIBIDO:** Importar bibliotecas externas diretamente (ex: `package:dio`, `package:fpdart`) dentro de `app/lib/`.
 - **OBRIGATÓRIO:** Usar arquivos de exportação em `packages/shared/lib/libraries/{nome_lib}_export.dart`.
     - Exemplo: `import 'package:shared/libraries/result_export.dart';`
-- **Exceções (Allowlist):** `package:flutter/*`, `package:dart/*`, `package:shared/*`, `package:design_system/*`.
+- **Exceções (Allowlist):** `package:flutter/*`, `package:dart/*`, `package:shared/*`, `package:dori/*`.
 
 ### 3. Camada de Rede (Baseado na ADR 004)
 - **NUNCA** instancie clientes HTTP concretos (Dio/Http) nos Repositórios.
