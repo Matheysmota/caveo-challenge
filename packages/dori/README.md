@@ -66,45 +66,71 @@ O Dori segue o padrão **Atomic Design** de Brad Frost, adaptado para Flutter:
 
 ## 🎨 Tokens
 
+> 📖 **Especificação completa:** [`documents/tokens-spec.md`](../../documents/tokens-spec.md)
+
+### Acesso via Context
+
+```dart
+Widget build(BuildContext context) {
+  final tokens = context.dori.tokens;
+  
+  return Container(
+    padding: EdgeInsets.all(tokens.spacing.inset.sm),
+    decoration: BoxDecoration(
+      color: tokens.colors.surface.one,
+      borderRadius: tokens.radius.lg,
+    ),
+    child: Column(
+      children: [
+        SizedBox(height: tokens.spacing.stack.xxxs),
+        DoriText(
+          label: 'Produtos',
+          type: DoriTypography.title5,
+        ),
+      ],
+    ),
+  );
+}
+```
+
 ### Cores
 
 ```dart
-// Light Mode
-Container(color: DoriColors.background);     // Slate 50
-Container(color: DoriColors.surface);        // White
-Text(style: TextStyle(color: DoriColors.textPrimary));  // Slate 900
+// Brand (Identidade visual)
+tokens.colors.brand.pure    // Cor pura da marca
+tokens.colors.brand.one     // Variação primária
+tokens.colors.brand.two     // Variação secundária
 
-// Accent
-Container(color: DoriColors.accent);         // Indigo 900
-```
+// Surface (Fundos)
+tokens.colors.surface.pure  // Máximo contraste (white/black)
+tokens.colors.surface.one   // Fundo de cards
+tokens.colors.surface.two   // Fundo secundário
 
-### Tipografia
+// Content (Textos)
+tokens.colors.content.pure  // Texto máximo contraste
+tokens.colors.content.one   // Texto primário (default)
+tokens.colors.content.two   // Texto secundário
 
-```dart
-DoriText(
-  'Produtos',
-  style: DoriTypography.display,  // 24px, ExtraBold
-);
-
-DoriText(
-  'R\$ 299,90',
-  style: DoriTypography.price,    // 18px, Black
-);
-
-DoriText(
-  'Descrição do produto...',
-  style: DoriTypography.body,     // 14px, Medium
-);
+// Feedback
+tokens.colors.feedback.success
+tokens.colors.feedback.error
+tokens.colors.feedback.info
 ```
 
 ### Espaçamentos
 
 ```dart
-SizedBox(width: DoriSpacing.xs);   // 4dp
-SizedBox(width: DoriSpacing.sm);   // 8dp
-SizedBox(width: DoriSpacing.md);   // 16dp
-SizedBox(width: DoriSpacing.lg);   // 24dp
-SizedBox(width: DoriSpacing.xl);   // 32dp
+// Horizontal (entre elementos lado a lado)
+SizedBox(width: tokens.spacing.inline.xxs);
+
+// Vertical (entre elementos empilhados)
+SizedBox(height: tokens.spacing.stack.xs);
+
+// Padding interno
+EdgeInsets.all(tokens.spacing.inset.sm);
+
+// Escala completa:
+// xxxs (4dp) | xxs (8dp) | xs (16dp) | sm (24dp) | md (32dp) | lg (48dp) | xl (64dp)
 ```
 
 ### Bordas
@@ -112,9 +138,9 @@ SizedBox(width: DoriSpacing.xl);   // 32dp
 ```dart
 Container(
   decoration: BoxDecoration(
-    borderRadius: DoriRadius.sm,   // 8dp
-    borderRadius: DoriRadius.md,   // 12dp
-    borderRadius: DoriRadius.lg,   // 16dp
+    borderRadius: tokens.radius.sm,   // 8dp
+    borderRadius: tokens.radius.md,   // 12dp
+    borderRadius: tokens.radius.lg,   // 16dp
   ),
 );
 ```
@@ -126,13 +152,24 @@ Container(
 ### DoriText
 
 ```dart
+// Uso básico (defaults: type=description, color=content.one)
+DoriText(label: 'Hello, World!');
+
+// Com customização
 DoriText(
-  'Hello, World!',
-  style: DoriTypography.body,
-  color: DoriColors.textPrimary,
-  maxLines: 2,
-  overflow: TextOverflow.ellipsis,
+  label: 'Produtos',                        // required
+  type: DoriTypography.title5,              // default: description
+  color: tokens.colors.content.one,         // default: content.one
+  maxLines: 2,                              // opcional
+  overflow: TextOverflow.ellipsis,          // opcional
 );
+
+// Variantes de tipografia
+DoriText(label: 'Título', type: DoriTypography.title5);
+DoriText(label: 'Texto normal', type: DoriTypography.description);
+DoriText(label: 'Texto destaque', type: DoriTypography.descriptionBold);
+DoriText(label: 'Legenda', type: DoriTypography.caption);
+DoriText(label: 'Legenda destaque', type: DoriTypography.captionBold);
 ```
 
 ### DoriIcon
@@ -141,7 +178,7 @@ DoriText(
 DoriIcon(
   icon: Icons.search,
   size: DoriIconSize.md,
-  color: DoriColors.textSecondary,
+  color: tokens.colors.content.two,
 );
 ```
 

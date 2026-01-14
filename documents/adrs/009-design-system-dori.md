@@ -139,44 +139,69 @@ packages/dori/
 | Barrel files | `dori_{camada}.barrel.dart` | `dori_atoms.barrel.dart` |
 | Classes | `Dori{Nome}` | `DoriText`, `DoriProductCard` |
 | Enums | `Dori{Nome}` | `DoriTypography`, `DoriCardSize` |
-| Tokens (const) | `Dori{Categoria}.{valor}` | `DoriColors.primary`, `DoriSpacing.md` |
+| Tokens (const) | `Dori{Categoria}.{valor}` | `DoriColors.brand.one`, `DoriSpacing.inline.md` |
 
 ### Sistema de Tokens
 
 Os tokens são baseados no **Material Design 3** com customizações do **GenZ Commerce Kit**.
 
-#### Cores (Semantic Tokens)
+> 📖 **Especificação completa:** [`documents/tokens-spec.md`](../tokens-spec.md)
+
+#### Estrutura de Acesso
+
 ```dart
-abstract class DoriColors {
-  // Background
-  static const Color background = Color(0xFFF8FAFC);      // Slate 50
-  static const Color backgroundDark = Color(0xFF020617);  // Slate 950
-  
-  // Surface (Cards)
-  static const Color surface = Color(0xFFFFFFFF);         // White
-  static const Color surfaceDark = Color(0xFF1E293B);     // Slate 800
-  
-  // Text
-  static const Color textPrimary = Color(0xFF0F172A);     // Slate 900
-  static const Color textSecondary = Color(0xFF334155);   // Slate 700
-  
-  // Accent
-  static const Color accent = Color(0xFF312E81);          // Indigo 900
-  static const Color accentDark = Color(0xFF818CF8);      // Indigo 400
-}
+// Via context
+final dori = Dori.of(context);  // ou context.dori
+
+// Tokens disponíveis
+dori.tokens.colors.brand.one      // Cores
+dori.tokens.spacing.inline.md     // Espaçamentos
+dori.tokens.radius.lg             // Bordas
+
+// Tema atual
+dori.brightness                   // Brightness.light ou Brightness.dark
 ```
+
+#### Cores (Semantic Tokens)
+
+```
+colors
+├── brand      → pure, one, two      (Identidade visual)
+├── surface    → pure, one, two      (Fundos e superfícies)
+├── content    → pure, one, two      (Textos e ícones)
+└── feedback   → success, error, info (Estados)
+```
+
+#### Espaçamentos (Spacing)
+
+```
+spacing
+├── inline    → xxxs, xxs, xs, sm, md, lg, xl   (Horizontal)
+├── stack     → xxxs, xxs, xs, sm, md, lg, xl   (Vertical)
+└── inset     → xxxs, xxs, xs, sm, md, lg, xl   (Padding)
+```
+
+| Token | Valor |
+|-------|-------|
+| `xxxs` | 4dp |
+| `xxs` | 8dp |
+| `xs` | 16dp |
+| `sm` | 24dp |
+| `md` | 32dp |
+| `lg` | 48dp |
+| `xl` | 64dp |
 
 #### Tipografia
 - **Font Family:** Plus Jakarta Sans
-- **Weights:** Medium (500), Bold (700), ExtraBold (800), Black (900)
+- **Weights:** Medium (500), Bold (700), ExtraBold (800)
 
 ```dart
 enum DoriTypography {
-  display,    // 24px, ExtraBold 800
-  price,      // 18px, Black 900
-  body,       // 14px, Medium 500
-  caption,    // 12px, Medium 500
-  badge,      // 10px, Bold 700, letter-spacing wide
+  title5,          // 24px, ExtraBold 800 - Títulos principais
+  description,     // 14px, Medium 500 - Texto padrão (default)
+  descriptionBold, // 14px, Bold 700 - Texto com destaque
+  caption,         // 12px, Medium 500 - Texto pequeno
+  captionBold,     // 12px, Bold 700 - Texto pequeno com destaque
 }
 ```
 
