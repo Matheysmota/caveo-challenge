@@ -9,7 +9,28 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Adicionado
 
+#### Organisms
+- 🃏 `DoriProductCard` — Pinterest-style card for product/content display
+  - Props: `imageUrl`, `primaryText`, `secondaryText`, `badgeText`, `size`, `onTap`, `semanticLabel`, `imageBuilder`
+  - Agnostic API: Uses `primaryText`/`secondaryText` instead of domain-specific names
+  - Sizes: sm (3:4), md (4:5, default), lg (1:1)
+  - Press animation: Scale 0.95 + Opacity 0.85 on tap (100ms duration)
+  - Minimum press duration: 80ms for visual feedback on quick taps
+  - Uses `Timer` for scheduled release (proper resource management)
+  - Shimmer loading via `DoriShimmer` atom
+  - Uses `DoriText` and `DoriBadge` atoms internally
+  - Custom image builder support for caching libraries (cached_network_image)
+  - Built-in accessibility with semantic labels (button semantics when tappable)
+  - Respects `MediaQuery.disableAnimations` for reduced motion
+  - Widgetbook story with sizes, content variants, shimmer demo, and grid layout
+
 #### Atoms
+- ✨ `DoriShimmer` — Reusable shimmer loading placeholder
+  - Props: none (fully automatic)
+  - 1500ms animation duration with `easeInOutSine` curve
+  - Horizontal gradient from `surface.two` to `surface.three`
+  - Proper `AnimationController` lifecycle management
+  - Can be used standalone or composed in other widgets
 - ⚛️ `DoriText` — Text widget with typography tokens
   - Props: `label`, `variant`, `color`, `maxLines`, `overflow`, `textAlign`
   - Default variant: `description` (14px Medium)

@@ -12,6 +12,7 @@
 /// - [DoriBadge] — Badge for status, labels, or counts
 /// - [DoriCircularProgress] — Morphing loading indicator
 /// - [DoriButton] — Button with variants and loading state
+/// - [DoriShimmer] — Shimmer loading placeholder
 ///
 /// {@category Atoms}
 library;
@@ -32,3 +33,6 @@ export 'circular_progress/dori_circular_progress.dart';
 
 // Button
 export 'button/dori_button.dart';
+
+// Shimmer
+export 'shimmer/dori_shimmer.dart';
