@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import '../../theme/dori_theme.barrel.dart';
 import '../../tokens/dori_colors.dart';
 import '../../tokens/dori_radius.dart';
+import '../../tokens/dori_shadows.dart';
 import '../../tokens/dori_spacing.dart';
 import '../../tokens/dori_typography.dart';
+import '../text/dori_text.dart';
 
 /// Semantic variants for DoriBadge.
 ///
@@ -106,11 +108,10 @@ class DoriBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dori = context.dori;
-    final colors = dori.colors;
+    final colors = context.dori.colors;
     final effectiveSemanticLabel = semanticLabel ?? label;
 
-    final (backgroundColor, textColor) = _getColors(colors, dori.isDark);
+    final (backgroundColor, textColor) = _getColors(colors);
     final padding = _getPadding();
 
     return Semantics(
@@ -121,10 +122,12 @@ class DoriBadge extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: DoriRadius.md,
+          boxShadow: DoriShadows.of(context).xs,
         ),
-        child: Text(
-          label,
-          style: DoriTypography.captionBold.copyWith(color: textColor),
+        child: DoriText(
+          label: label,
+          variant: DoriTypographyVariant.captionBold,
+          color: textColor,
         ),
       ),
     );
@@ -132,30 +135,22 @@ class DoriBadge extends StatelessWidget {
 
   /// Returns background and text colors based on variant.
   ///
-  /// In dark mode, text uses lighter tinted versions of feedback colors
-  /// for better contrast while maintaining color identity.
-  (Color backgroundColor, Color textColor) _getColors(
-    DoriColorScheme colors,
-    bool isDark,
-  ) {
-    // Lighter tinted colors for dark mode text (better contrast)
-    const successLight = Color(0xFF86EFAC); // Green 300
-    const errorLight = Color(0xFFFCA5A5); // Red 300
-    const infoLight = Color(0xFF93C5FD); // Blue 300
-
+  /// Uses semantic tokens for both background (soft) and text (light) colors.
+  /// This ensures consistent colors across themes without opacity calculations.
+  (Color backgroundColor, Color textColor) _getColors(DoriColorScheme colors) {
     return switch (variant) {
-      DoriBadgeVariant.neutral => (colors.surface.two, colors.content.one),
+      DoriBadgeVariant.neutral => (colors.surface.three, colors.content.one),
       DoriBadgeVariant.success => (
-        colors.feedback.success.withValues(alpha: 0.25),
-        isDark ? successLight : colors.feedback.success,
+        colors.feedback.successSoft,
+        colors.feedback.successLight,
       ),
       DoriBadgeVariant.error => (
-        colors.feedback.error.withValues(alpha: 0.25),
-        isDark ? errorLight : colors.feedback.error,
+        colors.feedback.errorSoft,
+        colors.feedback.errorLight,
       ),
       DoriBadgeVariant.info => (
-        colors.feedback.info.withValues(alpha: 0.25),
-        isDark ? infoLight : colors.feedback.info,
+        colors.feedback.infoSoft,
+        colors.feedback.infoLight,
       ),
     };
   }
@@ -168,7 +163,7 @@ class DoriBadge extends StatelessWidget {
         vertical: DoriSpacing.xxxs / 2,
       ),
       DoriBadgeSize.md => const EdgeInsets.symmetric(
-        horizontal: DoriSpacing.xs,
+        horizontal: DoriSpacing.sm,
         vertical: DoriSpacing.xxxs,
       ),
     };

@@ -134,23 +134,26 @@ class DoriBadgeShowcase extends StatelessWidget {
     DoriBadgeVariant variant,
     DoriColorScheme colors,
   ) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 80,
-          child: DoriText(
-            label: label,
-            variant: DoriTypographyVariant.caption,
-            color: colors.content.two,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          SizedBox(
+            width: 80,
+            child: DoriText(
+              label: label,
+              variant: DoriTypographyVariant.caption,
+              color: colors.content.two,
+            ),
           ),
-        ),
-        SizedBox(width: DoriSpacing.xs),
-        DoriBadge(label: 'Label', variant: variant),
-        SizedBox(width: DoriSpacing.xxs),
-        DoriBadge(label: '12', variant: variant),
-        SizedBox(width: DoriSpacing.xxs),
-        DoriBadge(label: 'NEW', variant: variant),
-      ],
+          SizedBox(width: DoriSpacing.xs),
+          DoriBadge(label: 'Label', variant: variant),
+          SizedBox(width: DoriSpacing.xxs),
+          DoriBadge(label: '12', variant: variant),
+          SizedBox(width: DoriSpacing.xxs),
+          DoriBadge(label: 'NEW', variant: variant),
+        ],
+      ),
     );
   }
 

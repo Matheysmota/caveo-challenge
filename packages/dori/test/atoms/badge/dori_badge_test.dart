@@ -35,8 +35,8 @@ void main() {
         // Assert
         final container = tester.widget<Container>(find.byType(Container));
         final decoration = container.decoration as BoxDecoration;
-        // Neutral uses surface.two color
-        expect(decoration.color, equals(DoriColors.light.surface.two));
+        // Neutral uses surface.three color for better contrast
+        expect(decoration.color, equals(DoriColors.light.surface.three));
       });
 
       testWidgets('should render badge with success variant', (tester) async {
@@ -52,10 +52,7 @@ void main() {
         // Assert
         final container = tester.widget<Container>(find.byType(Container));
         final decoration = container.decoration as BoxDecoration;
-        final expectedColor = DoriColors.light.feedback.success.withValues(
-          alpha: 0.25,
-        );
-        expect(decoration.color, equals(expectedColor));
+        expect(decoration.color, equals(DoriColors.light.feedback.successSoft));
       });
 
       testWidgets('should render badge with error variant', (tester) async {
@@ -71,10 +68,7 @@ void main() {
         // Assert
         final container = tester.widget<Container>(find.byType(Container));
         final decoration = container.decoration as BoxDecoration;
-        final expectedColor = DoriColors.light.feedback.error.withValues(
-          alpha: 0.25,
-        );
-        expect(decoration.color, equals(expectedColor));
+        expect(decoration.color, equals(DoriColors.light.feedback.errorSoft));
       });
 
       testWidgets('should render badge with info variant', (tester) async {
@@ -87,10 +81,7 @@ void main() {
         // Assert
         final container = tester.widget<Container>(find.byType(Container));
         final decoration = container.decoration as BoxDecoration;
-        final expectedColor = DoriColors.light.feedback.info.withValues(
-          alpha: 0.25,
-        );
-        expect(decoration.color, equals(expectedColor));
+        expect(decoration.color, equals(DoriColors.light.feedback.infoSoft));
       });
     });
 
@@ -111,7 +102,7 @@ void main() {
           padding,
           equals(
             const EdgeInsets.symmetric(
-              horizontal: DoriSpacing.xs,
+              horizontal: DoriSpacing.sm,
               vertical: DoriSpacing.xxxs,
             ),
           ),
@@ -238,6 +229,41 @@ void main() {
         final decoration = container.decoration as BoxDecoration;
         expect(decoration.borderRadius, equals(DoriRadius.md));
       });
+
+      testWidgets('should have shadow using DoriShadows.xs token', (
+        tester,
+      ) async {
+        // Arrange
+        const badge = DoriBadge(label: 'Shadow');
+
+        // Act
+        await tester.pumpWidget(buildTestWidget(badge));
+
+        // Assert
+        final container = tester.widget<Container>(find.byType(Container));
+        final decoration = container.decoration as BoxDecoration;
+        expect(decoration.boxShadow, equals(DoriShadows.light.xs));
+      });
+
+      testWidgets('should have shadow for all variants', (tester) async {
+        // Test all variants have shadow
+        for (final variant in DoriBadgeVariant.values) {
+          // Arrange
+          final badge = DoriBadge(label: 'Test', variant: variant);
+
+          // Act
+          await tester.pumpWidget(buildTestWidget(badge));
+
+          // Assert
+          final container = tester.widget<Container>(find.byType(Container));
+          final decoration = container.decoration as BoxDecoration;
+          expect(
+            decoration.boxShadow,
+            isNotNull,
+            reason: 'Shadow should exist for $variant',
+          );
+        }
+      });
     });
 
     group('accessibility', () {
@@ -285,11 +311,6 @@ void main() {
     });
 
     group('dark mode', () {
-      // Lighter tinted colors for dark mode (matching implementation)
-      const successLight = Color(0xFF86EFAC); // Green 300
-      const errorLight = Color(0xFFFCA5A5); // Red 300
-      const infoLight = Color(0xFF93C5FD); // Blue 300
-
       testWidgets('should use dark mode colors for neutral variant', (
         tester,
       ) async {
@@ -302,7 +323,7 @@ void main() {
         // Assert
         final container = tester.widget<Container>(find.byType(Container));
         final decoration = container.decoration as BoxDecoration;
-        expect(decoration.color, equals(DoriColors.dark.surface.two));
+        expect(decoration.color, equals(DoriColors.dark.surface.three));
       });
 
       testWidgets('should use dark mode text color for neutral variant', (
@@ -319,6 +340,57 @@ void main() {
         expect(textWidget.style?.color, equals(DoriColors.dark.content.one));
       });
 
+      testWidgets('should use dark mode soft background for success variant', (
+        tester,
+      ) async {
+        // Arrange
+        const badge = DoriBadge(
+          label: 'Success',
+          variant: DoriBadgeVariant.success,
+        );
+
+        // Act
+        await tester.pumpWidget(buildTestWidget(badge, isDark: true));
+
+        // Assert
+        final container = tester.widget<Container>(find.byType(Container));
+        final decoration = container.decoration as BoxDecoration;
+        expect(decoration.color, equals(DoriColors.dark.feedback.successSoft));
+      });
+
+      testWidgets('should use dark mode soft background for error variant', (
+        tester,
+      ) async {
+        // Arrange
+        const badge = DoriBadge(
+          label: 'Error',
+          variant: DoriBadgeVariant.error,
+        );
+
+        // Act
+        await tester.pumpWidget(buildTestWidget(badge, isDark: true));
+
+        // Assert
+        final container = tester.widget<Container>(find.byType(Container));
+        final decoration = container.decoration as BoxDecoration;
+        expect(decoration.color, equals(DoriColors.dark.feedback.errorSoft));
+      });
+
+      testWidgets('should use dark mode soft background for info variant', (
+        tester,
+      ) async {
+        // Arrange
+        const badge = DoriBadge(label: 'Info', variant: DoriBadgeVariant.info);
+
+        // Act
+        await tester.pumpWidget(buildTestWidget(badge, isDark: true));
+
+        // Assert
+        final container = tester.widget<Container>(find.byType(Container));
+        final decoration = container.decoration as BoxDecoration;
+        expect(decoration.color, equals(DoriColors.dark.feedback.infoSoft));
+      });
+
       testWidgets(
         'should use light green text color for success variant in dark mode',
         (tester) async {
@@ -333,7 +405,10 @@ void main() {
 
           // Assert
           final textWidget = tester.widget<Text>(find.text('Success'));
-          expect(textWidget.style?.color, equals(successLight));
+          expect(
+            textWidget.style?.color,
+            equals(DoriColors.dark.feedback.successLight),
+          );
         },
       );
 
@@ -351,7 +426,10 @@ void main() {
 
           // Assert
           final textWidget = tester.widget<Text>(find.text('Error'));
-          expect(textWidget.style?.color, equals(errorLight));
+          expect(
+            textWidget.style?.color,
+            equals(DoriColors.dark.feedback.errorLight),
+          );
         },
       );
 
@@ -369,7 +447,10 @@ void main() {
 
           // Assert
           final textWidget = tester.widget<Text>(find.text('Info'));
-          expect(textWidget.style?.color, equals(infoLight));
+          expect(
+            textWidget.style?.color,
+            equals(DoriColors.dark.feedback.infoLight),
+          );
         },
       );
     });

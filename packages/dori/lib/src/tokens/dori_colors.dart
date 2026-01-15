@@ -23,6 +23,7 @@ class DoriColors {
       pure: Color(0xFFFFFFFF), // White
       one: Color(0xFFF8FAFC), // Slate 50
       two: Color(0xFFF1F5F9), // Slate 100
+      three: Color(0xFFE2E8F0), // Slate 200 - higher contrast for badges
     ),
     content: DoriContentColors(
       pure: Color(0xFF020617), // Slate 950
@@ -31,8 +32,14 @@ class DoriColors {
     ),
     feedback: DoriFeedbackColors(
       success: Color(0xFF16A34A), // Green 600
+      successSoft: Color(0xFFDCFCE7), // Green 100
+      successLight: Color(0xFF16A34A), // Green 600 (same in light mode)
       error: Color(0xFFDC2626), // Red 600
+      errorSoft: Color(0xFFFEE2E2), // Red 100
+      errorLight: Color(0xFFDC2626), // Red 600 (same in light mode)
       info: Color(0xFF2563EB), // Blue 600
+      infoSoft: Color(0xFFDBEAFE), // Blue 100
+      infoLight: Color(0xFF2563EB), // Blue 600 (same in light mode)
     ),
   );
 
@@ -47,6 +54,7 @@ class DoriColors {
       pure: Color(0xFF020617), // Slate 950
       one: Color(0xFF0F172A), // Slate 900
       two: Color(0xFF1E293B), // Slate 800
+      three: Color(0xFF334155), // Slate 700 - higher contrast for badges
     ),
     content: DoriContentColors(
       pure: Color(0xFFFFFFFF), // White
@@ -55,8 +63,14 @@ class DoriColors {
     ),
     feedback: DoriFeedbackColors(
       success: Color(0xFF16A34A), // Green 600
+      successSoft: Color(0xFF14532D), // Green 900
+      successLight: Color(0xFF86EFAC), // Green 300
       error: Color(0xFFDC2626), // Red 600
+      errorSoft: Color(0xFF7F1D1D), // Red 900
+      errorLight: Color(0xFFFCA5A5), // Red 300
       info: Color(0xFF2563EB), // Blue 600
+      infoSoft: Color(0xFF1E3A8A), // Blue 900
+      infoLight: Color(0xFF93C5FD), // Blue 300
     ),
   );
 }
@@ -114,6 +128,7 @@ class DoriBrandColors {
 /// - **pure**: Maximum contrast (white/black)
 /// - **one**: Primary surface (cards, main containers)
 /// - **two**: Secondary surface (alternative backgrounds)
+/// - **three**: Tertiary surface (higher contrast, badges neutral)
 @immutable
 class DoriSurfaceColors {
   /// Maximum contrast surface
@@ -125,10 +140,14 @@ class DoriSurfaceColors {
   /// Secondary surface (alternative backgrounds)
   final Color two;
 
+  /// Tertiary surface (higher contrast for badges, chips)
+  final Color three;
+
   const DoriSurfaceColors({
     required this.pure,
     required this.one,
     required this.two,
+    required this.three,
   });
 }
 
@@ -158,23 +177,47 @@ class DoriContentColors {
 /// Feedback state colors
 ///
 /// Used to communicate states to the user:
-/// - **success**: Successful actions, confirmations
-/// - **error**: Errors, destructive actions, alerts
-/// - **info**: Neutral information, highlights
+/// - **success/error/info**: Primary feedback colors (Green/Red/Blue 600)
+/// - **successSoft/errorSoft/infoSoft**: Soft backgrounds (100 in light, 900 in dark)
+/// - **successLight/errorLight/infoLight**: Light text for dark backgrounds (300 variants)
 @immutable
 class DoriFeedbackColors {
   /// Success, confirmation (Green 600)
   final Color success;
 
+  /// Success soft background (Green 100 light / Green 900 dark)
+  final Color successSoft;
+
+  /// Success light text for dark backgrounds (Green 300)
+  final Color successLight;
+
   /// Error, destructive action (Red 600)
   final Color error;
+
+  /// Error soft background (Red 100 light / Red 900 dark)
+  final Color errorSoft;
+
+  /// Error light text for dark backgrounds (Red 300)
+  final Color errorLight;
 
   /// Information, neutral highlight (Blue 600)
   final Color info;
 
+  /// Info soft background (Blue 100 light / Blue 900 dark)
+  final Color infoSoft;
+
+  /// Info light text for dark backgrounds (Blue 300)
+  final Color infoLight;
+
   const DoriFeedbackColors({
     required this.success,
+    required this.successSoft,
+    required this.successLight,
     required this.error,
+    required this.errorSoft,
+    required this.errorLight,
     required this.info,
+    required this.infoSoft,
+    required this.infoLight,
   });
 }

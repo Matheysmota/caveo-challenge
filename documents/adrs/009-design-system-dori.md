@@ -167,10 +167,12 @@ dori.brightness                   // Brightness.light ou Brightness.dark
 ```
 colors
 ├── brand      → pure, one, two      (Identidade visual)
-├── surface    → pure, one, two      (Fundos e superfícies)
+├── surface    → pure, one, two, three      (Fundos e superfícies)
 ├── content    → pure, one, two      (Textos e ícones)
-└── feedback   → success, error, info (Estados)
+└── feedback   → success, error, info, successSoft, errorSoft, infoSoft, successLight, errorLight, infoLight (Estados e variantes)
 ```
+
+> **Nota:** Tokens `*Soft` são para backgrounds suaves. Tokens `*Light` são para texto sobre backgrounds soft (especialmente em dark mode).
 
 #### Espaçamentos (Spacing)
 
