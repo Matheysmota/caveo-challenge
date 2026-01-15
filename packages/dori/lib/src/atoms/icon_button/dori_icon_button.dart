@@ -127,8 +127,8 @@ class DoriIconButton extends StatelessWidget {
 
     final iColor = iconColor;
     final effectiveIconColor = iColor?.withValues(
-            alpha: (iColor.a * disabledOpacityMultiplier).clamp(0.0, 1.0),
-          );
+      alpha: (iColor.a * disabledOpacityMultiplier).clamp(0.0, 1.0),
+    );
 
     return Semantics(
       label: effectiveSemanticLabel,
