@@ -49,3 +49,8 @@ O arquivo `README.md` conterá uma "Health Check Badge" vinculada ao status do w
 *   **Cultura de Testes:** A obrigatoriedade de 80% de coverage no diff força os desenvolvedores a escreverem testes junto com a feature, mudando a mentalidade de "testar depois" para "testar durante".
 *   **Feedback Rápido:** O desenvolvedor descobre erros de arquitetura minutos após o push, sem esperar pelo code review humano.
 *   **Custo de CI:** O pipeline consome minutos de build; otimizações (caching de dependências) serão necessárias para não impactar o lead time.
+
+## Referências
+
+- [System Design](../system_design.md) — Visão geral da arquitetura validada pela CI
+- [ADR 003](003-abstracao-e-governanca-bibliotecas.md) — Regras de governança de imports

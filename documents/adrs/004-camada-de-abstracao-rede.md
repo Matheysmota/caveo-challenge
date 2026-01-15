@@ -49,3 +49,8 @@ Decidimos implementar o padrão **ApiDataSourceDelegate** para toda comunicaçã
 *   **Testabilidade:** Testar repositórios torna-se trivial. Não precisamos mockar o servidor HTTP nem a classe complexa do Dio; apenas criamos um `MockApiDataSourceDelegate` que retorna objetos simples.
 *   **Consistência:** Tratamento de erros, Refresh Token, Logger e Headers padrões são configurados em um único lugar.
 *   **Segurança:** Previne que desenvolvedores façam chamadas HTTP "soltas" sem passar pelos interceptors de segurança da aplicação.
+
+## Referências
+
+- [System Design](../system_design.md) — Diagrama de componentes mostrando ApiDataSourceDelegate
+- [ADR 003](003-abstracao-e-governanca-bibliotecas.md) — Governança que bloqueia imports diretos de libs HTTP

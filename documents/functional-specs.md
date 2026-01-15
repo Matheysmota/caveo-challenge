@@ -2,6 +2,8 @@
 
 Este documento detalha o comportamento esperado das funcionalidades do aplicativo, servindo como referência para desenvolvimento e QA.
 
+> **Veja também:** [System Design](system_design.md) para a arquitetura técnica que implementa estas especificações.
+
 ---
 
 ## Escopo do Aplicativo
