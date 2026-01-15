@@ -356,6 +356,7 @@ A CI/CD inclui verificações de acessibilidade:
 
 ## Referências
 
+- [System Design](../system_design.md) — Visão geral da arquitetura e dependências
+- [tokens-spec.md](../tokens-spec.md) — Especificação detalhada dos tokens
 - [Atomic Design - Brad Frost](https://bradfrost.com/blog/post/atomic-web-design/)
 - [Material Design 3](https://m3.material.io/)
-- [GenZ Commerce Kit Tokens](internal)

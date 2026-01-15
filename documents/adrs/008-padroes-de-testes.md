@@ -167,3 +167,9 @@ test/
 ### Trade-offs
 *   **Sem E2E:** Fluxos completos de navegação não são validados automaticamente.
 *   **Tempo adicional:** Escrever testes de corner cases leva mais tempo que apenas happy path.
+
+## Referências
+
+- [System Design](../system_design.md) — Arquitetura que facilita testes unitários
+- [ADR 003](003-abstracao-e-governanca-bibliotecas.md) — Governança do mocktail_export
+- [ADR 005](005-esteira-ci-cd.md) — Execução de testes na CI

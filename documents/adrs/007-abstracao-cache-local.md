@@ -223,5 +223,6 @@ final response = await cache.getModel(
 
 ## Referências
 
+*   [System Design](../system_design.md) — Diagrama de componentes e estratégias de resiliência
 *   [functional-specs.md](../functional-specs.md) — Requisitos de modo offline
 *   [ADR 003](003-abstracao-e-governanca-bibliotecas.md) — Governança de dependências

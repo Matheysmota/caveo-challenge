@@ -77,3 +77,9 @@ Decidimos implementar uma política estrita de **Gerenciamento Centralizado de D
 *   **Segurança:** Limitamos a superfície de ataque e o uso indevido de métodos internos de bibliotecas.
 *   **Disciplina:** Aumenta ligeiramente a fricção para adicionar novas libs, o que incentiva o time a pensar duas vezes antes de inflar o projeto ("Slow down to speed up").
 *   **Padronização:** Garante que todo o time utilize as mesmas versões e configurações base.
+
+## Referências
+
+- [System Design](../system_design.md) — Diagrama de dependências entre packages
+- [ADR 004](004-camada-de-abstracao-rede.md) — Abstração de Networking
+- [ADR 005](005-esteira-ci-cd.md) — Enforcement via CI/CD
