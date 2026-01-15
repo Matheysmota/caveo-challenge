@@ -21,8 +21,9 @@ Decidimos implementar uma esteira de **Integração Contínua (CI)** robusta uti
 
 ### 2. Governança de Arquitetura (Compliance)
 *   **Ação:** Executar script customizado `scripts/check_imports.sh`.
-*   **Objetivo:** Verificar violações da **ADR 003**. O script falhará se detectar imports diretos de pacotes externos dentro de `app/lib/`.
-*   **Exceção:** Pacotes listados na **Allowlist** (ex: `shared`, `dori`, `flutter`, `caveo_challenge`).
+*   **Objetivo:** Verificar violações da **ADR 003**. O script validará imports em todos os packages do monorepo (`app`, `shared`, `dori`), cada um com sua própria allowlist de dependências permitidas.
+*   **Escopo:** O script analisa todos os arquivos `.dart` em `*/lib/` de cada package.
+*   **Exceção:** Pacotes listados na **Allowlist** específica de cada package (consulte ADR 003 para detalhes).
 
 ### 3. Testes e Cobertura (Quality Assurance)
 *   **Ação:** Executar testes unitários e de widget.
