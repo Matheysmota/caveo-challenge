@@ -8,7 +8,7 @@
 /// - Respect TTL policies and return null for expired data
 /// - Clean up expired data automatically on retrieval
 ///
-/// See [ADR 007](../../documents/adrs/007-abstracao-cache-local.md)
+/// See ADR 007 (documents/adrs/007-abstracao-cache-local.md)
 /// for architecture decisions.
 library;
 

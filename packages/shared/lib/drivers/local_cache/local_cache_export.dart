@@ -3,7 +3,7 @@
 /// Provides an abstraction layer for local storage operations
 /// with support for TTL (Time-To-Live) expiration policies.
 ///
-/// See [ADR 007](../../documents/adrs/007-abstracao-cache-local.md)
+/// See ADR 007 (documents/adrs/007-abstracao-cache-local.md)
 /// for architecture decisions.
 ///
 /// ## Usage
