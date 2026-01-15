@@ -13,6 +13,10 @@
 import 'package:widgetbook/widgetbook.dart' as _widgetbook;
 import 'package:widgetbook_caveo/stories/colors_story.dart'
     as _widgetbook_caveo_stories_colors_story;
+import 'package:widgetbook_caveo/stories/icon_button_story.dart'
+    as _widgetbook_caveo_stories_icon_button_story;
+import 'package:widgetbook_caveo/stories/icon_story.dart'
+    as _widgetbook_caveo_stories_icon_story;
 import 'package:widgetbook_caveo/stories/radius_story.dart'
     as _widgetbook_caveo_stories_radius_story;
 import 'package:widgetbook_caveo/stories/spacing_story.dart'
@@ -26,6 +30,25 @@ final directories = <_widgetbook.WidgetbookNode>[
   _widgetbook.WidgetbookCategory(
     name: 'Atoms',
     children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'DoriIconButtonShowcase',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Icon Button',
+            builder: _widgetbook_caveo_stories_icon_button_story
+                .buildDoriIconButtonShowcase,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'DoriIconShowcase',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Icon Gallery',
+            builder: _widgetbook_caveo_stories_icon_story.buildDoriIconShowcase,
+          ),
+        ],
+      ),
       _widgetbook.WidgetbookComponent(
         name: 'DoriTextShowcase',
         useCases: [

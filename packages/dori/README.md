@@ -202,6 +202,112 @@ DoriText(
 | `overflow` | `TextOverflow?` | `null` | Overflow behavior |
 | `textAlign` | `TextAlign?` | `null` | Text alignment |
 
+### DoriIcon
+
+Icon widget with restricted icon set and Dori tokens.
+
+```dart
+// Basic usage with default size (md = 24dp)
+DoriIcon(icon: DoriIconData.search)
+
+// With custom size
+DoriIcon(
+  icon: DoriIconData.close,
+  size: DoriIconSize.sm,
+)
+
+// With custom color
+DoriIcon(
+  icon: DoriIconData.lightMode,
+  color: context.dori.colors.brand.pure,
+)
+
+// With custom semantic label (accessibility)
+DoriIcon(
+  icon: DoriIconData.arrowBack,
+  semanticLabel: 'Return to previous screen',
+)
+```
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `icon` | `DoriIconData` | **required** | Icon from allowed set |
+| `size` | `DoriIconSize` | `md` | Icon size (sm=16, md=24, lg=32) |
+| `color` | `Color?` | `null` | Icon color |
+| `semanticLabel` | `String?` | `null` | Accessibility label |
+
+**Available Icons (`DoriIconData`):**
+
+| Icon | Name | Use Case |
+|------|------|----------|
+| 🔍 | `search` | AppBar search button |
+| ✕ | `close` | Close buttons, clear |
+| ☀️ | `lightMode` | Theme toggle (in dark) |
+| 🌙 | `darkMode` | Theme toggle (in light) |
+| ← | `arrowBack` | Navigation back |
+| ⚠️ | `error` | Error states |
+| 🔄 | `refresh` | Refresh actions |
+| › | `chevronRight` | List navigation |
+| ℹ️ | `info` | Information |
+| ✓ | `check` | Success states |
+| ⚡ | `warning` | Warning states |
+
+### DoriIconButton
+
+Circular icon button with Dori tokens.
+
+```dart
+// Basic usage with default size (md = 40dp)
+DoriIconButton(
+  icon: DoriIconData.search,
+  onPressed: () => print('Pressed!'),
+)
+
+// Small size (32dp)
+DoriIconButton(
+  icon: DoriIconData.close,
+  size: DoriIconButtonSize.sm,
+  onPressed: () {},
+)
+
+// With custom colors
+DoriIconButton(
+  icon: DoriIconData.lightMode,
+  backgroundColor: context.dori.colors.brand.pure,
+  iconColor: context.dori.colors.surface.pure,
+  onPressed: () {},
+)
+
+// Disabled state
+DoriIconButton(
+  icon: DoriIconData.refresh,
+  onPressed: null, // null = disabled
+)
+
+// With custom semantic label (accessibility)
+DoriIconButton(
+  icon: DoriIconData.arrowBack,
+  semanticLabel: 'Return to previous screen',
+  onPressed: () => Navigator.pop(context),
+)
+```
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `icon` | `DoriIconData` | **required** | Icon from allowed set |
+| `onPressed` | `VoidCallback?` | **required** | Tap callback (null = disabled) |
+| `size` | `DoriIconButtonSize` | `md` | Button size (sm=32dp, md=40dp) |
+| `backgroundColor` | `Color?` | `null` | Background color |
+| `iconColor` | `Color?` | `null` | Icon color |
+| `semanticLabel` | `String?` | `null` | Accessibility label |
+
+**Size Reference:**
+
+| Size | Total | Padding | Icon |
+|------|-------|---------|------|
+| `sm` | 32dp | 8dp | 16dp |
+| `md` | 40dp | 8dp | 24dp |
+
 ---
 
 ## 📚 Documentação
