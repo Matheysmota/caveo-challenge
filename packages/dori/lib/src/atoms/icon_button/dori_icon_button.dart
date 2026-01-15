@@ -115,8 +115,12 @@ class DoriIconButton extends StatelessWidget {
     // Apply opacity to colors directly instead of wrapping the widget tree
     // This preserves the InkWell ripple effect when enabled
     final disabledOpacityMultiplier = isDisabled ? 0.5 : 1.0;
-    final defaultBackgroundColor = dori.colors.content.two.withValues(
-      alpha: 0.12 * disabledOpacityMultiplier,
+    final defaultColor = dori.colors.content.two;
+    final defaultBackgroundColor = defaultColor.withValues(
+      alpha: (defaultColor.a * 0.12 * disabledOpacityMultiplier).clamp(
+        0.0,
+        1.0,
+      ),
     );
     final bgColor = backgroundColor;
     final effectiveBackgroundColor = bgColor != null
