@@ -23,6 +23,8 @@ import 'package:widgetbook_caveo/stories/icon_button_story.dart'
     as _widgetbook_caveo_stories_icon_button_story;
 import 'package:widgetbook_caveo/stories/icon_story.dart'
     as _widgetbook_caveo_stories_icon_story;
+import 'package:widgetbook_caveo/stories/product_card_story.dart'
+    as _widgetbook_caveo_stories_product_card_story;
 import 'package:widgetbook_caveo/stories/radius_story.dart'
     as _widgetbook_caveo_stories_radius_story;
 import 'package:widgetbook_caveo/stories/spacing_story.dart'
@@ -91,6 +93,21 @@ final directories = <_widgetbook.WidgetbookNode>[
           _widgetbook.WidgetbookUseCase(
             name: 'Text Variants',
             builder: _widgetbook_caveo_stories_text_story.buildDoriTextShowcase,
+          ),
+        ],
+      ),
+    ],
+  ),
+  _widgetbook.WidgetbookCategory(
+    name: 'Organisms',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'DoriProductCardShowcase',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Product Card Showcase',
+            builder: _widgetbook_caveo_stories_product_card_story
+                .buildDoriProductCardShowcase,
           ),
         ],
       ),

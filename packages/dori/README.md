@@ -324,13 +324,110 @@ DoriIconButton(
 packages/dori/
 ├── lib/
 │   ├── src/
-│   │   ├── atoms/        # DoriText, DoriIcon, DoriBadge, DoriButton
+│   │   ├── atoms/        # DoriText, DoriIcon, DoriBadge, DoriButton, DoriShimmer
+│   │   ├── organisms/    # DoriProductCard
 │   │   ├── tokens/       # Colors, Spacing, Radius, Typography
 │   │   └── theme/        # DoriTheme, DoriProvider
 │   └── dori.dart         # Barrel principal
 ├── example/              # Widgetbook
 └── test/
 ```
+
+---
+
+## 🦠 Organisms
+
+### DoriProductCard
+
+Pinterest-style card for product/content display with shimmer loading and press animation.
+
+```dart
+// Basic usage
+DoriProductCard(
+  imageUrl: 'https://example.com/product.jpg',
+  primaryText: 'Product Name',
+)
+
+// With all options
+DoriProductCard(
+  imageUrl: 'https://example.com/product.jpg',
+  primaryText: 'Premium Headphones',
+  secondaryText: 'R\$ 299,90',
+  badgeText: 'NEW',
+  size: DoriProductCardSize.lg,
+  onTap: () => print('Card tapped!'),
+)
+
+// With custom image builder (e.g., cached_network_image)
+DoriProductCard(
+  imageUrl: imageUrl,
+  primaryText: 'Product',
+  imageBuilder: (context, url) => CachedNetworkImage(
+    imageUrl: url,
+    fit: BoxFit.cover,
+  ),
+)
+```
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `imageUrl` | `String` | **required** | URL of the product image |
+| `primaryText` | `String` | **required** | Main text (e.g., product name) |
+| `secondaryText` | `String?` | `null` | Secondary text (e.g., price) |
+| `badgeText` | `String?` | `null` | Badge label (e.g., category, status) |
+| `size` | `DoriProductCardSize` | `md` | Card size variant |
+| `onTap` | `VoidCallback?` | `null` | Tap callback (enables press animation) |
+| `semanticLabel` | `String?` | `null` | Custom accessibility label |
+| `imageBuilder` | `Widget Function(BuildContext, String)?` | `null` | Custom image builder |
+
+**Size Reference:**
+
+| Size | Aspect Ratio | Use Case |
+|------|--------------|----------|
+| `sm` | 3:4 (0.75) | Compact grids, small thumbnails |
+| `md` | 4:5 (0.80) | Standard product cards |
+| `lg` | 1:1 (1.00) | Featured products, hero cards |
+
+**Features:**
+- 🎭 **Press Animation:** Scale 0.95 + Opacity 0.85 with 80ms minimum duration
+- ✨ **Shimmer Loading:** Automatic shimmer effect while image loads
+- ♿ **Accessibility:** Full semantic support with button role when tappable
+- 🎬 **Reduced Motion:** Respects system accessibility settings
+
+---
+
+## ✨ Atoms (continued)
+
+### DoriShimmer
+
+Reusable shimmer loading placeholder with animated gradient.
+
+```dart
+// Basic usage (fills parent container)
+Container(
+  width: 200,
+  height: 100,
+  child: DoriShimmer(),
+)
+
+// Inside a card or skeleton
+AspectRatio(
+  aspectRatio: 4 / 5,
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(16),
+    child: DoriShimmer(),
+  ),
+)
+```
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| (none) | — | — | Fully automatic, no configuration needed |
+
+**Animation Details:**
+- Duration: 1500ms
+- Curve: `Curves.easeInOutSine`
+- Colors: `surface.two` → `surface.three` (theme-aware)
 
 ---
 
