@@ -34,9 +34,21 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   - Props: `label`, `variant`, `size`, `semanticLabel`
   - Variants: neutral, success, error, info
   - Sizes: sm (compact), md (standard)
-  - Semantic background colors with 15% opacity
+  - Semantic background colors with 25% opacity
+  - Dark mode: uses `content.one` for text color (better contrast)
+  - Light mode: uses feedback color for text
+  - Horizontal padding: 16dp, vertical: 4dp (md) / 2dp (sm)
+  - Border radius: md (16dp)
   - Built-in accessibility with semantic labels
   - Widgetbook story with variants, sizes and use cases
+
+### Alterado
+
+#### Tokens
+- 🔘 `DoriRadius` — Nova escala de border radius
+  - sm: 8dp (inputs, botões pequenos)
+  - md: 16dp (badges, chips, botões) — **antes era 12dp**
+  - lg: 24dp (cards, modais) — **antes era 16dp**
 
 ---
 

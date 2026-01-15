@@ -111,7 +111,7 @@ void main() {
           padding,
           equals(
             const EdgeInsets.symmetric(
-              horizontal: DoriSpacing.xxs,
+              horizontal: DoriSpacing.xs,
               vertical: DoriSpacing.xxxs,
             ),
           ),
@@ -134,7 +134,7 @@ void main() {
           padding,
           equals(
             const EdgeInsets.symmetric(
-              horizontal: DoriSpacing.xxs,
+              horizontal: DoriSpacing.xs,
               vertical: DoriSpacing.xxxs / 2,
             ),
           ),
@@ -313,6 +313,60 @@ void main() {
         final textWidget = tester.widget<Text>(find.text('Dark'));
         expect(textWidget.style?.color, equals(DoriColors.dark.content.one));
       });
+
+      testWidgets(
+        'should use content.one text color for success variant in dark mode',
+        (tester) async {
+          // Arrange
+          const badge = DoriBadge(
+            label: 'Success',
+            variant: DoriBadgeVariant.success,
+          );
+
+          // Act
+          await tester.pumpWidget(buildTestWidget(badge, isDark: true));
+
+          // Assert
+          final textWidget = tester.widget<Text>(find.text('Success'));
+          expect(textWidget.style?.color, equals(DoriColors.dark.content.one));
+        },
+      );
+
+      testWidgets(
+        'should use content.one text color for error variant in dark mode',
+        (tester) async {
+          // Arrange
+          const badge = DoriBadge(
+            label: 'Error',
+            variant: DoriBadgeVariant.error,
+          );
+
+          // Act
+          await tester.pumpWidget(buildTestWidget(badge, isDark: true));
+
+          // Assert
+          final textWidget = tester.widget<Text>(find.text('Error'));
+          expect(textWidget.style?.color, equals(DoriColors.dark.content.one));
+        },
+      );
+
+      testWidgets(
+        'should use content.one text color for info variant in dark mode',
+        (tester) async {
+          // Arrange
+          const badge = DoriBadge(
+            label: 'Info',
+            variant: DoriBadgeVariant.info,
+          );
+
+          // Act
+          await tester.pumpWidget(buildTestWidget(badge, isDark: true));
+
+          // Assert
+          final textWidget = tester.widget<Text>(find.text('Info'));
+          expect(textWidget.style?.color, equals(DoriColors.dark.content.one));
+        },
+      );
     });
 
     group('DoriBadgeVariant', () {

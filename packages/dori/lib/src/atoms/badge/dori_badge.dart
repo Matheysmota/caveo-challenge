@@ -106,10 +106,11 @@ class DoriBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.dori.colors;
+    final dori = context.dori;
+    final colors = dori.colors;
     final effectiveSemanticLabel = semanticLabel ?? label;
 
-    final (backgroundColor, textColor) = _getColors(colors);
+    final (backgroundColor, textColor) = _getColors(colors, dori.isDark);
     final padding = _getPadding();
 
     return Semantics(
@@ -130,20 +131,26 @@ class DoriBadge extends StatelessWidget {
   }
 
   /// Returns background and text colors based on variant.
-  (Color backgroundColor, Color textColor) _getColors(DoriColorScheme colors) {
+  ///
+  /// In dark mode, text uses content.one for better contrast.
+  /// In light mode, text uses the feedback color directly.
+  (Color backgroundColor, Color textColor) _getColors(
+    DoriColorScheme colors,
+    bool isDark,
+  ) {
     return switch (variant) {
       DoriBadgeVariant.neutral => (colors.surface.two, colors.content.one),
       DoriBadgeVariant.success => (
         colors.feedback.success.withValues(alpha: 0.25),
-        colors.feedback.success,
+        isDark ? colors.content.one : colors.feedback.success,
       ),
       DoriBadgeVariant.error => (
         colors.feedback.error.withValues(alpha: 0.25),
-        colors.feedback.error,
+        isDark ? colors.content.one : colors.feedback.error,
       ),
       DoriBadgeVariant.info => (
         colors.feedback.info.withValues(alpha: 0.25),
-        colors.feedback.info,
+        isDark ? colors.content.one : colors.feedback.info,
       ),
     };
   }
@@ -152,11 +159,11 @@ class DoriBadge extends StatelessWidget {
   EdgeInsets _getPadding() {
     return switch (size) {
       DoriBadgeSize.sm => const EdgeInsets.symmetric(
-        horizontal: DoriSpacing.xxs,
+        horizontal: DoriSpacing.xs,
         vertical: DoriSpacing.xxxs / 2,
       ),
       DoriBadgeSize.md => const EdgeInsets.symmetric(
-        horizontal: DoriSpacing.xxs,
+        horizontal: DoriSpacing.xs,
         vertical: DoriSpacing.xxxs,
       ),
     };
