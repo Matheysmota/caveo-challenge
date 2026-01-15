@@ -12,6 +12,8 @@ dependencies:
     sdk: flutter
   # Local storage implementation
   shared_preferences: 2.5.4
+  # Connectivity monitoring
+  connectivity_plus: 6.1.1
   # Mocking library (exported via mocktail_export.dart for app tests)
   mocktail: 1.0.4
 
