@@ -13,8 +13,15 @@
 /// final localCacheProvider = FutureProvider<LocalCacheSource>((ref) async {
 ///   return SharedPreferencesLocalCacheSource.create();
 /// });
+///
+/// final connectivityProvider = Provider<ConnectivityObserver>((ref) {
+///   return ConnectivityPlusObserver();
+/// });
 /// ```
 library;
+
+// Connectivity implementation
+export 'src/drivers/connectivity/connectivity_plus_observer.dart';
 
 // Local cache implementation
 export 'src/drivers/local_cache/shared_preferences_local_cache_source.dart';
