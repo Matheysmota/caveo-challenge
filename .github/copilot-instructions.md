@@ -193,9 +193,12 @@ Widget build(BuildContext context) {
 | Categoria | Tokens |
 |-----------|--------|
 | **Spacing** | `xxxs(4)`, `xxs(8)`, `xs(16)`, `sm(24)`, `md(32)`, `lg(48)`, `xl(64)` |
-| **Radius** | `sm(8)`, `md(12)`, `lg(16)` |
+| **Radius** | `sm(8)`, `md(16)`, `lg(24)` |
+| **Shadows** | `xs(blur 2)`, `sm(blur 4)`, `md(blur 8)`, `lg(blur 16)` |
 | **Typography** | `title5`, `description`, `descriptionBold`, `caption`, `captionBold` |
-| **Colors** | `brand.{pure,one,two}`, `surface.{pure,one,two}`, `content.{pure,one,two}`, `feedback.{success,error,info}` |
+| **Colors** | `brand.{pure,one,two}`, `surface.{pure,one,two,three}`, `content.{pure,one,two}`, `feedback.{success,error,info,successSoft,errorSoft,infoSoft,successLight,errorLight,infoLight}` |
+
+> **Nota:** Use tokens `*Soft` para backgrounds e `*Light` para texto sobre esses backgrounds (especialmente em dark mode).
 
 ### Controle de Tema
 

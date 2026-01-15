@@ -30,6 +30,43 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   - Disabled state support with 0.5 opacity
   - Built-in accessibility with semantic labels
   - Widgetbook story with size variants and states
+- 🏷️ `DoriBadge` — Badge for status, labels, or counts
+  - Props: `label`, `variant`, `size`, `semanticLabel`
+  - Variants: neutral, success, error, info
+  - Sizes: sm (compact: 8dp horizontal), md (standard: 24dp horizontal)
+  - Uses `DoriText` internally for text rendering
+  - Uses explicit token colors (soft backgrounds, light text)
+  - Neutral variant uses `surface.three` for better contrast
+  - Subtle shadow using `DoriShadows.xs` token
+  - Dark mode: soft backgrounds with light tinted text for contrast
+  - Light mode: soft backgrounds with feedback colors for text
+  - Border radius: md (16dp)
+  - Built-in accessibility with semantic labels
+  - Widgetbook story with variants, sizes and use cases
+
+#### Tokens
+- 🎨 `DoriFeedbackColors` — Novos tokens para backgrounds e texto
+  - `successSoft`, `errorSoft`, `infoSoft` — Backgrounds suaves (Green/Red/Blue 100 light, 900 dark)
+  - `successLight`, `errorLight`, `infoLight` — Texto com contraste (Green/Red/Blue 600 light, 300 dark)
+  - Elimina uso de `withValues(alpha:)` para gerar cores semanticamente
+- 🎨 `DoriSurfaceColors` — Novo token `three`
+  - `surface.three` — Superfície terciária para maior contraste (Slate 200 light, Slate 700 dark)
+  - Usado em badges neutral para destaque visual
+- 🌑 `DoriShadows` — Sistema de tokens para sombras
+  - Escala: xs, sm, md, lg
+  - Adaptado para light/dark mode com opacidades diferentes
+  - xs: blur 2, offset (0,1) — badges, chips
+  - sm: blur 4, offset (0,2) — cards
+  - md: blur 8, offset (0,4) — elementos flutuantes
+  - lg: blur 16, offset (0,8) — modais, overlays
+
+### Alterado
+
+#### Tokens
+- 🔘 `DoriRadius` — Nova escala de border radius
+  - sm: 8dp (inputs, botões pequenos)
+  - md: 16dp (badges, chips, botões) — **antes era 12dp**
+  - lg: 24dp (cards, modais) — **antes era 16dp**
 
 ---
 

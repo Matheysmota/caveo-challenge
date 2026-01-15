@@ -11,6 +11,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:widgetbook/widgetbook.dart' as _widgetbook;
+import 'package:widgetbook_caveo/stories/badge_story.dart'
+    as _widgetbook_caveo_stories_badge_story;
 import 'package:widgetbook_caveo/stories/colors_story.dart'
     as _widgetbook_caveo_stories_colors_story;
 import 'package:widgetbook_caveo/stories/icon_button_story.dart'
@@ -30,6 +32,16 @@ final directories = <_widgetbook.WidgetbookNode>[
   _widgetbook.WidgetbookCategory(
     name: 'Atoms',
     children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'DoriBadgeShowcase',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Badge Showcase',
+            builder:
+                _widgetbook_caveo_stories_badge_story.buildDoriBadgeShowcase,
+          ),
+        ],
+      ),
       _widgetbook.WidgetbookComponent(
         name: 'DoriIconButtonShowcase',
         useCases: [

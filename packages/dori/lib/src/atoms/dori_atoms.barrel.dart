@@ -9,6 +9,7 @@
 /// - [DoriIcon] — Icon with restricted icon set
 /// - [DoriIconButton] — Circular icon button
 /// - [DoriText] — Text with typography tokens
+/// - [DoriBadge] — Badge for status, labels, or counts
 ///
 /// {@category Atoms}
 library;
@@ -20,3 +21,6 @@ export 'icon_button/dori_icon_button.dart';
 
 // Text
 export 'text/dori_text.dart';
+
+// Badge
+export 'badge/dori_badge.dart';

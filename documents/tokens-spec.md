@@ -120,6 +120,7 @@ colors
 | `surface.pure` | White `#FFFFFF` | Slate 950 `#020617` | Superfície máximo contraste |
 | `surface.one` | Slate 50 `#F8FAFC` | Slate 900 `#0F172A` | Fundo de cards (primário) |
 | `surface.two` | Slate 100 `#F1F5F9` | Slate 800 `#1E293B` | Fundo secundário |
+| `surface.three` | Slate 200 `#E2E8F0` | Slate 700 `#334155` | Superfície terciária (badges neutral, chips) |
 
 ### Content (Textos e Ícones)
 
@@ -131,11 +132,31 @@ colors
 
 ### Feedback (Estados)
 
-| Token | Cor | Uso |
-|-------|-----|-----|
-| `feedback.success` | Green 600 `#16A34A` | Sucesso, confirmação |
-| `feedback.error` | Red 600 `#DC2626` | Erro, ação destrutiva |
-| `feedback.info` | Blue 600 `#2563EB` | Informação, destaque neutro |
+#### Cores Principais
+
+| Token | Light Mode | Dark Mode | Uso |
+|-------|------------|-----------|-----|
+| `feedback.success` | Green 600 `#16A34A` | Green 600 `#16A34A` | Sucesso, confirmação |
+| `feedback.error` | Red 600 `#DC2626` | Red 600 `#DC2626` | Erro, ação destrutiva |
+| `feedback.info` | Blue 600 `#2563EB` | Blue 600 `#2563EB` | Informação, destaque neutro |
+
+#### Cores Soft (Backgrounds)
+
+| Token | Light Mode | Dark Mode | Uso |
+|-------|------------|-----------|-----|
+| `feedback.successSoft` | Green 100 `#DCFCE7` | Green 900 `#14532D` | Background de badges/alertas de sucesso |
+| `feedback.errorSoft` | Red 100 `#FEE2E2` | Red 900 `#7F1D1D` | Background de badges/alertas de erro |
+| `feedback.infoSoft` | Blue 100 `#DBEAFE` | Blue 900 `#1E3A8A` | Background de badges/alertas de informação |
+
+#### Cores Light (Texto em Dark Mode)
+
+| Token | Light Mode | Dark Mode | Uso |
+|-------|------------|-----------|-----|
+| `feedback.successLight` | Green 600 `#16A34A` | Green 300 `#86EFAC` | Texto de feedback em dark mode |
+| `feedback.errorLight` | Red 600 `#DC2626` | Red 300 `#FCA5A5` | Texto de feedback em dark mode |
+| `feedback.infoLight` | Blue 600 `#2563EB` | Blue 300 `#93C5FD` | Texto de feedback em dark mode |
+
+> **Nota:** Os tokens `*Light` existem para garantir contraste adequado de texto sobre backgrounds `*Soft` em dark mode. Em light mode, usam a mesma cor que o token principal.
 
 ---
 
@@ -189,9 +210,9 @@ Container(
 
 | Token | Valor | Uso |
 |-------|-------|-----|
-| `sm` | 8dp | Botões, inputs, badges |
-| `md` | 12dp | Cards pequenos, chips |
-| `lg` | 16dp | Cards principais, modais |
+| `sm` | 8dp | Elementos pequenos (inputs, botões pequenos) |
+| `md` | 16dp | Elementos médios (badges, chips, botões) |
+| `lg` | 24dp | Elementos grandes (cards, modais, containers) |
 
 ### Uso
 
@@ -207,6 +228,40 @@ ClipRRect(
   borderRadius: BorderRadius.circular(context.dori.radius.lgValue),
   child: Image(...),
 );
+```
+
+---
+
+## Shadows
+
+### Escala
+
+| Token | Blur | Offset | Uso |
+|-------|------|--------|-----|
+| `xs` | 2dp | (0, 1) | Elementos pequenos (badges, chips) |
+| `sm` | 4dp | (0, 2) | Cards e containers |
+| `md` | 8dp | (0, 4) | Elementos flutuantes |
+| `lg` | 16dp | (0, 8) | Modais e overlays |
+
+### Cores por Tema
+
+| Tema | xs | sm | md | lg |
+|------|----|----|----|----|
+| **Light** | Slate 950 @ 8% | Slate 950 @ 10% | Slate 950 @ 12% | Slate 950 @ 16% |
+| **Dark** | Black @ 20% | Black @ 25% | Black @ 30% | Black @ 35% |
+
+### Uso
+
+```dart
+Container(
+  decoration: BoxDecoration(
+    boxShadow: DoriShadows.of(context).xs,
+  ),
+);
+
+// Acesso direto (sem context)
+final lightShadow = DoriShadows.light.sm;
+final darkShadow = DoriShadows.dark.sm;
 ```
 
 ---
@@ -256,6 +311,7 @@ dori.setTheme(dori.themeMode.inverse);
 - [x] `DoriColors` com light/dark schemes
 - [x] `DoriSpacing` com escala flat
 - [x] `DoriRadius` com sm/md/lg
+- [x] `DoriShadows` com xs/sm/md/lg
 - [x] `DoriTypography` com 5 variantes
 - [x] `DoriTheme.light` e `DoriTheme.dark`
 - [x] `DoriThemeExtension` para acesso via context
