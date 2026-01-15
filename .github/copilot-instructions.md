@@ -193,7 +193,7 @@ Widget build(BuildContext context) {
 | Categoria | Tokens |
 |-----------|--------|
 | **Spacing** | `xxxs(4)`, `xxs(8)`, `xs(16)`, `sm(24)`, `md(32)`, `lg(48)`, `xl(64)` |
-| **Radius** | `sm(8)`, `md(12)`, `lg(16)` |
+| **Radius** | `sm(8)`, `md(16)`, `lg(24)` |
 | **Typography** | `title5`, `description`, `descriptionBold`, `caption`, `captionBold` |
 | **Colors** | `brand.{pure,one,two}`, `surface.{pure,one,two}`, `content.{pure,one,two}`, `feedback.{success,error,info}` |
 

@@ -119,7 +119,7 @@ class DoriBadge extends StatelessWidget {
         padding: padding,
         decoration: BoxDecoration(
           color: backgroundColor,
-          borderRadius: DoriRadius.sm,
+          borderRadius: DoriRadius.md,
         ),
         child: Text(
           label,
@@ -134,15 +134,15 @@ class DoriBadge extends StatelessWidget {
     return switch (variant) {
       DoriBadgeVariant.neutral => (colors.surface.two, colors.content.one),
       DoriBadgeVariant.success => (
-        colors.feedback.success.withValues(alpha: 0.15),
+        colors.feedback.success.withValues(alpha: 0.25),
         colors.feedback.success,
       ),
       DoriBadgeVariant.error => (
-        colors.feedback.error.withValues(alpha: 0.15),
+        colors.feedback.error.withValues(alpha: 0.25),
         colors.feedback.error,
       ),
       DoriBadgeVariant.info => (
-        colors.feedback.info.withValues(alpha: 0.15),
+        colors.feedback.info.withValues(alpha: 0.25),
         colors.feedback.info,
       ),
     };

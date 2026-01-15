@@ -5,29 +5,29 @@ import 'package:flutter/material.dart';
 /// Scale of radii for rounded corners.
 ///
 /// ## Scale
-/// - **sm**: 8dp — Buttons, inputs, badges
-/// - **md**: 12dp — Small cards, chips
-/// - **lg**: 16dp — Main cards, modals
+/// - **sm**: 8dp — Small elements (inputs, small buttons)
+/// - **md**: 16dp — Medium elements (badges, chips, buttons)
+/// - **lg**: 24dp — Large elements (cards, modals, containers)
 ///
 /// {@category Tokens}
 class DoriRadius {
   const DoriRadius._();
 
-  /// 8dp — Buttons, inputs, badges
+  /// 8dp — Small elements (inputs, small buttons)
   static const double smValue = 8;
 
-  /// 12dp — Small cards, chips
-  static const double mdValue = 12;
+  /// 16dp — Medium elements (badges, chips, buttons)
+  static const double mdValue = 16;
 
-  /// 16dp — Main cards, modals
-  static const double lgValue = 16;
+  /// 24dp — Large elements (cards, modals, containers)
+  static const double lgValue = 24;
 
   /// Circular BorderRadius of 8dp
   static BorderRadius get sm => BorderRadius.circular(smValue);
 
-  /// Circular BorderRadius of 12dp
+  /// Circular BorderRadius of 16dp
   static BorderRadius get md => BorderRadius.circular(mdValue);
 
-  /// Circular BorderRadius of 16dp
+  /// Circular BorderRadius of 24dp
   static BorderRadius get lg => BorderRadius.circular(lgValue);
 }

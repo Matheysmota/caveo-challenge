@@ -189,9 +189,9 @@ Container(
 
 | Token | Valor | Uso |
 |-------|-------|-----|
-| `sm` | 8dp | Botões, inputs, badges |
-| `md` | 12dp | Cards pequenos, chips |
-| `lg` | 16dp | Cards principais, modais |
+| `sm` | 8dp | Elementos pequenos (inputs, botões pequenos) |
+| `md` | 16dp | Elementos médios (badges, chips, botões) |
+| `lg` | 24dp | Elementos grandes (cards, modais, containers) |
 
 ### Uso
 

@@ -53,7 +53,7 @@ void main() {
         final container = tester.widget<Container>(find.byType(Container));
         final decoration = container.decoration as BoxDecoration;
         final expectedColor = DoriColors.light.feedback.success.withValues(
-          alpha: 0.15,
+          alpha: 0.25,
         );
         expect(decoration.color, equals(expectedColor));
       });
@@ -72,7 +72,7 @@ void main() {
         final container = tester.widget<Container>(find.byType(Container));
         final decoration = container.decoration as BoxDecoration;
         final expectedColor = DoriColors.light.feedback.error.withValues(
-          alpha: 0.15,
+          alpha: 0.25,
         );
         expect(decoration.color, equals(expectedColor));
       });
@@ -88,7 +88,7 @@ void main() {
         final container = tester.widget<Container>(find.byType(Container));
         final decoration = container.decoration as BoxDecoration;
         final expectedColor = DoriColors.light.feedback.info.withValues(
-          alpha: 0.15,
+          alpha: 0.25,
         );
         expect(decoration.color, equals(expectedColor));
       });
@@ -236,7 +236,7 @@ void main() {
         // Assert
         final container = tester.widget<Container>(find.byType(Container));
         final decoration = container.decoration as BoxDecoration;
-        expect(decoration.borderRadius, equals(DoriRadius.sm));
+        expect(decoration.borderRadius, equals(DoriRadius.md));
       });
     });
 
