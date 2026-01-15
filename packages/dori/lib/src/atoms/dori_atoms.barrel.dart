@@ -10,6 +10,8 @@
 /// - [DoriIconButton] — Circular icon button
 /// - [DoriText] — Text with typography tokens
 /// - [DoriBadge] — Badge for status, labels, or counts
+/// - [DoriCircularProgress] — Morphing loading indicator
+/// - [DoriButton] — Button with variants and loading state
 ///
 /// {@category Atoms}
 library;
@@ -24,3 +26,9 @@ export 'text/dori_text.dart';
 
 // Badge
 export 'badge/dori_badge.dart';
+
+// Circular Progress
+export 'circular_progress/dori_circular_progress.dart';
+
+// Button
+export 'button/dori_button.dart';

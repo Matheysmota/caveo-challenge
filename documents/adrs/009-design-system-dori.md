@@ -95,10 +95,29 @@ packages/dori/
 │   │   │   └── dori_tokens.barrel.dart
 │   │   │
 │   │   ├── atoms/
-│   │   │   ├── dori_text.dart
-│   │   │   ├── dori_icon.dart
-│   │   │   ├── dori_image.dart
-│   │   │   ├── dori_badge.dart
+│   │   │   ├── badge/
+│   │   │   │   ├── dori_badge.dart           # Widget principal
+│   │   │   │   ├── dori_badge_variant.dart   # Enum de variantes
+│   │   │   │   └── dori_badge_size.dart      # Enum de tamanhos
+│   │   │   ├── button/
+│   │   │   │   ├── dori_button.dart
+│   │   │   │   ├── dori_button_variant.dart
+│   │   │   │   ├── dori_button_size.dart
+│   │   │   │   └── dori_button_style.dart    # Lógica de cores/estilos
+│   │   │   ├── circular_progress/
+│   │   │   │   ├── dori_circular_progress.dart
+│   │   │   │   ├── dori_circular_progress_size.dart
+│   │   │   │   ├── morphing_shape_painter.dart
+│   │   │   │   └── shape_generators.dart
+│   │   │   ├── icon/
+│   │   │   │   ├── dori_icon.dart
+│   │   │   │   ├── dori_icon_data.dart       # Enum de ícones permitidos
+│   │   │   │   └── dori_icon_size.dart
+│   │   │   ├── icon_button/
+│   │   │   │   ├── dori_icon_button.dart
+│   │   │   │   └── dori_icon_button_size.dart
+│   │   │   ├── text/
+│   │   │   │   └── dori_text.dart
 │   │   │   └── dori_atoms.barrel.dart
 │   │   │
 │   │   ├── molecules/

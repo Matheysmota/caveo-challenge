@@ -13,6 +13,10 @@
 import 'package:widgetbook/widgetbook.dart' as _widgetbook;
 import 'package:widgetbook_caveo/stories/badge_story.dart'
     as _widgetbook_caveo_stories_badge_story;
+import 'package:widgetbook_caveo/stories/button_story.dart'
+    as _widgetbook_caveo_stories_button_story;
+import 'package:widgetbook_caveo/stories/circular_progress_story.dart'
+    as _widgetbook_caveo_stories_circular_progress_story;
 import 'package:widgetbook_caveo/stories/colors_story.dart'
     as _widgetbook_caveo_stories_colors_story;
 import 'package:widgetbook_caveo/stories/icon_button_story.dart'
@@ -39,6 +43,26 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Badge Showcase',
             builder:
                 _widgetbook_caveo_stories_badge_story.buildDoriBadgeShowcase,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'DoriButtonShowcase',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Button Showcase',
+            builder:
+                _widgetbook_caveo_stories_button_story.buildDoriButtonShowcase,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'DoriCircularProgressShowcase',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Circular Progress Showcase',
+            builder: _widgetbook_caveo_stories_circular_progress_story
+                .buildDoriCircularProgressShowcase,
           ),
         ],
       ),
