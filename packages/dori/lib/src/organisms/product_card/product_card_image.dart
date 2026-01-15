@@ -56,7 +56,7 @@ class ProductCardImage extends StatelessWidget {
 
 /// Default image widget with shimmer loading and error handling.
 ///
-/// Separated into its own StatefulWidget so the shimmer animation
+/// Separated into its own widget so the shimmer animation
 /// is only created when actually needed (during loading state).
 class _DefaultProductImage extends StatelessWidget {
   const _DefaultProductImage({required this.imageUrl});

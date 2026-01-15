@@ -121,13 +121,7 @@ class DoriProductCardShowcase extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface.one,
         borderRadius: DoriRadius.md,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: DoriShadows.light.sm,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,13 +203,7 @@ class DoriProductCardShowcase extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface.one,
         borderRadius: DoriRadius.md,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: DoriShadows.light.sm,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -288,13 +276,7 @@ class DoriProductCardShowcase extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface.one,
         borderRadius: DoriRadius.md,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: DoriShadows.light.sm,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -380,13 +362,7 @@ class DoriProductCardShowcase extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface.one,
         borderRadius: DoriRadius.md,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: DoriShadows.light.sm,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

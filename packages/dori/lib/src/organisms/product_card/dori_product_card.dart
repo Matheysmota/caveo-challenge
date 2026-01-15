@@ -118,6 +118,8 @@ class _DoriProductCardState extends State<DoriProductCard>
   DateTime? _pressStartTime;
 
   /// Whether we're waiting for minimum press duration before reversing.
+  ///
+  /// Starts as `false` because there are no pending release operations initially.
   bool _pendingRelease = false;
 
   bool get _isInteractive => widget.onTap != null;
