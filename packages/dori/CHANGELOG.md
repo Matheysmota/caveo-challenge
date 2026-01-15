@@ -30,6 +30,13 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   - Disabled state support with 0.5 opacity
   - Built-in accessibility with semantic labels
   - Widgetbook story with size variants and states
+- 🏷️ `DoriBadge` — Badge for status, labels, or counts
+  - Props: `label`, `variant`, `size`, `semanticLabel`
+  - Variants: neutral, success, error, info
+  - Sizes: sm (compact), md (standard)
+  - Semantic background colors with 15% opacity
+  - Built-in accessibility with semantic labels
+  - Widgetbook story with variants, sizes and use cases
 
 ---
 
