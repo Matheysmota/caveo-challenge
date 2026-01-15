@@ -3,10 +3,21 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared/shared.dart';
 
 void main() {
-  test('adds one to input values', () {
-    final calculator = Calculator();
-    expect(calculator.addOne(2), 3);
-    expect(calculator.addOne(-7), -6);
-    expect(calculator.addOne(0), 1);
+  group('shared package', () {
+    test('should export LocalCacheSource', () {
+      // This test validates that the barrel export works correctly.
+      // LocalCacheSource is an abstract class, we just check it's accessible.
+      expect(LocalCacheSource, isNotNull);
+    });
+
+    test('should export LocalStorageKey', () {
+      expect(LocalStorageKey.products, isNotNull);
+      expect(LocalStorageKey.themeMode, isNotNull);
+    });
+
+    test('should export LocalStorageTTL', () {
+      const ttl = LocalStorageTTL.withoutExpiration();
+      expect(ttl.expires, isFalse);
+    });
   });
 }

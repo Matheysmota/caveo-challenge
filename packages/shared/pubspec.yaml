@@ -1,5 +1,5 @@
 name: shared
-description: "A new Flutter package project."
+description: "Shared utilities, drivers, and library exports for the Caveo Challenge app."
 version: 0.0.1
 homepage:
 
@@ -10,11 +10,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # Local storage implementation
+  shared_preferences: 2.5.4
+  # Mocking library (exported via mocktail_export.dart for app tests)
+  mocktail: 1.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
+  flutter_lints: 6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
