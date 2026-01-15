@@ -108,6 +108,51 @@ void main() {
         await expectLater(stream, emits(ConnectivityStatus.offline));
       });
 
+      test('should emit offline when only Bluetooth is connected', () async {
+        // Arrange - Bluetooth does not provide internet access
+        when(
+          () => mockConnectivity.checkConnectivity(),
+        ).thenAnswer((_) async => [ConnectivityResult.bluetooth]);
+
+        observer = ConnectivityPlusObserver.withConnectivity(mockConnectivity);
+
+        // Act
+        final stream = observer.observe();
+
+        // Assert
+        await expectLater(stream, emits(ConnectivityStatus.offline));
+      });
+
+      test('should emit online when WiFi + Bluetooth connected', () async {
+        // Arrange - WiFi provides internet, Bluetooth doesn't matter
+        when(() => mockConnectivity.checkConnectivity()).thenAnswer(
+          (_) async => [ConnectivityResult.bluetooth, ConnectivityResult.wifi],
+        );
+
+        observer = ConnectivityPlusObserver.withConnectivity(mockConnectivity);
+
+        // Act
+        final stream = observer.observe();
+
+        // Assert
+        await expectLater(stream, emits(ConnectivityStatus.online));
+      });
+
+      test('should emit online when VPN is connected', () async {
+        // Arrange - VPN provides internet access
+        when(
+          () => mockConnectivity.checkConnectivity(),
+        ).thenAnswer((_) async => [ConnectivityResult.vpn]);
+
+        observer = ConnectivityPlusObserver.withConnectivity(mockConnectivity);
+
+        // Act
+        final stream = observer.observe();
+
+        // Assert
+        await expectLater(stream, emits(ConnectivityStatus.online));
+      });
+
       test('should emit online when multiple connections exist', () async {
         // Arrange - WiFi + Mobile simultaneously
         when(() => mockConnectivity.checkConnectivity()).thenAnswer(
@@ -288,12 +333,17 @@ void main() {
 
     group('re-subscription', () {
       test(
-        'should emit last known status to new subscriber after cancel',
+        'should wait for fresh check after subscription was disposed',
         () async {
-          // Arrange
-          when(
-            () => mockConnectivity.checkConnectivity(),
-          ).thenAnswer((_) async => [ConnectivityResult.wifi]);
+          // Arrange - connectivity changes between subscriptions
+          var checkCount = 0;
+          when(() => mockConnectivity.checkConnectivity()).thenAnswer((
+            _,
+          ) async {
+            checkCount++;
+            // Both checks return online
+            return [ConnectivityResult.wifi];
+          });
 
           observer = ConnectivityPlusObserver.withConnectivity(
             mockConnectivity,
@@ -309,10 +359,12 @@ void main() {
           connectivityController.add([ConnectivityResult.none]);
           await Future.delayed(const Duration(milliseconds: 50));
 
-          // Cancel first subscription
+          // Cancel first subscription (releases connectivity_plus subscription)
           await sub1.cancel();
 
-          // New subscription should get last known status (offline)
+          // New subscription after dispose:
+          // Should NOT emit stale "offline" status
+          // Should wait for fresh checkConnectivity() which returns "online"
           final emissions2 = <ConnectivityStatus>[];
           final sub2 = observer.observe().listen(emissions2.add);
 
@@ -322,10 +374,87 @@ void main() {
 
           // Assert
           expect(emissions1, [
-            ConnectivityStatus.online,
-            ConnectivityStatus.offline,
+            ConnectivityStatus.online, // Initial check
+            ConnectivityStatus.offline, // Stream event
           ]);
-          expect(emissions2, [ConnectivityStatus.offline]); // Last known status
+          // After re-subscribe, waits for fresh data (not stale offline)
+          expect(emissions2, [
+            ConnectivityStatus.online, // Fresh check result
+          ]);
+          expect(checkCount, equals(2)); // Proves re-check happened
+        },
+      );
+
+      test(
+        'should emit current status on re-check even if different from last known',
+        () async {
+          // Arrange - first check online, second check offline
+          var checkCount = 0;
+          when(() => mockConnectivity.checkConnectivity()).thenAnswer((
+            _,
+          ) async {
+            checkCount++;
+            if (checkCount == 1) {
+              return [ConnectivityResult.wifi]; // First: online
+            }
+            return [ConnectivityResult.none]; // Second: offline
+          });
+
+          observer = ConnectivityPlusObserver.withConnectivity(
+            mockConnectivity,
+          );
+
+          // First subscription
+          final emissions1 = <ConnectivityStatus>[];
+          final sub1 = observer.observe().listen(emissions1.add);
+          await Future.delayed(const Duration(milliseconds: 50));
+          await sub1.cancel();
+
+          // Second subscription - connectivity changed to offline
+          final emissions2 = <ConnectivityStatus>[];
+          final sub2 = observer.observe().listen(emissions2.add);
+          await Future.delayed(const Duration(milliseconds: 50));
+          await sub2.cancel();
+
+          // Assert
+          expect(emissions1, [ConnectivityStatus.online]);
+          expect(emissions2, [ConnectivityStatus.offline]); // Fresh check
+          expect(checkCount, equals(2));
+        },
+      );
+
+      test(
+        'should not duplicate emission if status unchanged after re-check',
+        () async {
+          // Arrange - connectivity stays the same
+          when(
+            () => mockConnectivity.checkConnectivity(),
+          ).thenAnswer((_) async => [ConnectivityResult.wifi]);
+
+          observer = ConnectivityPlusObserver.withConnectivity(
+            mockConnectivity,
+          );
+
+          // Act - first subscription
+          final emissions1 = <ConnectivityStatus>[];
+          final sub1 = observer.observe().listen(emissions1.add);
+
+          await Future.delayed(const Duration(milliseconds: 50));
+
+          // Cancel first subscription
+          await sub1.cancel();
+
+          // New subscription - status hasn't changed (still online)
+          final emissions2 = <ConnectivityStatus>[];
+          final sub2 = observer.observe().listen(emissions2.add);
+
+          await Future.delayed(const Duration(milliseconds: 50));
+
+          await sub2.cancel();
+
+          // Assert - both get online (fresh check each time)
+          expect(emissions1, [ConnectivityStatus.online]);
+          expect(emissions2, [ConnectivityStatus.online]);
         },
       );
     });
