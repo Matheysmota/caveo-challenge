@@ -1,0 +1,76 @@
+name: Caveo CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality_checks:
+    name: Quality & Governance
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      
+      # Install dependencies for all packages
+      - name: Install Dependencies (shared)
+        working-directory: packages/shared
+        run: flutter pub get
+        
+      - name: Install Dependencies (dori)
+        working-directory: packages/dori
+        run: flutter pub get
+        
+      - name: Install Dependencies (app)
+        working-directory: app
+        run: flutter pub get
+        
+      - name: Architecture Governance (ADR 003)
+        run: |
+          chmod +x scripts/check_imports.sh
+          ./scripts/check_imports.sh
+          
+      - name: Dart Format
+        run: dart format . --set-exit-if-changed
+        
+      - name: Flutter Analyze (Lint) - Packages
+        run: |
+          cd packages/shared && flutter analyze --fatal-infos --fatal-warnings
+          cd ../dori && flutter analyze --fatal-infos --fatal-warnings
+        
+      - name: Flutter Analyze (Lint) - App
+        working-directory: app
+        run: flutter analyze --fatal-infos --fatal-warnings
+        
+      - name: Run Tests - Packages
+        run: |
+          cd packages/shared && flutter test
+          cd ../dori && flutter test
+        
+      - name: Run Tests & Coverage - App (ADR 008)
+        working-directory: app
+        run: flutter test --coverage
+
+      - name: Check Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v3
+        with:
+          path: './app/coverage/lcov.info'
+          min_coverage: 80
+        
+      - name: Build Android (Health Check)
+        working-directory: app
+        run: flutter build apk --debug --no-pub
