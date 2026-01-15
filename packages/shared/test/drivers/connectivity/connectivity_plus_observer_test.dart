@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared/libraries/mocktail_export.dart';
-
-import 'package:shared/drivers/connectivity/connectivity_export.dart';
-import 'package:shared/implementations.dart';
+import 'package:shared/libraries/mocktail_export/mocktail_export.dart';
+import 'package:shared/shared.dart';
 
 class MockConnectivity extends Mock implements Connectivity {}
 

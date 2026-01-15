@@ -14,8 +14,14 @@ dependencies:
   shared_preferences: 2.5.4
   # Connectivity monitoring
   connectivity_plus: 6.1.1
+  # HTTP client for network requests
+  dio: 5.8.0+1
+  # Environment configuration loader
+  flutter_dotenv: 5.2.1
   # Mocking library (exported via mocktail_export.dart for app tests)
   mocktail: 1.0.4
+  # Equatable for value equality
+  equatable: 2.0.7
 
 dev_dependencies:
   flutter_test:

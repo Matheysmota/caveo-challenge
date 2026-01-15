@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:shared/drivers/local_cache/local_cache_export.dart';
-import 'package:shared/implementations.dart';
+import 'package:shared/shared.dart';
 
 // Test model implementing Serializable
 class TestProduct implements Serializable {
