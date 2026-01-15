@@ -97,8 +97,21 @@ class ConnectivityPlusObserver implements ConnectivityObserver {
   }
 
   void _onLastListenerCanceled() {
-    // Keep subscription alive even without listeners
-    // This prevents re-checking connectivity on each new subscription
+    // Keep subscription alive even without listeners.
+    //
+    // Resource implications:
+    // - The underlying connectivity_plus stream subscription remains active
+    //   even when there are no external listeners to this observer.
+    // - Cleanup (subscription cancel + controller close) happens only in
+    //   [dispose], so this instance should be scoped and disposed properly
+    //   by the DI container (e.g., Riverpod provider).
+    //
+    // Trade-off:
+    // - Pros: avoids re-checking connectivity and re-subscribing to the
+    //   connectivity_plus stream every time a new listener subscribes.
+    // - Cons: keeps the connectivity_plus stream active in the background,
+    //   which may use a small amount of memory and processing even with
+    //   zero listeners.
   }
 
   void _emitIfChanged(ConnectivityStatus status) {
