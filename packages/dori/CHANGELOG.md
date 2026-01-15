@@ -9,6 +9,20 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Adicionado
 
+#### Molecules
+- 🔍 `DoriSearchBar` — Search input field with debounce logic
+  - Props: `onSearch`, `hintText`, `controller`, `focusNode`, `autofocus`, `enabled`, `minCharacters`, `debounceDuration`, `onChanged`, `onSubmitted`, `onCleared`, `semanticLabel`, `unfocusOnTapOutside`
+  - Debounce behavior: triggers `onSearch` after user stops typing for `debounceDuration` (default: 400ms)
+  - Minimum characters: only triggers search when text length >= `minCharacters` (default: 3)
+  - Focus control: external `FocusNode` support for navigation integration
+  - **Tap outside behavior**: `unfocusOnTapOutside` (default: true) dismisses keyboard when tapping outside
+  - Clear button: uses `DoriIconButton.xs` (16dp circle, 12dp icon) for compact fit
+  - Accessibility: full semantic support with customizable label
+  - Empty/cleared input triggers `onSearch` immediately with empty string
+  - Submit via keyboard bypasses debounce and triggers immediately
+  - Uses `DoriIcon` for search icon and `DoriIconButton` for clear button
+  - Widgetbook story with interactive demo, disabled states, tap outside behavior, and custom configurations
+
 #### Organisms
 - 🃏 `DoriProductCard` — Pinterest-style card for product/content display
   - Props: `imageUrl`, `primaryText`, `secondaryText`, `badgeText`, `size`, `onTap`, `semanticLabel`, `imageBuilder`
@@ -37,7 +51,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   - Widgetbook story with all variants showcase
 - 🔣 `DoriIcon` — Icon widget with restricted icon set
   - Props: `icon`, `size`, `color`, `semanticLabel`
-  - Sizes based on spacing tokens: sm (16dp), md (24dp), lg (32dp)
+  - Sizes based on spacing tokens: xs (8dp), sm (16dp), md (24dp), lg (32dp)
   - Built-in accessibility with semantic labels
   - Widgetbook story with icon gallery
 - 🎯 `DoriIconData` — Enum of allowed icons
@@ -46,8 +60,9 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   - Each icon has default semantic label for accessibility
 - 🔘 `DoriIconButton` — Circular icon button
   - Props: `icon`, `onPressed`, `size`, `backgroundColor`, `iconColor`, `semanticLabel`
-  - Sizes: sm (32dp total, 16dp icon), md (40dp total, 24dp icon)
-  - 8dp padding between icon and border
+  - Sizes: xs (16dp total, 12dp icon), sm (24dp total, 16dp icon), md (32dp total, 16dp icon), lg (40dp total, 24dp icon), xlg (48dp total, 32dp icon)
+  - Default background uses `surface.three` (Slate 300) for visible contrast on surfaces
+  - Padding: xs has 2dp, sm has 4dp, others have 8dp
   - Disabled state support with 0.5 opacity
   - Built-in accessibility with semantic labels
   - Widgetbook story with size variants and states

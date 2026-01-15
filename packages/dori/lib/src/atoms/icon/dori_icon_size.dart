@@ -6,12 +6,20 @@ import '../../tokens/dori_spacing.dart';
 ///
 /// | Size | Value | Use Case |
 /// |------|-------|----------|
+/// | xxs  | 12dp  | Clear buttons in inputs, very compact UI |
+/// | xs   | 16dp  | Small buttons, inline icons |
 /// | sm   | 16dp  | Inline with text, small buttons |
 /// | md   | 24dp  | Default size, most common |
 /// | lg   | 32dp  | Prominent actions, headers |
 ///
 /// {@category Atoms}
 enum DoriIconSize {
+  /// 12dp — Extra extra small icons, clear buttons in inputs
+  xxs(12),
+
+  /// 16dp — Extra small icons, small buttons
+  xs(DoriSpacing.xs),
+
   /// 16dp — Small icons, inline with text
   sm(DoriSpacing.xs),
 

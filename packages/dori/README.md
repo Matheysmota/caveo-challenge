@@ -257,17 +257,31 @@ DoriIcon(
 Circular icon button with Dori tokens.
 
 ```dart
-// Basic usage with default size (md = 40dp)
+// Basic usage with default size (md = 32dp)
 DoriIconButton(
   icon: DoriIconData.search,
   onPressed: () => print('Pressed!'),
 )
 
-// Small size (32dp)
+// Small size for compact UI (24dp) - ideal for clear buttons
 DoriIconButton(
   icon: DoriIconData.close,
   size: DoriIconButtonSize.sm,
-  onPressed: () {},
+  onPressed: () => clearInput(),
+)
+
+// Large size for primary actions (40dp)
+DoriIconButton(
+  icon: DoriIconData.arrowBack,
+  size: DoriIconButtonSize.lg,
+  onPressed: () => goBack(),
+)
+
+// Extra large for accessibility (48dp touch target)
+DoriIconButton(
+  icon: DoriIconData.refresh,
+  size: DoriIconButtonSize.xlg,
+  onPressed: () => refresh(),
 )
 
 // With custom colors
@@ -296,17 +310,22 @@ DoriIconButton(
 |----------|------|---------|-------------|
 | `icon` | `DoriIconData` | **required** | Icon from allowed set |
 | `onPressed` | `VoidCallback?` | **required** | Tap callback (null = disabled) |
-| `size` | `DoriIconButtonSize` | `md` | Button size (sm=32dp, md=40dp) |
+| `size` | `DoriIconButtonSize` | `md` | Button size |
 | `backgroundColor` | `Color?` | `null` | Background color |
 | `iconColor` | `Color?` | `null` | Icon color |
 | `semanticLabel` | `String?` | `null` | Accessibility label |
 
 **Size Reference:**
 
-| Size | Total | Padding | Icon |
-|------|-------|---------|------|
-| `sm` | 32dp | 8dp | 16dp |
-| `md` | 40dp | 8dp | 24dp |
+| Size | Total | Icon | Use Case |
+|------|-------|------|----------|
+| `xs` | 16dp | 12dp | Clear buttons in inputs, very compact |
+| `sm` | 24dp | 16dp | Compact UI elements |
+| `md` | 32dp | 16dp | Standard inline actions |
+| `lg` | 40dp | 24dp | Primary actions, navigation |
+| `xlg` | 48dp | 32dp | Touch-friendly, meets accessibility |
+
+> **Note:** The default background uses `surface.three` (Slate 300) for visible contrast on all surfaces.
 
 ---
 
@@ -325,6 +344,7 @@ packages/dori/
 ├── lib/
 │   ├── src/
 │   │   ├── atoms/        # DoriText, DoriIcon, DoriBadge, DoriButton, DoriShimmer
+│   │   ├── molecules/    # DoriSearchBar
 │   │   ├── organisms/    # DoriProductCard
 │   │   ├── tokens/       # Colors, Spacing, Radius, Typography
 │   │   └── theme/        # DoriTheme, DoriProvider
@@ -332,6 +352,82 @@ packages/dori/
 ├── example/              # Widgetbook
 └── test/
 ```
+
+---
+
+## 🧪 Molecules
+
+### DoriSearchBar
+
+Search input field with built-in debounce logic for optimized search performance.
+
+```dart
+// Basic usage
+DoriSearchBar(
+  onSearch: (query) {
+    // Called after debounce when query.length >= 3
+    print('Searching for: $query');
+  },
+)
+
+// With custom hint text
+DoriSearchBar(
+  hintText: 'Search products...',
+  onSearch: (query) => searchProducts(query),
+)
+
+// With external controller and focus node
+final controller = TextEditingController();
+final focusNode = FocusNode();
+
+DoriSearchBar(
+  controller: controller,
+  focusNode: focusNode,
+  hintText: 'Search...',
+  onSearch: (query) => performSearch(query),
+  onChanged: (text) => updateSuggestions(text),
+)
+
+// Later: programmatic focus control
+focusNode.requestFocus();  // Focus the search bar
+focusNode.unfocus();       // Unfocus
+
+// Custom debounce settings
+DoriSearchBar(
+  minCharacters: 2,
+  debounceDuration: Duration(milliseconds: 500),
+  onSearch: (query) => quickSearch(query),
+)
+```
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `onSearch` | `ValueChanged<String>` | **required** | Callback after debounce |
+| `hintText` | `String` | `'Search'` | Placeholder text |
+| `controller` | `TextEditingController?` | `null` | External text controller |
+| `focusNode` | `FocusNode?` | `null` | External focus node |
+| `autofocus` | `bool` | `false` | Auto-focus on mount |
+| `enabled` | `bool` | `true` | Enable/disable input |
+| `minCharacters` | `int` | `3` | Min chars before search |
+| `debounceDuration` | `Duration` | `400ms` | Debounce delay |
+| `onChanged` | `ValueChanged<String>?` | `null` | Immediate text change callback |
+| `onSubmitted` | `ValueChanged<String>?` | `null` | Keyboard submit callback |
+| `onCleared` | `VoidCallback?` | `null` | Clear button callback |
+| `semanticLabel` | `String?` | `null` | Accessibility label |
+| `unfocusOnTapOutside` | `bool` | `true` | Dismiss keyboard on tap outside |
+
+**Debounce Behavior:**
+- `onSearch` is called when:
+  1. User types `minCharacters` or more AND stops typing for `debounceDuration`
+  2. User clears the input (immediately with empty string)
+  3. User submits via keyboard (immediately, bypasses debounce)
+
+**Features:**
+- 🔍 **Smart Debounce:** Reduces API calls by waiting for typing pause
+- 🎯 **Focus Control:** External FocusNode for navigation integration
+- 📱 **Tap Outside Dismiss:** Automatically unfocuses and dismisses keyboard on tap outside
+- ✕ **Clear Button:** Appears when text is entered
+- ♿ **Accessibility:** Full semantic support for screen readers
 
 ---
 

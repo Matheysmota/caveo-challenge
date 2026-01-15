@@ -10,22 +10,53 @@ export 'dori_icon_button_size.dart';
 /// A circular icon button with Dori styling.
 ///
 /// Small, circular button that contains an icon. Commonly used for
-/// actions in AppBar, close buttons, or inline actions.
+/// actions in AppBar, close buttons, clear buttons in inputs, or inline actions.
+///
+/// ## Size Reference
+///
+/// | Size | Total | Icon | Use Case |
+/// |------|-------|------|----------|
+/// | xs   | 16dp  | 12dp | Clear buttons in inputs, very compact |
+/// | sm   | 24dp  | 16dp | Compact UI elements |
+/// | md   | 32dp  | 16dp | Standard inline actions |
+/// | lg   | 40dp  | 24dp | Primary actions, navigation |
+/// | xlg  | 48dp  | 32dp | Touch-friendly, meets accessibility |
 ///
 /// ## Example
 ///
 /// ```dart
-/// // Basic usage
+/// // Basic usage (defaults to md = 32dp)
 /// DoriIconButton(
 ///   icon: DoriIconData.close,
 ///   onPressed: () => Navigator.pop(context),
 /// )
 ///
-/// // With custom size
+/// // Extra small for clear buttons in inputs (16dp)
+/// DoriIconButton(
+///   icon: DoriIconData.close,
+///   size: DoriIconButtonSize.xs,
+///   onPressed: () => clearInput(),
+/// )
+///
+/// // Small size for compact UI (24dp)
+/// DoriIconButton(
+///   icon: DoriIconData.close,
+///   size: DoriIconButtonSize.sm,
+///   onPressed: () => clearInput(),
+/// )
+///
+/// // Large size for prominent actions (40dp)
 /// DoriIconButton(
 ///   icon: DoriIconData.search,
-///   size: DoriIconButtonSize.sm,
+///   size: DoriIconButtonSize.lg,
 ///   onPressed: () => openSearch(),
+/// )
+///
+/// // Extra large for accessibility (48dp)
+/// DoriIconButton(
+///   icon: DoriIconData.arrowBack,
+///   size: DoriIconButtonSize.xlg,
+///   onPressed: () => goBack(),
 /// )
 ///
 /// // With custom color
@@ -70,7 +101,7 @@ class DoriIconButton extends StatelessWidget {
 
   /// Size of the button.
   ///
-  /// Defaults to [DoriIconButtonSize.md] (40dp total).
+  /// Defaults to [DoriIconButtonSize.md] (32dp total with 16dp icon).
   final DoriIconButtonSize size;
 
   /// Color of the icon.
@@ -135,11 +166,8 @@ class DoriIconButton extends StatelessWidget {
   ) {
     final disabledOpacity = isDisabled ? 0.5 : 1.0;
 
-    // Background color
-    final defaultColor = colors.content.two;
-    final defaultBg = defaultColor.withValues(
-      alpha: (defaultColor.a * 0.12 * disabledOpacity).clamp(0.0, 1.0),
-    );
+    // Background color - use surface.three for visible contrast on any surface
+    final defaultBg = colors.surface.three.withValues(alpha: disabledOpacity);
     final effectiveBg = backgroundColor != null
         ? backgroundColor!.withValues(
             alpha: (backgroundColor!.a * disabledOpacity).clamp(0.0, 1.0),
