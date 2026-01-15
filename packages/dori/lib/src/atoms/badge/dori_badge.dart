@@ -7,36 +7,11 @@ import '../../tokens/dori_shadows.dart';
 import '../../tokens/dori_spacing.dart';
 import '../../tokens/dori_typography.dart';
 import '../text/dori_text.dart';
+import 'dori_badge_size.dart';
+import 'dori_badge_variant.dart';
 
-/// Semantic variants for DoriBadge.
-///
-/// Each variant maps to specific feedback colors from the design system.
-///
-/// {@category Atoms}
-enum DoriBadgeVariant {
-  /// Neutral/default badge — uses surface colors
-  neutral,
-
-  /// Success badge — uses feedback.success color
-  success,
-
-  /// Error badge — uses feedback.error color
-  error,
-
-  /// Info badge — uses feedback.info color
-  info,
-}
-
-/// Size variants for DoriBadge.
-///
-/// {@category Atoms}
-enum DoriBadgeSize {
-  /// Small: 12px caption text, minimal padding
-  sm,
-
-  /// Medium: 12px caption text, standard padding
-  md,
-}
+export 'dori_badge_size.dart';
+export 'dori_badge_variant.dart';
 
 /// A badge component for displaying status, labels, or counts.
 ///
@@ -134,9 +109,6 @@ class DoriBadge extends StatelessWidget {
   }
 
   /// Returns background and text colors based on variant.
-  ///
-  /// Uses semantic tokens for both background (soft) and text (light) colors.
-  /// This ensures consistent colors across themes without opacity calculations.
   (Color backgroundColor, Color textColor) _getColors(DoriColorScheme colors) {
     return switch (variant) {
       DoriBadgeVariant.neutral => (colors.surface.three, colors.content.one),

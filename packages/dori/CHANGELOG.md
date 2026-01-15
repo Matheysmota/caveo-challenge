@@ -43,6 +43,24 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
   - Border radius: md (16dp)
   - Built-in accessibility with semantic labels
   - Widgetbook story with variants, sizes and use cases
+- 🔄 `DoriCircularProgress` — Morphing loading indicator (Material 3 inspired)
+  - Props: `size`, `color`, `showBackground`, `semanticLabel`
+  - Sizes: sm (16dp), md (24dp, default), lg (32dp)
+  - Morphing animation between ellipse, pentagon, and starburst shapes
+  - Continuous rotation with smooth shape transitions
+  - Optional background halo using brand.two color
+  - Uses `RepaintBoundary` for performance optimization
+  - Built-in accessibility with semantic labels
+- 🔲 `DoriButton` — Button with variants and loading state
+  - Props: `label`, `onPressed`, `variant`, `size`, `leadingIcon`, `trailingIcon`, `isLoading`, `isExpanded`, `semanticLabel`
+  - Variants: primary (filled), secondary (outlined), tertiary (text-only)
+  - Sizes: sm (32dp height), md (44dp, default), lg (52dp)
+  - Loading state shows `DoriCircularProgress` matching button color
+  - Press animation with subtle scale (0.96)
+  - Icon support (leading and/or trailing) using `DoriIcon`
+  - Uses `DoriText` for label with size-appropriate typography
+  - Disabled state with 0.5 opacity
+  - Built-in accessibility with semantic labels
 
 #### Tokens
 - 🎨 `DoriFeedbackColors` — Novos tokens para backgrounds e texto

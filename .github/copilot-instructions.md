@@ -218,9 +218,22 @@ if (context.dori.isDark) { ... }
 | Precisa de... | Use |
 |---------------|-----|
 | Cor, espaçamento, tipografia | **Tokens** via `context.dori` |
-| Texto, ícone, imagem | **Atoms** (ex: `DoriText`) |
+| Texto, ícone | **Atoms** (ex: `DoriText`, `DoriIcon`) |
+| Botão, badge, loading | **Atoms** (ex: `DoriButton`, `DoriBadge`, `DoriCircularProgress`) |
 | Campo de busca, toggle | **Molecules** (ex: `DoriSearchBar`) |
 | Card de produto, AppBar | **Organisms** (ex: `DoriProductCard`) |
+
+### Atoms Disponíveis
+
+| Atom | Descrição |
+|------|-----------|
+| `DoriText` | Texto com variantes de tipografia |
+| `DoriIcon` | Ícone com conjunto restrito |
+| `DoriIconData` | Enum de ícones permitidos |
+| `DoriIconButton` | Botão circular com ícone |
+| `DoriBadge` | Badge para status/labels |
+| `DoriCircularProgress` | Loading animado com morphing |
+| `DoriButton` | Botão com variantes e loading |
 
 ### Regras de Criação de Componentes Dori
 

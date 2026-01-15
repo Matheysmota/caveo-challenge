@@ -1,28 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/dori_theme.barrel.dart';
+import '../../tokens/dori_colors.dart';
 import '../icon/dori_icon.dart';
-import '../icon/dori_icon_data.dart';
+import 'dori_icon_button_size.dart';
 
-/// Size variants for DoriIconButton.
-///
-/// {@category Atoms}
-enum DoriIconButtonSize {
-  /// Small: 16dp icon + 8dp padding on each side = 32dp total
-  sm(DoriIconSize.sm, 32),
-
-  /// Medium: 24dp icon + 8dp padding on each side = 40dp total
-  md(DoriIconSize.md, 40);
-
-  /// Creates a DoriIconButtonSize with associated icon size and total dimension.
-  const DoriIconButtonSize(this.iconSize, this.totalSize);
-
-  /// The icon size to use inside the button.
-  final DoriIconSize iconSize;
-
-  /// The total button size (icon + padding).
-  final double totalSize;
-}
+export 'dori_icon_button_size.dart';
 
 /// A circular icon button with Dori styling.
 ///
@@ -112,26 +95,9 @@ class DoriIconButton extends StatelessWidget {
     final effectiveSemanticLabel = semanticLabel ?? icon.semanticLabel;
     final isDisabled = onPressed == null;
 
-    // Apply opacity to colors directly instead of wrapping the widget tree
-    // This preserves the InkWell ripple effect when enabled
-    final disabledOpacityMultiplier = isDisabled ? 0.5 : 1.0;
-    final defaultColor = dori.colors.content.two;
-    final defaultBackgroundColor = defaultColor.withValues(
-      alpha: (defaultColor.a * 0.12 * disabledOpacityMultiplier).clamp(
-        0.0,
-        1.0,
-      ),
-    );
-    final bgColor = backgroundColor;
-    final effectiveBackgroundColor = bgColor != null
-        ? bgColor.withValues(
-            alpha: (bgColor.a * disabledOpacityMultiplier).clamp(0.0, 1.0),
-          )
-        : defaultBackgroundColor;
-
-    final iColor = iconColor;
-    final effectiveIconColor = iColor?.withValues(
-      alpha: (iColor.a * disabledOpacityMultiplier).clamp(0.0, 1.0),
+    final (effectiveBackgroundColor, effectiveIconColor) = _getColors(
+      dori.colors,
+      isDisabled,
     );
 
     return Semantics(
@@ -160,5 +126,31 @@ class DoriIconButton extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// Returns effective background and icon colors.
+  (Color backgroundColor, Color? iconColor) _getColors(
+    DoriColorScheme colors,
+    bool isDisabled,
+  ) {
+    final disabledOpacity = isDisabled ? 0.5 : 1.0;
+
+    // Background color
+    final defaultColor = colors.content.two;
+    final defaultBg = defaultColor.withValues(
+      alpha: (defaultColor.a * 0.12 * disabledOpacity).clamp(0.0, 1.0),
+    );
+    final effectiveBg = backgroundColor != null
+        ? backgroundColor!.withValues(
+            alpha: (backgroundColor!.a * disabledOpacity).clamp(0.0, 1.0),
+          )
+        : defaultBg;
+
+    // Icon color
+    final effectiveIcon = iconColor?.withValues(
+      alpha: (iconColor!.a * disabledOpacity).clamp(0.0, 1.0),
+    );
+
+    return (effectiveBg, effectiveIcon);
   }
 }
