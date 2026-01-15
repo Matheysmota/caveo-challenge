@@ -5,14 +5,17 @@ import 'package:flutter/material.dart';
 import '../../theme/dori_theme.barrel.dart';
 import 'dori_circular_progress_size.dart';
 import 'morphing_shape_painter.dart';
+import 'shape_generators.dart' show kShapeCount;
 
 export 'dori_circular_progress_size.dart';
 
 /// A morphing circular progress indicator inspired by Material 3.
 ///
-/// Displays a loading animation that morphs between different shapes:
-/// ellipse, pentagon, and starburst. The shapes transition smoothly
-/// while rotating continuously.
+/// Displays a loading animation that morphs through 7 different shapes
+/// following the Material 3 indeterminate loading indicator sequence:
+/// SOFT_BURST → COOKIE_9 → PENTAGON → PILL → SUNNY → COOKIE_4 → OVAL → (repeat)
+///
+/// The shapes transition smoothly while rotating continuously.
 ///
 /// ## Example
 ///
@@ -84,7 +87,10 @@ class _DoriCircularProgressState extends State<DoriCircularProgress>
   late final Animation<double> _morphAnimation;
 
   /// Animation duration for one complete cycle.
-  static const _animationDuration = Duration(milliseconds: 2400);
+  ///
+  /// Material 3 uses 650ms per shape transition.
+  /// With 7 shapes, full cycle = 7 × 650ms = 4550ms.
+  static const _animationDuration = Duration(milliseconds: 4550);
 
   @override
   void initState() {
@@ -104,11 +110,13 @@ class _DoriCircularProgressState extends State<DoriCircularProgress>
       end: 2 * math.pi,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
 
-    // Morph: cycles through 3 shapes with easing
+    // Morph: cycles through 7 shapes with LINEAR progression.
+    // Each shape transition takes equal time (650ms).
+    // The easing is applied WITHIN each transition via interpolateShapesToPath.
     _morphAnimation = Tween<double>(
       begin: 0,
-      end: 3,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+      end: kShapeCount.toDouble(),
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
 
     _controller.repeat();
   }
