@@ -134,7 +134,7 @@ void main() {
           padding,
           equals(
             const EdgeInsets.symmetric(
-              horizontal: DoriSpacing.xs,
+              horizontal: DoriSpacing.xxs,
               vertical: DoriSpacing.xxxs / 2,
             ),
           ),
@@ -285,6 +285,11 @@ void main() {
     });
 
     group('dark mode', () {
+      // Lighter tinted colors for dark mode (matching implementation)
+      const successLight = Color(0xFF86EFAC); // Green 300
+      const errorLight = Color(0xFFFCA5A5); // Red 300
+      const infoLight = Color(0xFF93C5FD); // Blue 300
+
       testWidgets('should use dark mode colors for neutral variant', (
         tester,
       ) async {
@@ -315,7 +320,7 @@ void main() {
       });
 
       testWidgets(
-        'should use content.one text color for success variant in dark mode',
+        'should use light green text color for success variant in dark mode',
         (tester) async {
           // Arrange
           const badge = DoriBadge(
@@ -328,12 +333,12 @@ void main() {
 
           // Assert
           final textWidget = tester.widget<Text>(find.text('Success'));
-          expect(textWidget.style?.color, equals(DoriColors.dark.content.one));
+          expect(textWidget.style?.color, equals(successLight));
         },
       );
 
       testWidgets(
-        'should use content.one text color for error variant in dark mode',
+        'should use light red text color for error variant in dark mode',
         (tester) async {
           // Arrange
           const badge = DoriBadge(
@@ -346,12 +351,12 @@ void main() {
 
           // Assert
           final textWidget = tester.widget<Text>(find.text('Error'));
-          expect(textWidget.style?.color, equals(DoriColors.dark.content.one));
+          expect(textWidget.style?.color, equals(errorLight));
         },
       );
 
       testWidgets(
-        'should use content.one text color for info variant in dark mode',
+        'should use light blue text color for info variant in dark mode',
         (tester) async {
           // Arrange
           const badge = DoriBadge(
@@ -364,7 +369,7 @@ void main() {
 
           // Assert
           final textWidget = tester.widget<Text>(find.text('Info'));
-          expect(textWidget.style?.color, equals(DoriColors.dark.content.one));
+          expect(textWidget.style?.color, equals(infoLight));
         },
       );
     });

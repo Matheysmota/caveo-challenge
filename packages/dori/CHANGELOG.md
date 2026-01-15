@@ -33,11 +33,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - 🏷️ `DoriBadge` — Badge for status, labels, or counts
   - Props: `label`, `variant`, `size`, `semanticLabel`
   - Variants: neutral, success, error, info
-  - Sizes: sm (compact), md (standard)
+  - Sizes: sm (compact: 8dp horizontal), md (standard: 16dp horizontal)
   - Semantic background colors with 25% opacity
-  - Dark mode: uses `content.one` for text color (better contrast)
-  - Light mode: uses feedback color for text
-  - Horizontal padding: 16dp, vertical: 4dp (md) / 2dp (sm)
+  - Dark mode: uses lighter tinted colors (Green 300, Red 300, Blue 300)
+  - Light mode: uses feedback colors directly
   - Border radius: md (16dp)
   - Built-in accessibility with semantic labels
   - Widgetbook story with variants, sizes and use cases

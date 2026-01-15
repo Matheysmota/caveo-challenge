@@ -132,25 +132,30 @@ class DoriBadge extends StatelessWidget {
 
   /// Returns background and text colors based on variant.
   ///
-  /// In dark mode, text uses content.one for better contrast.
-  /// In light mode, text uses the feedback color directly.
+  /// In dark mode, text uses lighter tinted versions of feedback colors
+  /// for better contrast while maintaining color identity.
   (Color backgroundColor, Color textColor) _getColors(
     DoriColorScheme colors,
     bool isDark,
   ) {
+    // Lighter tinted colors for dark mode text (better contrast)
+    const successLight = Color(0xFF86EFAC); // Green 300
+    const errorLight = Color(0xFFFCA5A5); // Red 300
+    const infoLight = Color(0xFF93C5FD); // Blue 300
+
     return switch (variant) {
       DoriBadgeVariant.neutral => (colors.surface.two, colors.content.one),
       DoriBadgeVariant.success => (
         colors.feedback.success.withValues(alpha: 0.25),
-        isDark ? colors.content.one : colors.feedback.success,
+        isDark ? successLight : colors.feedback.success,
       ),
       DoriBadgeVariant.error => (
         colors.feedback.error.withValues(alpha: 0.25),
-        isDark ? colors.content.one : colors.feedback.error,
+        isDark ? errorLight : colors.feedback.error,
       ),
       DoriBadgeVariant.info => (
         colors.feedback.info.withValues(alpha: 0.25),
-        isDark ? colors.content.one : colors.feedback.info,
+        isDark ? infoLight : colors.feedback.info,
       ),
     };
   }
@@ -159,7 +164,7 @@ class DoriBadge extends StatelessWidget {
   EdgeInsets _getPadding() {
     return switch (size) {
       DoriBadgeSize.sm => const EdgeInsets.symmetric(
-        horizontal: DoriSpacing.xs,
+        horizontal: DoriSpacing.xxs,
         vertical: DoriSpacing.xxxs / 2,
       ),
       DoriBadgeSize.md => const EdgeInsets.symmetric(
