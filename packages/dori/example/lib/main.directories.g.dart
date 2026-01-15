@@ -27,6 +27,8 @@ import 'package:widgetbook_caveo/stories/product_card_story.dart'
     as _widgetbook_caveo_stories_product_card_story;
 import 'package:widgetbook_caveo/stories/radius_story.dart'
     as _widgetbook_caveo_stories_radius_story;
+import 'package:widgetbook_caveo/stories/search_bar_story.dart'
+    as _widgetbook_caveo_stories_search_bar_story;
 import 'package:widgetbook_caveo/stories/spacing_story.dart'
     as _widgetbook_caveo_stories_spacing_story;
 import 'package:widgetbook_caveo/stories/text_story.dart'
@@ -93,6 +95,21 @@ final directories = <_widgetbook.WidgetbookNode>[
           _widgetbook.WidgetbookUseCase(
             name: 'Text Variants',
             builder: _widgetbook_caveo_stories_text_story.buildDoriTextShowcase,
+          ),
+        ],
+      ),
+    ],
+  ),
+  _widgetbook.WidgetbookCategory(
+    name: 'Molecules',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'DoriSearchBarShowcase',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Search Bar Showcase',
+            builder: _widgetbook_caveo_stories_search_bar_story
+                .buildDoriSearchBarShowcase,
           ),
         ],
       ),
