@@ -155,13 +155,79 @@ A AppBar contém 3 elementos principais:
 
 #### C. Modo Offline e Resiliência
 *   **Detecção:** Se a conexão cair durante o uso.
-*   **Feedback:** Banner "Sem conexão com a internet" desce suavemente abaixo da AppBar (estilo SnackBar persistente ou componente customizado).
+*   **Feedback:** Ver seção [Feedback Visual: Banners de Status](#feedback-visual-banners-de-status).
 *   **Comportamento da Lista:**
     *   Itens já carregados permanecem visíveis.
     *   Imagens em cache permanecem visíveis.
 *   **Tentativa de Ação Offline:**
     *   *Pull to refresh:* Falha graciosamente (mantém lista atual e avisa erro via Toast/Banner).
     *   *Paginação:* Falha com opção de retry no rodapé.
+
+---
+
+### Feedback Visual: Banners de Status
+
+O aplicativo possui **dois tipos distintos de banners** para comunicar estados ao usuário. É importante diferenciar suas responsabilidades:
+
+#### Banner 1: "Você está offline" (Conectividade)
+
+| Propriedade | Valor |
+|-------------|-------|
+| **Trigger** | `ConnectivityObserver` detecta perda de conexão de rede |
+| **Mensagem** | "Você está offline" |
+| **Estilo** | `DoriBanner` com cor `feedback.info` |
+| **Posição** | Abaixo da AppBar, acima do conteúdo |
+| **Comportamento** | Aparece automaticamente quando offline, desaparece quando reconecta |
+| **Dismissível** | ❌ Não (controlado pelo sistema) |
+| **Responsável** | UI observa `ConnectivityObserver.observe()` (Stream) |
+
+**Cenários:**
+- Usuário desliga Wi-Fi → Banner aparece
+- Usuário religa Wi-Fi → Banner desaparece automaticamente
+- App inicia offline → Banner já aparece desde o início
+
+#### Banner 2: "Seus dados podem estar desatualizados" (Dados Stale)
+
+| Propriedade | Valor |
+|-------------|-------|
+| **Trigger** | Repository retornou dados do cache porque a API falhou (401, 500, timeout, etc.) |
+| **Mensagem** | "Seus dados podem estar desatualizados" |
+| **Estilo** | `DoriBanner` com cor `feedback.infoSoft` + ícone de warning |
+| **Posição** | Abaixo da AppBar (e abaixo do banner de offline, se ambos ativos) |
+| **Comportamento** | Aparece quando `isDataStale == true` no ViewModel |
+| **Dismissível** | ✅ Sim (usuário pode fechar) |
+| **Ação opcional** | Botão "Tentar novamente" para refazer fetch |
+| **Responsável** | ViewModel expõe `isDataStale: bool` baseado no retorno do Repository |
+
+**Cenários:**
+- Usuário abre app, API retorna 500, cache existe → Banner aparece
+- Usuário faz pull-to-refresh com sucesso → Banner desaparece
+- Usuário dismiss manualmente → Banner desaparece (mas dados continuam stale)
+
+#### Diferença Fundamental
+
+| Situação | Está Offline? | API Falhou? | Banner Exibido |
+|----------|---------------|-------------|----------------|
+| Sem internet, mostrando cache | ✅ | N/A | "Você está offline" |
+| Com internet, API 401/500, mostrando cache | ❌ | ✅ | "Dados desatualizados" |
+| Com internet, API OK | ❌ | ❌ | Nenhum |
+| Sem internet E API falhou (ambos) | ✅ | ✅ | Ambos os banners |
+
+#### Hierarquia Visual (quando ambos ativos)
+
+```
+┌─────────────────────────────────────────┐
+│           [  DoriAppBar  ]              │
+├─────────────────────────────────────────┤
+│ ⚠️ Você está offline                    │  ← Banner 1 (não dismissível)
+├─────────────────────────────────────────┤
+│ 📋 Seus dados podem estar desatualiz... │  ← Banner 2 (dismissível)
+├─────────────────────────────────────────┤
+│                                         │
+│         Lista de Produtos               │
+│                                         │
+└─────────────────────────────────────────┘
+```
 
 #### D. Performance de Imagens
 *   Utilizar `cached_network_image` (ou abstração equivalente).
