@@ -285,6 +285,50 @@ void main() {
         expect(emissions, [ConnectivityStatus.online]);
       });
     });
+
+    group('re-subscription', () {
+      test(
+        'should emit last known status to new subscriber after cancel',
+        () async {
+          // Arrange
+          when(
+            () => mockConnectivity.checkConnectivity(),
+          ).thenAnswer((_) async => [ConnectivityResult.wifi]);
+
+          observer = ConnectivityPlusObserver.withConnectivity(
+            mockConnectivity,
+          );
+
+          // Act - first subscription
+          final emissions1 = <ConnectivityStatus>[];
+          final sub1 = observer.observe().listen(emissions1.add);
+
+          await Future.delayed(const Duration(milliseconds: 50));
+
+          // Change to offline while subscribed
+          connectivityController.add([ConnectivityResult.none]);
+          await Future.delayed(const Duration(milliseconds: 50));
+
+          // Cancel first subscription
+          await sub1.cancel();
+
+          // New subscription should get last known status (offline)
+          final emissions2 = <ConnectivityStatus>[];
+          final sub2 = observer.observe().listen(emissions2.add);
+
+          await Future.delayed(const Duration(milliseconds: 50));
+
+          await sub2.cancel();
+
+          // Assert
+          expect(emissions1, [
+            ConnectivityStatus.online,
+            ConnectivityStatus.offline,
+          ]);
+          expect(emissions2, [ConnectivityStatus.offline]); // Last known status
+        },
+      );
+    });
   });
 
   group('ConnectivityStatus', () {

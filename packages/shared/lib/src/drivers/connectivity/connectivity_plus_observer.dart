@@ -20,20 +20,43 @@ import '../../../drivers/connectivity/connectivity_status.dart';
 /// - Uses a BehaviorSubject-like pattern (emits current value on subscription)
 /// - Deduplicates consecutive identical status updates
 /// - Handles multiple connectivity results (e.g., WiFi + Mobile simultaneously)
+/// - Lazy initialization (only subscribes when first observer connects)
+///
+/// ## Singleton Pattern
+///
+/// This class should be instantiated ONCE and provided via DI (Riverpod).
+/// The [Connectivity] instance from connectivity_plus is internally a singleton,
+/// but this wrapper manages its own stream transformation and state.
+///
+/// ```dart
+/// // In your providers file:
+/// final connectivityObserverProvider = Provider<ConnectivityObserver>((ref) {
+///   final observer = ConnectivityPlusObserver();
+///   ref.onDispose(() => observer.dispose());
+///   return observer;
+/// });
+/// ```
 class ConnectivityPlusObserver implements ConnectivityObserver {
-    ConnectivityPlusObserver() : _connectivity = Connectivity();
-
-  final Connectivity _connectivity;
-  StreamController<ConnectivityStatus>? _controller;
-  StreamSubscription<List<ConnectivityResult>>? _subscription;
-  ConnectivityStatus? _lastStatus;
-
-  /// Creates an instance with the default [Connectivity] instance.
+  /// Creates an instance using the default [Connectivity] singleton.
+  ///
+  /// This is the recommended constructor for production use.
+  /// The [Connectivity] class from connectivity_plus is already a singleton
+  /// internally, so multiple calls to this constructor are safe but wasteful.
+  ///
+  /// Prefer creating a single instance via DI (Riverpod Provider).
+  ConnectivityPlusObserver() : _connectivity = Connectivity();
 
   /// Creates an instance with a custom [Connectivity] instance.
   ///
   /// Useful for testing with mocked Connectivity.
   ConnectivityPlusObserver.withConnectivity(this._connectivity);
+
+  final Connectivity _connectivity;
+
+  StreamController<ConnectivityStatus>? _controller;
+  StreamSubscription<List<ConnectivityResult>>? _subscription;
+  ConnectivityStatus? _lastStatus;
+  bool _isInitialized = false;
 
   @override
   Stream<ConnectivityStatus> observe() {
@@ -50,6 +73,17 @@ class ConnectivityPlusObserver implements ConnectivityObserver {
   }
 
   Future<void> _onFirstListener() async {
+    // Guard against multiple initializations
+    // (can happen if all listeners cancel then a new one subscribes)
+    if (_isInitialized) {
+      // Re-emit last known status for new subscribers
+      if (_lastStatus != null) {
+        _controller?.add(_lastStatus!);
+      }
+      return;
+    }
+    _isInitialized = true;
+
     // Emit current status immediately
     final currentResults = await _connectivity.checkConnectivity();
     final currentStatus = _mapToStatus(currentResults);
@@ -104,5 +138,6 @@ class ConnectivityPlusObserver implements ConnectivityObserver {
     _controller?.close();
     _controller = null;
     _lastStatus = null;
+    _isInitialized = false;
   }
 }
