@@ -121,11 +121,11 @@ class ProductListViewModel extends Notifier<ProductListState> {
     result.fold(
       (products) {
         _currentPage = nextPage;
-        final updatedProducts = [...currentState.products, ...products];
-        _allProducts = updatedProducts;
+        // Append new products to _allProducts, not to filtered currentState.products
+        _allProducts = [..._allProducts, ...products];
 
         state = ProductListLoaded(
-          products: _filterProducts(updatedProducts, _searchQuery),
+          products: _filterProducts(_allProducts, _searchQuery),
           hasMorePages: products.length >= ProductConfig.pageSize,
         );
       },
