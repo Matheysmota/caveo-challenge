@@ -23,7 +23,7 @@ ALLOWLIST_APP="package:flutter/|package:dart:|package:shared/|package:dori/|pack
 
 # Shared: Can import Flutter SDK + its declared dependencies (for implementations)
 # Note: External libs should only be used in src/ (private) or libraries/ (exports)
-ALLOWLIST_SHARED="package:flutter/|package:dart:|package:shared/|package:shared_preferences/|package:connectivity_plus/|package:mocktail/|package:dio/|package:flutter_dotenv/|package:equatable/"
+ALLOWLIST_SHARED="package:flutter/|package:dart:|package:shared/|package:shared_preferences/|package:connectivity_plus/|package:mocktail/|package:dio/|package:flutter_dotenv/|package:equatable/|package:flutter_riverpod/|package:riverpod/"
 
 # Dori: Only Flutter SDK (pure UI, no external dependencies)
 ALLOWLIST_DORI="package:flutter/|package:dart:|package:dori/"
