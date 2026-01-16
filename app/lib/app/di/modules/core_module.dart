@@ -6,30 +6,20 @@
 /// These providers are app-wide singletons that should be initialized early
 /// in the app lifecycle.
 ///
-/// ## Initialization
+/// ## Non-Blocking Initialization
 ///
-/// Some providers require async initialization. Pre-initialize them in
-/// `main()` before `runApp()` and provide them via `ProviderScope.overrides`:
+/// LocalCacheSource is initialized lazily via FutureProvider to avoid
+/// blocking the first frame. Providers that depend on cache should watch
+/// [localCacheSourceProvider] and handle the AsyncValue appropriately.
 ///
 /// ```dart
-/// void main() async {
+/// void main() {
 ///   WidgetsFlutterBinding.ensureInitialized();
-///
-///   // Pre-initialize async dependencies
-///   final localCache = await SharedPreferencesLocalCacheSource.create();
-///   final savedTheme = await _loadSavedTheme(localCache);
-///
-///   runApp(
-///     ProviderScope(
-///       overrides: [
-///         localCacheSourceProvider.overrideWithValue(localCache),
-///         themeModeProvider.overrideWith(() => ThemeModeNotifier(savedTheme)),
-///       ],
-///       child: const AppWidget(),
-///     ),
-///   );
+///   runApp(const ProviderScope(child: AppWidget()));
 /// }
 /// ```
+///
+/// The cache will be ready by the time the splash screen finishes loading.
 library;
 
 import 'package:shared/shared.dart';
@@ -77,24 +67,30 @@ final apiDataSourceDelegateProvider = Provider<ApiDataSourceDelegate>((ref) {
 
 /// Provides the local cache source for persistent storage.
 ///
-/// **Important:** This provider must be overridden with a pre-initialized
-/// instance in the ProviderScope.
+/// **Lazy Initialization:** This FutureProvider initializes the cache
+/// asynchronously to avoid blocking the first frame. Consumers should
+/// watch this provider and handle the AsyncValue appropriately.
 ///
+/// For synchronous access after initialization, use:
 /// ```dart
-/// final localCache = await SharedPreferencesLocalCacheSource.create();
+/// final cache = ref.watch(localCacheSourceProvider).value;
+/// if (cache != null) {
+///   // Cache is ready
+/// }
+/// ```
 ///
+/// For tests, override with a synchronous mock:
+/// ```dart
 /// ProviderScope(
 ///   overrides: [
-///     localCacheSourceProvider.overrideWithValue(localCache),
+///     localCacheSourceProvider.overrideWith(
+///       (ref) => Future.value(MockLocalCacheSource()),
+///     ),
 ///   ],
-///   child: const AppWidget(),
 /// )
 /// ```
-final localCacheSourceProvider = Provider<LocalCacheSource>((ref) {
-  throw UnimplementedError(
-    'localCacheSourceProvider must be overridden with a pre-initialized '
-    'instance. Pre-initialize in main() before runApp().',
-  );
+final localCacheSourceProvider = FutureProvider<LocalCacheSource>((ref) async {
+  return SharedPreferencesLocalCacheSource.create();
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

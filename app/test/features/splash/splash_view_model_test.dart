@@ -1,22 +1,87 @@
+import 'dart:async';
+
+import 'package:caveo_challenge/app/di/modules/core_module.dart';
+import 'package:caveo_challenge/app/di/modules/products_module.dart';
+import 'package:caveo_challenge/features/products/domain/entities/product.dart';
+import 'package:caveo_challenge/features/products/domain/repositories/product_repository.dart';
 import 'package:caveo_challenge/features/splash/presentation/splash_state.dart';
 import 'package:caveo_challenge/features/splash/presentation/splash_view_model.dart';
+import 'package:caveo_challenge/main.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared/drivers/network/network_failure.dart';
-import 'package:shared/libraries/riverpod_export/riverpod_export.dart';
+import 'package:shared/libraries/mocktail_export/mocktail_export.dart';
+import 'package:shared/shared.dart';
+
+class MockSyncStore extends Mock implements SyncStore {}
+
+class MockProductRepository extends Mock implements ProductRepository {}
+
+class MockLocalCacheSource extends Mock implements LocalCacheSource {}
 
 void main() {
+  late MockSyncStore mockSyncStore;
+  late MockProductRepository mockRepository;
+  late MockLocalCacheSource mockLocalCache;
+  late StreamController<SyncState<List<Product>>> streamController;
+
+  setUp(() {
+    mockSyncStore = MockSyncStore();
+    mockRepository = MockProductRepository();
+    mockLocalCache = MockLocalCacheSource();
+    streamController = StreamController<SyncState<List<Product>>>.broadcast();
+
+    // Default setup for hasKey
+    when(() => mockSyncStore.hasKey(SyncStoreKey.products)).thenReturn(true);
+  });
+
+  tearDown(() async {
+    await streamController.close();
+  });
+
+  ProviderContainer createContainer() {
+    return ProviderContainer(
+      overrides: [
+        syncStoreProvider.overrideWithValue(mockSyncStore),
+        productRepositoryProvider.overrideWithValue(mockRepository),
+        localCacheSourceProvider.overrideWith(
+          (ref) => Future.value(mockLocalCache),
+        ),
+      ],
+    );
+  }
+
   group('SplashViewModel', () {
-    test('should start with SplashReady state', () {
-      final container = ProviderContainer.test();
+    test('should start with SplashLoading state', () {
+      // Arrange
+      when(
+        () => mockSyncStore.watch<List<Product>>(SyncStoreKey.products),
+      ).thenAnswer((_) => streamController.stream);
+      when(
+        () => mockSyncStore.sync<List<Product>>(SyncStoreKey.products),
+      ).thenAnswer((_) async => const SyncStateLoading<List<Product>>());
+
+      // Act
+      final container = createContainer();
       addTearDown(container.dispose);
 
       final state = container.read(splashViewModelProvider);
 
-      expect(state, isA<SplashReady>());
+      // Assert
+      expect(state, isA<SplashLoading>());
     });
 
-    test('should remain in SplashReady after minimum display time', () async {
-      final container = ProviderContainer.test();
+    test('should transition to SplashSuccess after sync and min time', () async {
+      // Arrange
+      when(
+        () => mockSyncStore.watch<List<Product>>(SyncStoreKey.products),
+      ).thenAnswer((_) => streamController.stream);
+      when(
+        () => mockSyncStore.sync<List<Product>>(SyncStoreKey.products),
+      ).thenAnswer((_) async {
+        streamController.add(const SyncStateSuccess<List<Product>>([]));
+        return const SyncStateSuccess<List<Product>>([]);
+      });
+
+      final container = createContainer();
       addTearDown(container.dispose);
 
       final states = <SplashState>[];
@@ -26,16 +91,30 @@ void main() {
         fireImmediately: true,
       );
 
+      // Act - Wait for minimum display time
       await Future<void>.delayed(
         SplashConfig.minimumDisplayDuration + const Duration(milliseconds: 200),
       );
 
-      expect(states.first, isA<SplashReady>());
-      expect(states.last, isA<SplashReady>());
+      // Assert
+      expect(states.first, isA<SplashLoading>());
+      expect(states.last, isA<SplashSuccess>());
     });
 
-    test('should not transition before minimum display time', () async {
-      final container = ProviderContainer.test();
+    test('should transition to SplashError on sync failure', () async {
+      // Arrange
+      const failure = ConnectionFailure(message: 'No connection');
+      when(
+        () => mockSyncStore.watch<List<Product>>(SyncStoreKey.products),
+      ).thenAnswer((_) => streamController.stream);
+      when(
+        () => mockSyncStore.sync<List<Product>>(SyncStoreKey.products),
+      ).thenAnswer((_) async {
+        streamController.add(const SyncStateError<List<Product>>(failure));
+        return const SyncStateError<List<Product>>(failure);
+      });
+
+      final container = createContainer();
       addTearDown(container.dispose);
 
       final states = <SplashState>[];
@@ -45,28 +124,70 @@ void main() {
         fireImmediately: true,
       );
 
-      // Wait less than minimum time
-      await Future<void>.delayed(const Duration(milliseconds: 500));
+      // Act - Wait for minimum display time
+      await Future<void>.delayed(
+        SplashConfig.minimumDisplayDuration + const Duration(milliseconds: 200),
+      );
 
-      // Should still be in initial state (only one state recorded)
-      expect(states.length, 1);
-      expect(states.first, isA<SplashReady>());
+      // Assert
+      expect(states.last, isA<SplashError>());
+      expect((states.last as SplashError).failure, failure);
     });
 
-    test('should reset state on retry', () async {
-      final container = ProviderContainer.test();
+    test('should not transition before minimum display time', () async {
+      // Arrange
+      when(
+        () => mockSyncStore.watch<List<Product>>(SyncStoreKey.products),
+      ).thenAnswer((_) => streamController.stream);
+      when(
+        () => mockSyncStore.sync<List<Product>>(SyncStoreKey.products),
+      ).thenAnswer((_) async {
+        streamController.add(const SyncStateSuccess<List<Product>>([]));
+        return const SyncStateSuccess<List<Product>>([]);
+      });
+
+      final container = createContainer();
+      addTearDown(container.dispose);
+
+      final states = <SplashState>[];
+      container.listen(
+        splashViewModelProvider,
+        (_, next) => states.add(next),
+        fireImmediately: true,
+      );
+
+      // Act - Wait less than minimum display time
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+
+      // Assert - Should still be initial state
+      expect(states.length, 1);
+      expect(states.first, isA<SplashLoading>());
+    });
+
+    test('should reset to SplashLoading on retry', () async {
+      // Arrange
+      when(
+        () => mockSyncStore.watch<List<Product>>(SyncStoreKey.products),
+      ).thenAnswer((_) => streamController.stream);
+      when(
+        () => mockSyncStore.sync<List<Product>>(SyncStoreKey.products),
+      ).thenAnswer((_) async => const SyncStateSuccess<List<Product>>([]));
+
+      final container = createContainer();
       addTearDown(container.dispose);
 
       final notifier = container.read(splashViewModelProvider.notifier);
 
-      // Wait for initial completion
+      // Act - Wait for sync completion
       await Future<void>.delayed(
         SplashConfig.minimumDisplayDuration + const Duration(milliseconds: 200),
       );
 
+      // Trigger retry
       notifier.retry();
 
-      expect(container.read(splashViewModelProvider), isA<SplashReady>());
+      // Assert
+      expect(container.read(splashViewModelProvider), isA<SplashLoading>());
     });
   });
 
@@ -77,31 +198,6 @@ void main() {
 
     test('timeoutDuration should be 10 seconds', () {
       expect(SplashConfig.timeoutDuration, const Duration(seconds: 10));
-    });
-  });
-
-  group('SplashState equality', () {
-    test('SplashReady instances should be equal', () {
-      expect(const SplashReady(), const SplashReady());
-    });
-
-    test('SplashError with same failure should be equal', () {
-      const failure = TimeoutFailure(message: 'test');
-
-      expect(
-        const SplashError(failure: failure),
-        const SplashError(failure: failure),
-      );
-    });
-
-    test('SplashError with different failures should not be equal', () {
-      const failure1 = TimeoutFailure(message: 'error 1');
-      const failure2 = TimeoutFailure(message: 'error 2');
-
-      expect(
-        const SplashError(failure: failure1),
-        isNot(const SplashError(failure: failure2)),
-      );
     });
   });
 }

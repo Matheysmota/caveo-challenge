@@ -5,24 +5,14 @@
 ///
 /// ## Initialization
 ///
-/// The theme should be pre-loaded in `main()` to avoid visual flash:
+/// The theme starts with [ThemeMode.system] and automatically loads the saved
+/// preference once the cache is ready. This enables **non-blocking startup**
+/// while still respecting user preference with minimal visual flash.
 ///
 /// ```dart
-/// void main() async {
-///   final localCache = await SharedPreferencesLocalCacheSource.create();
-///   final savedTheme = await loadSavedTheme(localCache);
-///
-///   runApp(
-///     ProviderScope(
-///       overrides: [
-///         localCacheSourceProvider.overrideWithValue(localCache),
-///         themeModeProvider.overrideWith(
-///           () => ThemeModeNotifier(initialTheme: savedTheme),
-///         ),
-///       ],
-///       child: const AppWidget(),
-///     ),
-///   );
+/// void main() {
+///   runApp(const ProviderScope(child: AppWidget()));
+///   // Theme loads automatically when cache is ready
 /// }
 /// ```
 ///
@@ -91,28 +81,49 @@ final themeModeProvider = NotifierProvider<ThemeModeNotifier, ThemeMode>(
 ///
 /// Handles persistence and provides methods for changing the theme.
 ///
-/// ## Pre-initialization
+/// ## Auto-Loading from Cache
 ///
-/// To avoid theme flash, create with initial theme from cache:
-///
-/// ```dart
-/// final savedTheme = await loadSavedTheme(localCache);
-/// themeModeProvider.overrideWith(() => ThemeModeNotifier(initialTheme: savedTheme));
-/// ```
+/// The notifier automatically loads the saved theme once the cache is ready.
+/// It starts with [ThemeMode.system] for instant startup and updates once
+/// the persisted preference is loaded.
 class ThemeModeNotifier extends Notifier<ThemeMode> {
-  /// Creates a notifier with an optional initial theme.
-  ///
-  /// If [initialTheme] is provided, it will be used as the starting value
-  /// instead of loading from cache (which would cause a flash).
-  ThemeModeNotifier({this.initialTheme});
-
-  /// The pre-loaded initial theme (if any).
-  final ThemeMode? initialTheme;
-
   @override
   ThemeMode build() {
-    // Use pre-loaded theme if available, otherwise default to system
-    return initialTheme ?? ThemeMode.system;
+    // Start with system theme for instant startup
+    // Then load saved preference when cache is ready
+    _loadSavedTheme();
+    return ThemeMode.system;
+  }
+
+  /// Loads the saved theme from cache when available.
+  Future<void> _loadSavedTheme() async {
+    final cacheAsync = ref.watch(localCacheSourceProvider);
+    cacheAsync.whenData((cache) async {
+      final savedTheme = await _readThemeFromCache(cache);
+      if (savedTheme != null && savedTheme != state) {
+        state = savedTheme;
+      }
+    });
+  }
+
+  /// Reads theme preference from cache.
+  Future<ThemeMode?> _readThemeFromCache(LocalCacheSource cache) async {
+    try {
+      final response = await cache.getModel(
+        LocalStorageKey.themeMode,
+        _ThemePreference.fromMap,
+      );
+      if (response != null) {
+        return switch (response.data.mode) {
+          'light' => ThemeMode.light,
+          'dark' => ThemeMode.dark,
+          _ => ThemeMode.system,
+        };
+      }
+    } catch (_) {
+      // Cache read failed, return null to use default
+    }
+    return null;
   }
 
   /// Sets the theme mode and persists it to cache.
@@ -141,15 +152,17 @@ class ThemeModeNotifier extends Notifier<ThemeMode> {
 
   /// Persists the theme to cache.
   Future<void> _persistTheme(ThemeMode mode) async {
-    try {
-      final cache = ref.read(localCacheSourceProvider);
-      await cache.setModel(
-        LocalStorageKey.themeMode,
-        _ThemePreference(mode.name),
-      );
-    } catch (_) {
-      // Ignore persistence errors
-    }
+    final cacheAsync = ref.read(localCacheSourceProvider);
+    cacheAsync.whenData((cache) async {
+      try {
+        await cache.setModel(
+          LocalStorageKey.themeMode,
+          _ThemePreference(mode.name),
+        );
+      } catch (_) {
+        // Ignore persistence errors
+      }
+    });
   }
 
   /// Converts DoriThemeMode to Flutter's ThemeMode.
@@ -160,38 +173,6 @@ class ThemeModeNotifier extends Notifier<ThemeMode> {
       DoriThemeMode.system => ThemeMode.system,
     };
   }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Pre-initialization Helper
-// ─────────────────────────────────────────────────────────────────────────────
-
-/// Loads the saved theme from cache.
-///
-/// Call this in `main()` before `runApp()` to avoid theme flash:
-///
-/// ```dart
-/// final savedTheme = await loadSavedTheme(localCache);
-/// ```
-///
-/// Returns [ThemeMode.system] if no theme is saved or if reading fails.
-Future<ThemeMode> loadSavedTheme(LocalCacheSource cache) async {
-  try {
-    final response = await cache.getModel(
-      LocalStorageKey.themeMode,
-      _ThemePreference.fromMap,
-    );
-    if (response != null) {
-      return switch (response.data.mode) {
-        'light' => ThemeMode.light,
-        'dark' => ThemeMode.dark,
-        _ => ThemeMode.system,
-      };
-    }
-  } catch (_) {
-    // If cache read fails, return default
-  }
-  return ThemeMode.system;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

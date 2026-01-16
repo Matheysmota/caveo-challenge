@@ -13,7 +13,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          localCacheSourceProvider.overrideWithValue(MockLocalCacheSource()),
+          localCacheSourceProvider.overrideWith(
+            (ref) => Future.value(MockLocalCacheSource()),
+          ),
           splashViewModelProvider.overrideWith(_StubSplashViewModel.new),
         ],
         child: const AppWidget(),
@@ -31,5 +33,5 @@ void main() {
 
 class _StubSplashViewModel extends SplashViewModel {
   @override
-  SplashState build() => const SplashReady();
+  SplashState build() => const SplashLoading();
 }
