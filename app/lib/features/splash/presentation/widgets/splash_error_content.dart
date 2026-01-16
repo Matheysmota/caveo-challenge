@@ -2,7 +2,7 @@ import 'package:dori/dori.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared/drivers/network/network_failure.dart';
 
-import '../../../../app/app_strings.dart';
+import '../../splash_strings.dart';
 
 class SplashErrorContent extends StatelessWidget {
   const SplashErrorContent({
@@ -21,23 +21,38 @@ class SplashErrorContent extends StatelessWidget {
     final dori = context.dori;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: dori.spacing.xs),
+      padding: EdgeInsets.symmetric(horizontal: dori.spacing.sm),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: dori.spacing.sm),
-          DoriIcon(
-            icon: DoriIconData.error,
-            size: DoriIconSize.lg,
-            color: dori.colors.feedback.error,
+          const Spacer(),
+          Container(
+            padding: EdgeInsets.all(dori.spacing.xs),
+            decoration: BoxDecoration(
+              color: dori.colors.feedback.errorSoft,
+              shape: BoxShape.circle,
+            ),
+            child: DoriIcon(
+              icon: DoriIconData.error,
+              size: DoriIconSize.lg,
+              color: dori.colors.feedback.errorLight,
+            ),
           ),
           SizedBox(height: dori.spacing.sm),
           DoriText(
-            label: failure.message,
+            label: SplashStrings.errorTitle,
+            variant: DoriTypographyVariant.title5,
+            color: dori.colors.content.one,
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: dori.spacing.xxs),
+          DoriText(
+            label: SplashStrings.errorDescription,
             variant: DoriTypographyVariant.description,
             color: dori.colors.content.two,
             textAlign: TextAlign.center,
           ),
-          Spacer(),
+          const Spacer(),
           DoriButton(
             label: SplashStrings.retryButton,
             isExpanded: true,

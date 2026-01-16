@@ -1,4 +1,5 @@
 import 'package:caveo_challenge/features/splash/presentation/widgets/splash_error_content.dart';
+import 'package:caveo_challenge/features/splash/splash_strings.dart';
 import 'package:dori/dori.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -23,7 +24,7 @@ void main() {
       );
     }
 
-    testWidgets('should display error message from failure', (tester) async {
+    testWidgets('should display error title and description', (tester) async {
       // Arrange
       const failure = ConnectionFailure(message: 'No internet connection');
 
@@ -31,7 +32,8 @@ void main() {
       await tester.pumpWidget(createWidget(failure: failure, onRetry: () {}));
 
       // Assert
-      expect(find.text('No internet connection'), findsOneWidget);
+      expect(find.text(SplashStrings.errorTitle), findsOneWidget);
+      expect(find.text(SplashStrings.errorDescription), findsOneWidget);
     });
 
     testWidgets('should display error icon', (tester) async {
@@ -54,7 +56,7 @@ void main() {
 
       // Assert
       expect(find.byType(DoriButton), findsOneWidget);
-      expect(find.text('Tentar novamente'), findsOneWidget);
+      expect(find.text(SplashStrings.retryButton), findsOneWidget);
     });
 
     testWidgets('should call onRetry when button is pressed', (tester) async {
@@ -108,17 +110,18 @@ void main() {
       expect(retryCalled, isFalse);
     });
 
-    testWidgets('should display different error types correctly', (
+    testWidgets('should show same UI for different error types', (
       tester,
     ) async {
-      // Arrange
+      // Arrange - Different error type
       const failure = TimeoutFailure(message: 'Request timed out');
 
       // Act
       await tester.pumpWidget(createWidget(failure: failure, onRetry: () {}));
 
-      // Assert
-      expect(find.text('Request timed out'), findsOneWidget);
+      // Assert - Same generic error UI is shown
+      expect(find.text(SplashStrings.errorTitle), findsOneWidget);
+      expect(find.text(SplashStrings.errorDescription), findsOneWidget);
     });
   });
 }
