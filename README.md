@@ -280,8 +280,12 @@ O vídeo abaixo demonstra as principais funcionalidades do aplicativo Fish em a�
 
 https://github.com/user-attachments/assets/d0f2d227-40b3-4ef7-be48-5fc3ed73887b
 
+### Catálogo de Componentes (Widgetbook)
+
+O Design System Dori possui um catálogo interativo de componentes documentado com Widgetbook:
+
+https://github.com/user-attachments/assets/25f0ac75-dc7f-4d6e-b109-81de5b3df704
+
 ---
 *Developed by Matheus Mota as part of Caveo Tech Challenge.*
-
-
 
