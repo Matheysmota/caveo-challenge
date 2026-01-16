@@ -1,28 +1,35 @@
+import 'package:dori/dori.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared/shared.dart';
+import 'package:shared/libraries/riverpod_export/riverpod_export.dart';
 
 import 'package:caveo_challenge/app/app_widget.dart';
 import 'package:caveo_challenge/app/di/app_providers.dart';
+import 'package:caveo_challenge/features/splash/splash.barrel.dart';
 
 import 'mocks/mock_local_cache_source.dart';
 
 void main() {
-  testWidgets('App smoke test', (WidgetTester tester) async {
+  testWidgets('App smoke test - splash page renders', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           localCacheSourceProvider.overrideWithValue(MockLocalCacheSource()),
+          splashViewModelProvider.overrideWith(_StubSplashViewModel.new),
         ],
         child: const AppWidget(),
       ),
     );
 
-    // Pump a few frames to let the router initialize
-    // (don't use pumpAndSettle because CircularProgressIndicator is animating)
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
 
-    // The splash screen placeholder should be visible
-    expect(find.text('Splash Screen Placeholder'), findsOneWidget);
+    expect(find.byType(SplashPage), findsOneWidget);
+    expect(find.byType(DoriSvg), findsOneWidget);
+    expect(find.byType(DoriCircularProgress), findsOneWidget);
   });
+}
+
+class _StubSplashViewModel extends SplashViewModel {
+  @override
+  SplashState build() => const SplashReady();
 }

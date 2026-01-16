@@ -28,6 +28,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 
+import '../../features/splash/splash_page.dart';
 import 'app_routes.dart';
 import 'route_transitions.dart';
 
@@ -50,7 +51,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'splash',
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
-          child: const _SplashPlaceholder(), // Will be replaced with SplashPage
+          child: const SplashPage(),
           transitionsBuilder: RouteTransitions.fade,
           transitionDuration: RouteTransitions.defaultDuration,
         ),
@@ -124,30 +125,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 // ─────────────────────────────────────────────────────────────────────────────
 // Placeholder Widgets (to be replaced with actual pages)
 // ─────────────────────────────────────────────────────────────────────────────
-
-/// Placeholder for Splash page.
-/// TODO: Replace with actual SplashPage in PR 2.
-class _SplashPlaceholder extends StatelessWidget {
-  const _SplashPlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('🐟', style: TextStyle(fontSize: 64)),
-            SizedBox(height: 16),
-            Text('Splash Screen Placeholder'),
-            SizedBox(height: 24),
-            CircularProgressIndicator(),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 /// Placeholder for Products page.
 /// TODO: Replace with actual ProductsPage in future PR.
