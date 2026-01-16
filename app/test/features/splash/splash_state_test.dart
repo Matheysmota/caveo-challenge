@@ -1,4 +1,4 @@
-import 'package:caveo_challenge/features/splash/presentation/splash_state.dart';
+import 'package:caveo_challenge/features/splash/presentation/view_models/splash_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared/drivers/network/network_failure.dart';
 

@@ -7,8 +7,8 @@ import 'package:shared/shared.dart';
 import 'package:caveo_challenge/app/di/app_providers.dart';
 import 'package:caveo_challenge/features/products/domain/entities/product.dart';
 import 'package:caveo_challenge/features/products/domain/repositories/product_repository.dart';
-import 'package:caveo_challenge/features/products/presentation/product_list_state.dart';
-import 'package:caveo_challenge/features/products/presentation/product_list_view_model.dart';
+import 'package:caveo_challenge/features/products/presentation/view_models/product_list_state.dart';
+import 'package:caveo_challenge/features/products/presentation/view_models/product_list_view_model.dart';
 import 'package:caveo_challenge/main.dart';
 
 class MockProductRepository extends Mock implements ProductRepository {}

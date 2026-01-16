@@ -3,12 +3,12 @@ library;
 
 import 'dart:async';
 
+import 'package:caveo_challenge/app/di/modules/products_module.dart';
+import 'package:caveo_challenge/features/products/domain/entities/product.dart';
+import 'package:caveo_challenge/features/splash/splash_strings.dart';
+import 'package:caveo_challenge/main.dart';
 import 'package:shared/shared.dart';
 
-import '../../../app/di/modules/products_module.dart';
-import '../../../main.dart';
-import '../../products/domain/entities/product.dart';
-import '../splash_strings.dart';
 import 'splash_state.dart';
 
 abstract final class SplashConfig {
@@ -50,7 +50,7 @@ class SplashViewModel extends Notifier<SplashState> {
   }
 
   void _reset() {
-    _cancelTimers();
+    _cancelAllTimers();
     _syncSubscription?.cancel();
     _syncSubscription = null;
     _syncComplete = false;
@@ -122,7 +122,8 @@ class SplashViewModel extends Notifier<SplashState> {
     _tryFinalize();
   }
 
-  void _cancelTimers() {
+  /// Cancels all active timers (minimum display, timeout, and cache retry).
+  void _cancelAllTimers() {
     _minimumDisplayTimer?.cancel();
     _minimumDisplayTimer = null;
     _timeoutTimer?.cancel();
@@ -133,7 +134,7 @@ class SplashViewModel extends Notifier<SplashState> {
 
   void _dispose() {
     _isDisposed = true;
-    _cancelTimers();
+    _cancelAllTimers();
     _syncSubscription?.cancel();
     _syncSubscription = null;
   }
