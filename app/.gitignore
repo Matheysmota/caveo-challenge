@@ -56,3 +56,6 @@
 **/ios/**/.xcode.env.local
 **/ios/**/Runner.xcworkspace/xcuserdata/
 **/ios/**/Runner.xcworkspace/contents.xcworkspacedata
+
+# Coverage reports
+coverage/

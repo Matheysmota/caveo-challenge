@@ -59,23 +59,26 @@ Adotamos a **Estrutura Híbrida (Opção 3)**, que respeita a essência do requi
 │   │   ├── main.dart             # Ponto de entrada (bootstrap)
 │   │   ├── app/                  # Configuração do App
 │   │   │   ├── app_widget.dart   # MaterialApp, Theme, Router
-│   │   │   ├── routes/           # Definição de rotas (GoRouter)
-│   │   │   └── providers/        # Providers globais (Riverpod)
+│   │   │   ├── di/               # Dependency Injection (Providers Riverpod)
+│   │   │   └── router/           # Definição de rotas (GoRouter)
 │   │   └── features/             # Features do App (Package by Feature interno)
 │   │       ├── splash/
-│   │       │   ├── presentation/ # UI da Splash
-│   │       │   └── ...
-│   │       └── product/
-│   │           ├── application/  # UseCases, DTOs
-│   │           ├── domain/       # Entities, Repository Interfaces
-│   │           ├── infrastructure/ # Repository Impl, Data Sources
-│   │           └── presentation/ # Pages, Widgets, ViewModels
+│   │       │   └── presentation/
+│   │       │       ├── view_models/  # Estados e ViewModels (Riverpod Notifiers)
+│   │       │       └── widgets/      # Widgets específicos da feature
+│   │       └── products/
+│   │           ├── domain/           # Entities, Repository Interfaces
+│   │           ├── infrastructure/   # Repository Impl, Data Sources, Models
+│   │           └── presentation/
+│   │               ├── view_models/  # Estados e ViewModels (Riverpod Notifiers)
+│   │               └── widgets/      # Widgets específicos da feature
 │   ├── test/                     # Testes do App
 │   └── pubspec.yaml              # Dependências (inclui packages locais)
 │
 ├── packages/                     # Módulos isolados e reutilizáveis
 │   ├── shared/                   # Núcleo compartilhado
 │   │   ├── lib/
+│   │   │   ├── drivers/          # Abstrações de infraestrutura
 │   │   │   ├── libraries/        # Exports de libs externas (Governança ADR 003)
 │   │   │   ├── utils/            # Utilitários (formatters, extensions)
 │   │   │   └── shared.dart       # Barrel file

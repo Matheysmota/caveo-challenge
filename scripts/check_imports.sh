@@ -23,11 +23,11 @@ ALLOWLIST_APP="package:flutter/|package:dart:|package:shared/|package:dori/|pack
 
 # Shared: Can import Flutter SDK + its declared dependencies (for implementations)
 # Note: External libs should only be used in src/ (private) or libraries/ (exports)
-ALLOWLIST_SHARED="package:flutter/|package:dart:|package:shared/|package:shared_preferences/|package:connectivity_plus/|package:mocktail/|package:dio/|package:flutter_dotenv/|package:equatable/|package:flutter_riverpod/|package:riverpod/|package:go_router/"
+ALLOWLIST_SHARED="package:flutter/|package:dart:|package:shared/|package:shared_preferences/|package:connectivity_plus/|package:mocktail/|package:dio/|package:flutter_dotenv/|package:equatable/|package:flutter_riverpod/|package:riverpod/|package:go_router/|package:infinite_scroll_pagination/"
 
 # Dori: Flutter SDK + its declared dependencies (Design System package)
 # Dori is independent and can have its own dependencies for UI rendering
-ALLOWLIST_DORI="package:flutter/|package:dart:|package:dori/|package:flutter_svg/"
+ALLOWLIST_DORI="package:flutter/|package:dart:|package:dori/|package:flutter_svg/|package:flutter_staggered_grid_view/"
 
 # ============================================================================
 # HELPER FUNCTIONS

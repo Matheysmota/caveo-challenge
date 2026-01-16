@@ -19,7 +19,7 @@ The `shared` package provides:
 | `ApiDataSourceDelegate` | HTTP abstraction | [ADR 004](../../documents/adrs/004-camada-de-abstracao-rede.md) |
 | `LocalCacheSource` | Typed cache with TTL | [ADR 007](../../documents/adrs/007-abstracao-cache-local.md) |
 | `ConnectivityObserver` | Network status monitoring | [ADR 010](../../documents/adrs/010-connectivity-observer.md) |
-| `SyncStore` | Initial data synchronization | [ADR 011](../../documents/adrs/011-sync-store.md) |
+| `SyncStore` | Initial data synchronization | [ADR 013](../../documents/adrs/013-sync-store.md) |
 
 ### Libraries (Governed Exports)
 

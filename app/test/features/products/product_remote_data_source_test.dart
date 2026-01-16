@@ -103,8 +103,9 @@ void main() {
 
       await dataSource.getProducts(page: 3);
 
-      expect(capturedParams?.queryParams?['offset'], '20');
-      expect(capturedParams?.queryParams?['limit'], '10');
+      // page 3 with pageSize 20 = offset 40
+      expect(capturedParams?.queryParams?['offset'], '40');
+      expect(capturedParams?.queryParams?['limit'], '20');
     });
   });
 }

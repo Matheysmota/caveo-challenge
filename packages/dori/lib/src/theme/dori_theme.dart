@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../tokens/dori_colors.dart';
 import '../tokens/dori_typography.dart';
@@ -63,6 +64,14 @@ class DoriTheme {
         centerTitle: true,
         titleTextStyle: DoriTypography.title5.copyWith(
           color: colors.content.one,
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+          systemNavigationBarColor: colors.surface.pure,
+          systemNavigationBarIconBrightness: isDark
+              ? Brightness.light
+              : Brightness.dark,
         ),
       ),
 
