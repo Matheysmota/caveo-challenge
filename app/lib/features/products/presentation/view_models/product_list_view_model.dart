@@ -3,15 +3,12 @@ library;
 
 import 'package:shared/shared.dart';
 
-import '../../../app/di/app_providers.dart';
-import '../../../main.dart';
-import '../domain/entities/product.dart';
-import '../domain/repositories/product_repository.dart';
+import '../../../../app/di/app_providers.dart';
+import '../../../../main.dart';
+import '../../domain/entities/product.dart';
+import '../../domain/product_config.dart';
+import '../../domain/repositories/product_repository.dart';
 import 'product_list_state.dart';
-
-abstract final class ProductListConfig {
-  static const int pageSize = 20;
-}
 
 final productListViewModelProvider =
     NotifierProvider<ProductListViewModel, ProductListState>(
@@ -83,7 +80,7 @@ class ProductListViewModel extends Notifier<ProductListState> {
         _allProducts = data;
         state = ProductListLoaded(
           products: data,
-          hasMorePages: data.length >= ProductListConfig.pageSize,
+          hasMorePages: data.length >= ProductConfig.pageSize,
         );
         return;
 
@@ -93,7 +90,7 @@ class ProductListViewModel extends Notifier<ProductListState> {
           state = ProductListLoaded(
             products: previousData,
             isDataStale: true,
-            hasMorePages: previousData.length >= ProductListConfig.pageSize,
+            hasMorePages: previousData.length >= ProductConfig.pageSize,
           );
           return;
         }
@@ -129,7 +126,7 @@ class ProductListViewModel extends Notifier<ProductListState> {
 
         state = ProductListLoaded(
           products: _filterProducts(updatedProducts, _searchQuery),
-          hasMorePages: products.length >= ProductListConfig.pageSize,
+          hasMorePages: products.length >= ProductConfig.pageSize,
         );
       },
       (failure) {

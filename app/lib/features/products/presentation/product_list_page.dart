@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 
 import '../../../app/app_strings.dart';
-import 'product_list_state.dart';
-import 'product_list_view_model.dart';
+import 'view_models/product_list_state.dart';
+import 'view_models/product_list_view_model.dart';
 import 'widgets/product_grid.dart';
 import 'widgets/product_list_app_bar.dart';
 import 'widgets/product_list_loading.dart';

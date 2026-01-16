@@ -4,6 +4,7 @@ import 'package:shared/drivers/network/request_params.dart';
 import 'package:shared/libraries/result_export/result_export.dart';
 
 import '../../domain/entities/product.dart';
+import '../../domain/product_config.dart';
 
 /// Contract for fetching products from remote API.
 abstract interface class ProductRemoteDataSource {
@@ -17,8 +18,6 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
   final ApiDataSourceDelegate _api;
 
-  static const _pageSize = 20;
-
   @override
   Future<Result<List<Product>, NetworkFailure>> getProducts({
     int page = 1,
@@ -27,8 +26,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       params: RequestParams.get(
         '/products',
         queryParams: {
-          'limit': '$_pageSize',
-          'offset': '${(page - 1) * _pageSize}',
+          'limit': '${ProductConfig.pageSize}',
+          'offset': '${(page - 1) * ProductConfig.pageSize}',
         },
       ),
       mapper: _parseProducts,

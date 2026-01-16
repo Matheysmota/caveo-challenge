@@ -1,4 +1,4 @@
-# ADR 011: SyncStore — Padrão de Sincronização Inicial
+# ADR 013: SyncStore — Padrão de Sincronização Inicial
 
 | Metadado | Valor |
 | :--- | :--- |

@@ -14,6 +14,6 @@
 ///   errorWidget: (context, url, error) => Icon(Icons.error),
 /// )
 /// ```
-library cached_network_image_export;
+library;
 
 export 'package:cached_network_image/cached_network_image.dart';

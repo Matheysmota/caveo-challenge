@@ -152,7 +152,7 @@ class _SampleCard extends StatelessWidget {
           Container(
             height: item.height * 0.6,
             decoration: BoxDecoration(
-              color: item.color.withOpacity(0.2),
+              color: item.color.withValues(alpha: 0.2),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(24),
                 topRight: Radius.circular(24),

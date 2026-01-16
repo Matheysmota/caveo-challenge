@@ -120,11 +120,19 @@ caveo-challenge/
 │       ├── main.dart             # Bootstrap + DI setup
 │       ├── app/                  # Configuração global
 │       │   ├── app_widget.dart   # MaterialApp + Routing
-│       │   ├── routes/           # GoRouter configuration
-│       │   └── providers/        # Riverpod global providers
+│       │   ├── di/               # Riverpod providers (DI)
+│       │   └── router/           # GoRouter configuration
 │       └── features/             # Feature modules (vertical slices)
 │           ├── splash/
-│           └── product/
+│           │   └── presentation/
+│           │       ├── view_models/  # Estados e ViewModels
+│           │       └── widgets/      # Widgets específicos
+│           └── products/
+│               ├── domain/           # Entities, Repository Interfaces
+│               ├── infrastructure/   # Repositories, Data Sources, Models
+│               └── presentation/
+│                   ├── view_models/  # Estados e ViewModels
+│                   └── widgets/      # Widgets específicos
 │
 ├── packages/
 │   ├── shared/                   # 🔧 Core utilities + Abstractions
@@ -132,7 +140,8 @@ caveo-challenge/
 │   │       ├── drivers/          # Interfaces públicas
 │   │       │   ├── local_cache/  # LocalCacheSource
 │   │       │   ├── connectivity/ # ConnectivityObserver
-│   │       │   └── network/      # ApiDataSourceDelegate (futuro)
+│   │       │   ├── network/      # ApiDataSourceDelegate
+│   │       │   └── sync_store/   # SyncStore
 │   │       ├── libraries/        # Re-exports governados
 │   │       ├── src/              # Implementações privadas
 │   │       └── utils/            # Extensions, formatters
@@ -537,7 +546,7 @@ Future<Result<List<Product>, ProductFailure>> getProducts({int page = 1}) async 
 
 ### SyncStore — Sincronização Inicial
 
-> Detalhes em [ADR 011](adrs/011-sync-store.md)
+> Detalhes em [ADR 013](adrs/013-sync-store.md)
 
 O SyncStore é uma abstração em `packages/shared` que permite sincronização inicial de dados sem acoplar features:
 
@@ -692,32 +701,35 @@ connectivity.observe().listen((status) {
 
 ---
 
-## Dores e Problemas Conhecidos
+## Status de Implementação
 
-### 🔴 Problemas Atuais
+### ✅ Implementado
 
-| Problema | Impacto | Status | Mitigação |
-|----------|---------|--------|-----------|
-| `ApiDataSourceDelegate` não implementado | Repositórios não podem fazer HTTP | 🚧 PR pendente | Mock temporário |
-| `result_dart` não adicionado | Sem Result Pattern real | 🚧 PR pendente | Usar `Either` manual |
-| `flutter_command` não adicionado | Commands ainda não funcionais | 🚧 PR pendente | ChangeNotifier direto |
-| Testes de integração ausentes | Cobertura apenas unitária | 📋 Backlog | Widget tests manuais |
+| Componente | Status | ADR |
+|------------|--------|-----|
+| `ApiDataSourceDelegate` | ✅ Completo | [ADR 004](adrs/004-camada-de-abstracao-rede.md) |
+| `LocalCacheSource` com TTL | ✅ Completo | [ADR 007](adrs/007-abstracao-cache-local.md) |
+| `ConnectivityObserver` | ✅ Completo | [ADR 010](adrs/010-connectivity-observer.md) |
+| `SyncStore` | ✅ Completo | [ADR 013](adrs/013-sync-store.md) |
+| `flutter_command` (Result Pattern) | ✅ Completo | [ADR 006](adrs/006-command-pattern-e-tratamento-erros.md) |
+| Design System Dori (Tokens + Atoms) | ✅ Completo | [ADR 009](adrs/009-design-system-dori.md) |
+| CI/CD GitHub Actions | ✅ Completo | [ADR 005](adrs/005-esteira-ci-cd.md) |
+| Governança de Imports (check_imports.sh) | ✅ Completo | [ADR 003](adrs/003-abstracao-e-governanca-bibliotecas.md) |
 
-### 🟡 Dívidas Técnicas
+### 🟡 Pendentes (Backlog)
 
-| Dívida | Risco | Prioridade |
-|--------|-------|------------|
+| Item | Risco | Prioridade |
+|------|-------|------------|
 | Fonte Plus Jakarta Sans não incluída | UI não 100% fiel ao design | Média |
-| Widgetbook não configurado | Documentação de componentes manual | Baixa |
-| GitHub Actions não implementado | CI apenas local | Alta |
-| Coverage report não automatizado | Difícil acompanhar métricas | Média |
+| Widgetbook para documentação de componentes | Documentação manual | Baixa |
+| Coverage report automatizado na CI | Difícil acompanhar métricas | Média |
+| Testes de integração E2E | Cobertura apenas unitária | Baixa |
 
 ### 🟢 Melhorias Futuras
 
 | Melhoria | Benefício | Esforço |
 |----------|-----------|---------|
-| Implementar `ApiDataSourceDelegate` | HTTP real funcional | Médio |
-| Adicionar retry policy com backoff | Resiliência em redes instáveis | Baixo |
+| Retry policy com exponential backoff | Resiliência em redes instáveis | Baixo |
 | Cache hierárquico (memory → disk) | Performance de leitura | Alto |
 | Feature flags via Remote Config | Rollout gradual | Médio |
 | Analytics abstraction | Métricas de uso | Médio |
@@ -738,7 +750,9 @@ connectivity.observe().listen((status) {
 - [ADR 008 — Padrões de Testes](adrs/008-padroes-de-testes.md)
 - [ADR 009 — Design System Dori](adrs/009-design-system-dori.md)
 - [ADR 010 — Connectivity Observer](adrs/010-connectivity-observer.md)
-- [ADR 011 — SyncStore](adrs/011-sync-store.md)
+- [ADR 011 — Splash Screen Architecture](adrs/011-splash-screen-architecture.md)
+- [ADR 012 — Infinite Scroll Pagination](adrs/012-infinite-scroll-pagination.md)
+- [ADR 013 — SyncStore](adrs/013-sync-store.md)
 
 ### Documentos de Apoio
 

@@ -4,7 +4,7 @@
 ![Coverage](https://img.shields.io/badge/coverage-80%25-brightgreen)
 ![Flutter](https://img.shields.io/badge/Flutter-3.x-blue?logo=flutter)
 
-Bem-vindo ao repositório do **Caveo Flutter Challenge**. Este projeto é uma aplicação mobile desenvolvida com foco em **Clean Architecture**, **Governança de Código** e **Escalabilidade**, seguindo rigorosamente princípios de engenharia de software documentados.
+Bem-vindo ao repositório do **Caveo Flutter Challenge**. Este projeto é uma aplicação mobile desenvolvida com foco em **Clean Architecture**, **Governança de Código** e **Escalabilidade**, seguindo rigorosamente princípios de engenharia de software documentados. O nome fictício escolhido para o aplicativo é Fish.
 
 ## 📚 Documentação e Decisões
 
@@ -23,25 +23,25 @@ Toda a evolução técnica deste projeto é pautada em documentação e ADRs (Ar
 
 O projeto adota uma **estrutura híbrida** que combina:
 - **Monorepo organizado:** Raiz limpa com `app/`, `packages/`, `documents/` e `scripts/`.
-- **Package by Feature interno:** Cada feature (`splash`, `product`) encapsula suas próprias camadas.
+- **Package by Feature interno:** Cada feature (`splash`, `products`) encapsula suas próprias camadas.
 - **Packages reutilizáveis:** `shared` e `dori` (Design System) são módulos independentes.
 
 ```
 / (root)
 ├── app/                      # App Shell (Projeto Flutter)
 │   └── lib/
-│       ├── main.dart         # Bootstrap
-│       ├── app/              # Configuração (Routes, Theme, Providers)
+│       ├── main.dart         # Bootstrap + DI Setup
+│       ├── app/              # Configuração (Router, Theme, DI)
 │       └── features/         # Features isoladas
 │           ├── splash/
-│           └── product/
-│               ├── application/
-│               ├── domain/
-│               ├── infrastructure/
-│               └── presentation/
+│           │   └── presentation/
+│           └── products/
+│               ├── domain/         # Entities, Repository Interfaces
+│               ├── infrastructure/ # Repository Impl, Data Sources
+│               └── presentation/   # Pages, Widgets, ViewModels
 │
 ├── packages/                 # Módulos reutilizáveis
-│   ├── shared/               # Core, Utils, Library Exports
+│   ├── shared/               # Drivers, Utils, Library Exports
 │   └── dori/                 # 🐠 Design System Dori
 │
 ├── documents/                # Documentação e ADRs
@@ -73,7 +73,7 @@ O projeto utiliza o **Dori** (D.O.R.I. — Design Oriented Reusable Interface), 
 |--------|-----------|-----|
 | **Result Pattern** | Métodos retornam `Result<S, F>`, sem exceções | [ADR 006](documents/adrs/006-command-pattern-e-tratamento-erros.md) |
 | **Repository Pattern** | Interface + Impl com fallback API → Cache | [ADR 004](documents/adrs/004-camada-de-abstracao-rede.md) |
-| **SyncStore** | Sincronização inicial desacoplada de features | [ADR 011](documents/adrs/011-sync-store.md) |
+| **SyncStore** | Sincronização inicial desacoplada de features | [ADR 013](documents/adrs/013-sync-store.md) |
 | **Atomic Design** | Componentes UI organizados em Atoms/Molecules/Organisms | [ADR 009](documents/adrs/009-design-system-dori.md) |
 
 ### SyncStore — Sincronização Inicial
@@ -94,36 +94,121 @@ syncStore.watch<List<Product>>(SyncStoreKey.products).listen((state) {
 });
 ```
 
-📖 **Documentação completa:** [ADR 011 — SyncStore](documents/adrs/011-sync-store.md)
+📖 **Documentação completa:** [ADR 013 — SyncStore](documents/adrs/013-sync-store.md)
 
 ---
 
 ## 🚀 Como Rodar o Projeto
 
 ### Pré-requisitos
-- Flutter SDK 3.x (Stable)
-- Git
 
-### Instalação
+| Ferramenta | Versão Mínima | Verificar |
+|------------|---------------|-----------|
+| Flutter SDK | 3.24.0+ | `flutter --version` |
+| Dart SDK | 3.5.0+ | `dart --version` |
+| Git | 2.x | `git --version` |
+| Android Studio / Xcode | Latest | Para emuladores |
 
-1. Clone o repositório:
+### Quick Start
+
 ```bash
+# 1. Clone o repositório
 git clone https://github.com/Matheysmota/caveo-challenge.git
 cd caveo-challenge
-```
 
-2. Instale as dependências:
-```bash
-cd app && flutter pub get
-```
+# 2. Instale as dependências de todos os packages
+cd app && flutter pub get && cd ..
+cd packages/shared && flutter pub get && cd ../..
+cd packages/dori && flutter pub get && cd ../..
 
-3. Execute o projeto:
-```bash
-# Opção 1: Script que lê .devEnv automaticamente (Recomendado)
-./scripts/run_dev.sh
-
-# Opção 2: Flutter run direto (usa fallback em debug)
+# 3. Execute o projeto
 cd app && flutter run
+```
+
+### Execução Detalhada
+
+#### Opção 1: Via Script (Recomendado para desenvolvimento)
+
+```bash
+# Da raiz do projeto
+./scripts/run_dev.sh
+```
+
+O script `run_dev.sh`:
+- Carrega variáveis do `.devEnv`
+- Injeta configurações via `--dart-define`
+- Executa `flutter run` no diretório `app/`
+
+#### Opção 2: Via Flutter Run (Quick run)
+
+```bash
+cd app && flutter run
+```
+
+O app usa fallback automático em modo debug:
+- `BASE_URL`: `https://fakestoreapi.com`
+- `CONNECT_TIMEOUT`: `30000ms`
+
+#### Opção 3: Via VS Code
+
+1. Abra o workspace na raiz do projeto
+2. Selecione um dispositivo no canto inferior direito
+3. Pressione `F5` ou use "Run > Start Debugging"
+
+#### Opção 4: Via Android Studio / IntelliJ
+
+1. Abra o diretório `app/` como projeto Flutter
+2. Configure um emulador ou conecte um dispositivo
+3. Clique em "Run" (▶️)
+
+### Dispositivos Disponíveis
+
+```bash
+# Listar dispositivos conectados
+flutter devices
+
+# Rodar em dispositivo específico
+flutter run -d <device_id>
+```
+
+| Plataforma | Device ID Exemplo |
+|------------|-------------------|
+| Android Emulator | `emulator-5554` |
+| iOS Simulator | `iPhone 15 Pro` |
+| Chrome (Web) | `chrome` |
+| macOS (Desktop) | `macos` |
+
+### Testes
+
+```bash
+# Rodar testes unitários (do diretório app/)
+cd app && flutter test
+
+# Rodar com coverage
+cd app && flutter test --coverage
+
+# Visualizar relatório (macOS/Linux)
+genhtml coverage/lcov.info -o coverage/html && open coverage/html/index.html
+```
+
+### Validação de Código (Lint + Governance)
+
+Antes de fazer commit, execute:
+
+```bash
+# 1. Formatação
+dart format .
+
+# 2. Análise estática
+cd app && flutter analyze && cd ..
+cd packages/shared && flutter analyze && cd ../..
+cd packages/dori && flutter analyze && cd ../..
+
+# 3. Governança de imports
+./scripts/check_imports.sh
+
+# 4. Testes
+cd app && flutter test
 ```
 
 ### Configuração de Ambiente

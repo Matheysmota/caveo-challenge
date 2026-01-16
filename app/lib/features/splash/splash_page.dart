@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 
 import '../../app/router/app_routes.dart';
-import 'presentation/splash_state.dart';
-import 'presentation/splash_view_model.dart';
+import 'presentation/view_models/splash_state.dart';
+import 'presentation/view_models/splash_view_model.dart';
 import 'presentation/widgets/splash_content.dart';
 import 'presentation/widgets/splash_error_content.dart';
 

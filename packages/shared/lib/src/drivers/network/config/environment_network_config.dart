@@ -13,6 +13,13 @@
 ///
 /// In CI/CD, pass the same flags to `flutter build`.
 ///
+/// ## Debug Mode Behavior
+///
+/// When running in debug mode without `--dart-define`:
+/// - A fallback URL is used automatically for development convenience
+/// - A warning is logged to indicate the fallback is active
+/// - Use `scripts/run_dev.sh` for proper env loading
+///
 /// ## Security Note
 ///
 /// For public APIs (like Fake Store API), the URL is not sensitive.
@@ -36,9 +43,11 @@ class EnvironmentNetworkConfig implements NetworkConfigProvider {
 
   static const _defaultTimeout = Duration(seconds: 30);
 
-  /// Fallback URL used only in debug mode for development convenience.
-  @visibleForTesting
-  static const devFallbackUrl = 'https://fakestoreapi.com';
+  /// Fallback URL used in debug mode when BASE_URL is not configured.
+  ///
+  /// This enables running the app directly without `--dart-define` flags,
+  /// useful for quick iterations. For proper env loading, use `run_dev.sh`.
+  static const _debugFallbackUrl = 'https://fakestoreapi.com';
 
   @override
   String get baseUrl {
@@ -55,7 +64,11 @@ class EnvironmentNetworkConfig implements NetworkConfigProvider {
     }
 
     // In debug mode, use fallback for development convenience.
-    return devFallbackUrl;
+    debugPrint(
+      '[EnvironmentNetworkConfig] BASE_URL not set, using fallback: '
+      '$_debugFallbackUrl. Use run_dev.sh or --dart-define for proper config.',
+    );
+    return _debugFallbackUrl;
   }
 
   @override

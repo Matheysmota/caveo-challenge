@@ -1,6 +1,6 @@
 import 'package:shared/libraries/equatable_export/equatable_export.dart';
 
-import '../domain/entities/product.dart';
+import '../../domain/entities/product.dart';
 
 sealed class ProductListState extends Equatable {
   const ProductListState();

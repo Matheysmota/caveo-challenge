@@ -3,7 +3,7 @@
 /// Provides a centralized mechanism for initial data synchronization
 /// with state management via streams.
 ///
-/// See ADR 011 (documents/adrs/011-sync-store.md) for architecture decisions.
+/// See ADR 013 (documents/adrs/013-sync-store.md) for architecture decisions.
 ///
 /// ## Quick Start
 ///
