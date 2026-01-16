@@ -271,33 +271,4 @@ Este projeto possui scripts de *Compliance* que rodam no CI. Para garantir que s
 4. O Merge só é permitido se todos os checks passarem.
 
 ---
-
-## 📸 Evidências
-
-### 🐟 Fish App
-
-Aplicativo principal com listagem de produtos, busca, cache offline e suporte a temas (Light/Dark).
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/0242a0a6-4122-45e0-8d98-2119d62605f2" alt="Fish App Screenshot" width="300"/>
-</p>
-
-### 🐠 Dori Design System (Widgetbook)
-
-Catálogo interativo de componentes do Design System Dori, documentando Atoms, Molecules e Organisms.
-
-<p align="center">
-  <a href="https://github.com/user-attachments/assets/6a135324-a330-429b-9bf8-734a7f762d26">
-    <img src="https://img.shields.io/badge/▶️_Assistir_Vídeo-Widgetbook_Demo-6C63FF?style=for-the-badge&logo=youtube" alt="Assistir Demo"/>
-  </a>
-</p>
-
-https://github.com/user-attachments/assets/6a135324-a330-429b-9bf8-734a7f762d26
-
----
-
-<p align="center">
-  <i>Developed with 💙 by <b>Matheus Mota</b> as part of Caveo Tech Challenge.</i>
-</p>
-
-
+*Developed by Matheus Mota as part of Caveo Tech Challenge.*
