@@ -64,9 +64,18 @@ class SplashViewModel extends Notifier<SplashState> {
   }
 
   /// Retries the sync operation after an error.
+  ///
+  /// Sets the button to loading state while keeping the error screen visible,
+  /// then proceeds with sync. If sync fails again, updates the error.
+  /// If sync succeeds, transitions to success state.
   void retry() {
+    final currentState = state;
+    if (currentState is! SplashError) return;
+
+    // Show loading on the retry button, not full screen loading
+    state = SplashError(failure: currentState.failure, isRetrying: true);
+
     _reset();
-    state = const SplashLoading();
     _startInitialization();
   }
 
