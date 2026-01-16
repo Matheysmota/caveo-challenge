@@ -48,14 +48,28 @@ Decidimos implementar uma política estrita de **Gerenciamento Centralizado de D
 
 3.  **Enforcement via CI/CD (Mecanismo de Allowlist):**
     *   Será implementado um script de validação (`check_imports.sh`) no pipeline.
-    *   **Regra de Bloqueio:** O script analisará estaticamente todos os arquivos `.dart` dentro de `app/lib/` (exceto arquivos de teste).
-    *   Se encontrar qualquer import que comece com `package:` mas NÃO esteja na **Allowlist** (lista de exceções permitidas), o build falhará.
-    *   **Allowlist Inicial:**
-        *   `package:flutter/*` (Framework)
-        *   `package:dart/*` (Linguagem)
-        *   `package:shared/*` (Package compartilhado)
-        *   `package:dori/*` (Design System Dori)
-        *   `package:caveo_challenge/*` (Imports internos do próprio app)
+    *   **Regra de Bloqueio:** O script analisará estaticamente todos os arquivos `.dart` dentro dos diretórios `lib/` de cada package.
+    *   Se encontrar qualquer import que comece com `package:` mas NÃO esteja na **Allowlist** do package correspondente, o build falhará.
+
+    **Allowlists por Package:**
+
+    | Package | Imports Permitidos | Justificativa |
+    |---------|-------------------|---------------|
+    | **app** | `flutter`, `dart`, `shared`, `dori`, `caveo_challenge` | App consome apenas packages internos; libs externas via `shared/libraries/` |
+    | **shared** | `flutter`, `dart`, `shared`, + dependências declaradas no `pubspec.yaml` | Shared é o "guardião" das libs externas, expõe via `*_export.dart` |
+    | **dori** | `flutter`, `dart`, `dori` | Design System puro, sem dependências externas |
+
+    **Uso do Script:**
+    ```bash
+    # Verificar todos os packages
+    ./scripts/check_imports.sh
+    
+    # Verificar package específico
+    ./scripts/check_imports.sh app
+    ./scripts/check_imports.sh shared
+    ./scripts/check_imports.sh dori
+    ```
+
     *   Isso garante que módulos internos como o Design System possam ser consumidos livremente, enquanto dependências de terceiros (http, bloc, provider) sejam estritamente controladas.
 
 ## Consequências
@@ -63,3 +77,9 @@ Decidimos implementar uma política estrita de **Gerenciamento Centralizado de D
 *   **Segurança:** Limitamos a superfície de ataque e o uso indevido de métodos internos de bibliotecas.
 *   **Disciplina:** Aumenta ligeiramente a fricção para adicionar novas libs, o que incentiva o time a pensar duas vezes antes de inflar o projeto ("Slow down to speed up").
 *   **Padronização:** Garante que todo o time utilize as mesmas versões e configurações base.
+
+## Referências
+
+- [System Design](../system_design.md) — Diagrama de dependências entre packages
+- [ADR 004](004-camada-de-abstracao-rede.md) — Abstração de Networking
+- [ADR 005](005-esteira-ci-cd.md) — Enforcement via CI/CD

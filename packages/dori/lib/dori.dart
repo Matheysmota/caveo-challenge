@@ -57,7 +57,11 @@ export 'src/theme/dori_theme.barrel.dart';
 // Atoms
 export 'src/atoms/dori_atoms.barrel.dart';
 
-// TODO: Export molecules, organisms when implemented
-// export 'src/molecules/dori_molecules.barrel.dart';
-// export 'src/organisms/dori_organisms.barrel.dart';
+// Molecules
+export 'src/molecules/dori_molecules.barrel.dart';
+
+// Organisms
+export 'src/organisms/dori_organisms.barrel.dart';
+
+// TODO: Export animations when implemented
 // export 'src/animations/dori_animations.barrel.dart';

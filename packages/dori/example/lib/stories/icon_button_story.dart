@@ -113,19 +113,15 @@ class DoriIconButtonShowcase extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface.one,
         borderRadius: DoriRadius.md,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: DoriShadows.light.sm,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildSizeItem(DoriIconButtonSize.sm, '32dp', colors),
-          _buildSizeItem(DoriIconButtonSize.md, '40dp', colors),
+          _buildSizeItem(DoriIconButtonSize.sm, '24dp', 'Compact', colors),
+          _buildSizeItem(DoriIconButtonSize.md, '32dp', 'Default', colors),
+          _buildSizeItem(DoriIconButtonSize.lg, '40dp', 'Large', colors),
+          _buildSizeItem(DoriIconButtonSize.xlg, '48dp', 'Touch', colors),
         ],
       ),
     );
@@ -134,12 +130,13 @@ class DoriIconButtonShowcase extends StatelessWidget {
   Widget _buildSizeItem(
     DoriIconButtonSize size,
     String label,
+    String description,
     DoriColorScheme colors,
   ) {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.all(DoriSpacing.xs),
+          padding: EdgeInsets.all(DoriSpacing.xxs),
           decoration: BoxDecoration(
             color: colors.surface.two,
             borderRadius: DoriRadius.sm,
@@ -162,6 +159,11 @@ class DoriIconButtonShowcase extends StatelessWidget {
           variant: DoriTypographyVariant.caption,
           color: colors.content.two,
         ),
+        DoriText(
+          label: description,
+          variant: DoriTypographyVariant.caption,
+          color: colors.content.two,
+        ),
       ],
     );
   }
@@ -173,13 +175,7 @@ class DoriIconButtonShowcase extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface.one,
         borderRadius: DoriRadius.md,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: DoriShadows.light.sm,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -223,13 +219,7 @@ class DoriIconButtonShowcase extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface.one,
         borderRadius: DoriRadius.md,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: DoriShadows.light.sm,
       ),
       child: Wrap(
         spacing: DoriSpacing.md,
@@ -287,13 +277,7 @@ class DoriIconButtonShowcase extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface.one,
         borderRadius: DoriRadius.md,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: DoriShadows.light.sm,
       ),
       child: Column(
         children: [
@@ -311,7 +295,7 @@ class DoriIconButtonShowcase extends StatelessWidget {
               children: [
                 DoriIconButton(
                   icon: DoriIconData.arrowBack,
-                  size: DoriIconButtonSize.sm,
+                  size: DoriIconButtonSize.md,
                   iconColor: colors.content.one,
                   onPressed: () {},
                 ),
@@ -325,7 +309,7 @@ class DoriIconButtonShowcase extends StatelessWidget {
                 ),
                 DoriIconButton(
                   icon: DoriIconData.search,
-                  size: DoriIconButtonSize.sm,
+                  size: DoriIconButtonSize.md,
                   iconColor: colors.content.one,
                   onPressed: () {},
                 ),
@@ -334,7 +318,7 @@ class DoriIconButtonShowcase extends StatelessWidget {
           ),
           SizedBox(height: DoriSpacing.xs),
           DoriText(
-            label: 'AppBar with back and search buttons',
+            label: 'AppBar with back and search buttons (md size)',
             variant: DoriTypographyVariant.caption,
             color: colors.content.two,
           ),

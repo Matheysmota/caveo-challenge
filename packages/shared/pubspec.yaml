@@ -1,5 +1,5 @@
 name: shared
-description: "A new Flutter package project."
+description: "Shared utilities, drivers, and library exports for the Caveo Challenge app."
 version: 0.0.1
 homepage:
 
@@ -10,11 +10,25 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # Local storage implementation
+  shared_preferences: 2.5.4
+  # Connectivity monitoring
+  connectivity_plus: 6.1.1
+  # HTTP client for network requests
+  dio: 5.8.0+1
+  # Environment configuration loader
+  flutter_dotenv: 5.2.1
+  # Mocking library (exported via mocktail_export.dart for app tests)
+  mocktail: 1.0.4
+  # Equatable for value equality
+  equatable: 2.0.7
+  # State management and dependency injection
+  flutter_riverpod: 3.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
+  flutter_lints: 6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

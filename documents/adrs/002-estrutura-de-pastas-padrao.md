@@ -140,3 +140,8 @@ Adotamos a **Estrutura Híbrida (Opção 3)**, que respeita a essência do requi
 *   **Positivo:** Respeita a essência do requisito (Clean Arch com camadas) sem ser literal.
 *   **Trade-off:** Requer gerenciamento de `pubspec.yaml` em múltiplos diretórios.
 *   **Mitigação:** Usamos `path` dependencies para desenvolvimento local, simplificando o workflow.
+
+## Referências
+
+- [System Design](../system_design.md) — Visão consolidada da arquitetura
+- [ADR 003](003-abstracao-e-governanca-bibliotecas.md) — Governança de dependências entre packages

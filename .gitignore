@@ -6,3 +6,12 @@
 **/*.iml
 **/.pub/
 **/pubspec.lockbuild/
+
+# ============================================================================
+# Environment Configuration Files
+# ============================================================================
+# .devEnv is intentionally committed for development convenience.
+# Production and staging environments should NEVER be committed.
+.prodEnv
+.stagingEnv
+*.env.local

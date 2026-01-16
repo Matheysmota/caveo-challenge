@@ -21,8 +21,9 @@ Decidimos implementar uma esteira de **Integração Contínua (CI)** robusta uti
 
 ### 2. Governança de Arquitetura (Compliance)
 *   **Ação:** Executar script customizado `scripts/check_imports.sh`.
-*   **Objetivo:** Verificar violações da **ADR 003**. O script falhará se detectar imports diretos de pacotes externos dentro de `app/lib/`.
-*   **Exceção:** Pacotes listados na **Allowlist** (ex: `shared`, `dori`, `flutter`, `caveo_challenge`).
+*   **Objetivo:** Verificar violações da **ADR 003**. O script validará imports em todos os packages do monorepo (`app`, `shared`, `dori`), cada um com sua própria allowlist de dependências permitidas.
+*   **Escopo:** O script analisa todos os arquivos `.dart` em `*/lib/` de cada package.
+*   **Exceção:** Pacotes listados na **Allowlist** específica de cada package (consulte ADR 003 para detalhes).
 
 ### 3. Testes e Cobertura (Quality Assurance)
 *   **Ação:** Executar testes unitários e de widget.
@@ -48,3 +49,8 @@ O arquivo `README.md` conterá uma "Health Check Badge" vinculada ao status do w
 *   **Cultura de Testes:** A obrigatoriedade de 80% de coverage no diff força os desenvolvedores a escreverem testes junto com a feature, mudando a mentalidade de "testar depois" para "testar durante".
 *   **Feedback Rápido:** O desenvolvedor descobre erros de arquitetura minutos após o push, sem esperar pelo code review humano.
 *   **Custo de CI:** O pipeline consome minutos de build; otimizações (caching de dependências) serão necessárias para não impactar o lead time.
+
+## Referências
+
+- [System Design](../system_design.md) — Visão geral da arquitetura validada pela CI
+- [ADR 003](003-abstracao-e-governanca-bibliotecas.md) — Regras de governança de imports

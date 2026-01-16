@@ -46,6 +46,43 @@ void main() {
       );
 
       testWidgets(
+        'should render icon with extra small size when DoriIconSize.xs is provided',
+        (tester) async {
+          // Arrange
+          const icon = DoriIcon(
+            icon: DoriIconData.close,
+            size: DoriIconSize.xs,
+          );
+
+          // Act
+          await tester.pumpWidget(buildTestWidget(icon));
+
+          // Assert
+          final iconWidget = tester.widget<Icon>(find.byType(Icon));
+          expect(iconWidget.size, equals(DoriIconSize.xs.value));
+        },
+      );
+
+      testWidgets(
+        'should render icon with extra extra small size when DoriIconSize.xxs is provided',
+        (tester) async {
+          // Arrange
+          const icon = DoriIcon(
+            icon: DoriIconData.close,
+            size: DoriIconSize.xxs,
+          );
+
+          // Act
+          await tester.pumpWidget(buildTestWidget(icon));
+
+          // Assert
+          final iconWidget = tester.widget<Icon>(find.byType(Icon));
+          expect(iconWidget.size, equals(DoriIconSize.xxs.value));
+          expect(iconWidget.size, equals(12.0));
+        },
+      );
+
+      testWidgets(
         'should render icon with large size when DoriIconSize.lg is provided',
         (tester) async {
           // Arrange
@@ -174,6 +211,8 @@ void main() {
     group('DoriIconSize', () {
       test('should have correct values for each size', () {
         // Arrange & Act & Assert
+        expect(DoriIconSize.xxs.value, equals(12.0));
+        expect(DoriIconSize.xs.value, equals(16.0));
         expect(DoriIconSize.sm.value, equals(16.0));
         expect(DoriIconSize.md.value, equals(24.0));
         expect(DoriIconSize.lg.value, equals(32.0));

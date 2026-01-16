@@ -48,3 +48,8 @@ Encapsular ações em objetos que possuem estado próprio (`isExecuting`, `resul
 *   **Código de UI Limpo:** Widgets tornam-se reativos e declarativos, apenas "escutando" o estado do comando.
 *   **Segurança:** O uso do Result Pattern força o desenvolvedor a considerar o caminho infeliz (erro) em tempo de compilação.
 *   **Desacoplamento:** A regra de negócio não sabe que existe um botão "Loading", ela apenas retorna um resultado. O Command traduz isso para a UI.
+
+## Referências
+
+- [System Design](../system_design.md) — Fluxo de dados e comunicação entre componentes
+- [ADR 007](007-abstracao-cache-local.md) — Cache local que usa Result Pattern

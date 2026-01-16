@@ -120,7 +120,7 @@ colors
 | `surface.pure` | White `#FFFFFF` | Slate 950 `#020617` | Superfície máximo contraste |
 | `surface.one` | Slate 50 `#F8FAFC` | Slate 900 `#0F172A` | Fundo de cards (primário) |
 | `surface.two` | Slate 100 `#F1F5F9` | Slate 800 `#1E293B` | Fundo secundário |
-| `surface.three` | Slate 200 `#E2E8F0` | Slate 700 `#334155` | Superfície terciária (badges neutral, chips) |
+| `surface.three` | Slate 300 `#CBD5E1` | Slate 700 `#334155` | Superfície terciária (badges, icon buttons, chips) |
 
 ### Content (Textos e Ícones)
 

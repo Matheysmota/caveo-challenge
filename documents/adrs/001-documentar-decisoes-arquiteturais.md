@@ -47,3 +47,7 @@ Seguiremos um template padrão contendo: Título, Metadados (Status, Data, Decis
 Para escalar o processo de decisão e democratizar a arquitetura na companhia, implementaremos um fluxo de **RFC (Request for Comments)**.
 Antes de uma ADR ser oficializada e mergeada na `main`, ela nascerá como uma proposta (RFC) aberta para discussão.
 Isso permitirá que engenheiros de diferentes times contribuam, identifiquem riscos não mapeados e refinem a solução antes que ela se torne um padrão.
+
+## Referências
+
+- [System Design](../system_design.md) — Documento que consolida todas as decisões arquiteturais

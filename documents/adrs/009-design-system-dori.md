@@ -116,6 +116,8 @@ packages/dori/
 │   │   │   ├── icon_button/
 │   │   │   │   ├── dori_icon_button.dart
 │   │   │   │   └── dori_icon_button_size.dart
+│   │   │   ├── shimmer/
+│   │   │   │   └── dori_shimmer.dart         # Shimmer loading placeholder
 │   │   │   ├── text/
 │   │   │   │   └── dori_text.dart
 │   │   │   └── dori_atoms.barrel.dart
@@ -128,7 +130,10 @@ packages/dori/
 │   │   │   └── dori_molecules.barrel.dart
 │   │   │
 │   │   ├── organisms/
-│   │   │   ├── dori_product_card.dart
+│   │   │   ├── product_card/
+│   │   │   │   ├── dori_product_card.dart    # Widget principal
+│   │   │   │   ├── dori_product_card_size.dart
+│   │   │   │   └── product_card_image.dart   # Componente interno de imagem
 │   │   │   ├── dori_app_bar.dart
 │   │   │   └── dori_organisms.barrel.dart
 │   │   │
@@ -351,6 +356,7 @@ A CI/CD inclui verificações de acessibilidade:
 
 ## Referências
 
+- [System Design](../system_design.md) — Visão geral da arquitetura e dependências
+- [tokens-spec.md](../tokens-spec.md) — Especificação detalhada dos tokens
 - [Atomic Design - Brad Frost](https://bradfrost.com/blog/post/atomic-web-design/)
 - [Material Design 3](https://m3.material.io/)
-- [GenZ Commerce Kit Tokens](internal)

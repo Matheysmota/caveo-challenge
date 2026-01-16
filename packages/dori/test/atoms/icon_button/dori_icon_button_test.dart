@@ -33,6 +33,25 @@ void main() {
       });
 
       testWidgets(
+        'should render with extra small size when DoriIconButtonSize.xs is provided',
+        (tester) async {
+          // Arrange
+          final button = DoriIconButton(
+            icon: DoriIconData.close,
+            size: DoriIconButtonSize.xs,
+            onPressed: () {},
+          );
+
+          // Act
+          await tester.pumpWidget(buildTestWidget(button));
+
+          // Assert - Check internal icon has xs size (xxs = 12dp)
+          final iconWidget = tester.widget<Icon>(find.byType(Icon));
+          expect(iconWidget.size, equals(DoriIconButtonSize.xs.iconSize.value));
+        },
+      );
+
+      testWidgets(
         'should render with small size when DoriIconButtonSize.sm is provided',
         (tester) async {
           // Arrange
@@ -48,6 +67,47 @@ void main() {
           // Assert - Check internal icon has small size
           final iconWidget = tester.widget<Icon>(find.byType(Icon));
           expect(iconWidget.size, equals(DoriIconButtonSize.sm.iconSize.value));
+        },
+      );
+
+      testWidgets(
+        'should render with large size when DoriIconButtonSize.lg is provided',
+        (tester) async {
+          // Arrange
+          final button = DoriIconButton(
+            icon: DoriIconData.arrowBack,
+            size: DoriIconButtonSize.lg,
+            onPressed: () {},
+          );
+
+          // Act
+          await tester.pumpWidget(buildTestWidget(button));
+
+          // Assert - Check internal icon has large size (md = 24dp)
+          final iconWidget = tester.widget<Icon>(find.byType(Icon));
+          expect(iconWidget.size, equals(DoriIconButtonSize.lg.iconSize.value));
+        },
+      );
+
+      testWidgets(
+        'should render with extra large size when DoriIconButtonSize.xlg is provided',
+        (tester) async {
+          // Arrange
+          final button = DoriIconButton(
+            icon: DoriIconData.refresh,
+            size: DoriIconButtonSize.xlg,
+            onPressed: () {},
+          );
+
+          // Act
+          await tester.pumpWidget(buildTestWidget(button));
+
+          // Assert - Check internal icon has xlg size (lg = 32dp)
+          final iconWidget = tester.widget<Icon>(find.byType(Icon));
+          expect(
+            iconWidget.size,
+            equals(DoriIconButtonSize.xlg.iconSize.value),
+          );
         },
       );
 
@@ -333,14 +393,35 @@ void main() {
     group('DoriIconButtonSize', () {
       test('should have correct total size for each variant', () {
         // Arrange & Act & Assert
-        expect(DoriIconButtonSize.sm.totalSize, equals(32.0));
-        expect(DoriIconButtonSize.md.totalSize, equals(40.0));
+        expect(DoriIconButtonSize.xs.totalSize, equals(16.0));
+        expect(DoriIconButtonSize.sm.totalSize, equals(24.0));
+        expect(DoriIconButtonSize.md.totalSize, equals(32.0));
+        expect(DoriIconButtonSize.lg.totalSize, equals(40.0));
+        expect(DoriIconButtonSize.xlg.totalSize, equals(48.0));
       });
 
       test('should have correct icon size for each variant', () {
         // Arrange & Act & Assert
-        expect(DoriIconButtonSize.sm.iconSize, equals(DoriIconSize.sm));
-        expect(DoriIconButtonSize.md.iconSize, equals(DoriIconSize.md));
+        // xs uses xxs icon (12dp) for clear buttons in inputs
+        expect(DoriIconButtonSize.xs.iconSize, equals(DoriIconSize.xxs));
+        // sm uses xs icon (16dp) for visibility, with 4dp padding
+        expect(DoriIconButtonSize.sm.iconSize, equals(DoriIconSize.xs));
+        expect(DoriIconButtonSize.md.iconSize, equals(DoriIconSize.sm));
+        expect(DoriIconButtonSize.lg.iconSize, equals(DoriIconSize.md));
+        expect(DoriIconButtonSize.xlg.iconSize, equals(DoriIconSize.lg));
+      });
+
+      test('should have correct padding for each variant', () {
+        // xs: 16dp total - 12dp icon = 4dp total / 2 = 2dp per side
+        expect(DoriIconButtonSize.xs.padding, equals(2.0));
+        // sm: 24dp total - 16dp icon = 8dp total / 2 = 4dp per side
+        expect(DoriIconButtonSize.sm.padding, equals(4.0));
+        // md: 32dp total - 16dp icon = 16dp total / 2 = 8dp per side
+        expect(DoriIconButtonSize.md.padding, equals(8.0));
+        // lg: 40dp total - 24dp icon = 16dp total / 2 = 8dp per side
+        expect(DoriIconButtonSize.lg.padding, equals(8.0));
+        // xlg: 48dp total - 32dp icon = 16dp total / 2 = 8dp per side
+        expect(DoriIconButtonSize.xlg.padding, equals(8.0));
       });
     });
   });

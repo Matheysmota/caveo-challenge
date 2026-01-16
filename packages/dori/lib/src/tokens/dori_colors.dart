@@ -23,7 +23,7 @@ class DoriColors {
       pure: Color(0xFFFFFFFF), // White
       one: Color(0xFFF8FAFC), // Slate 50
       two: Color(0xFFF1F5F9), // Slate 100
-      three: Color(0xFFE2E8F0), // Slate 200 - higher contrast for badges
+      three: Color(0xFFCBD5E1), // Slate 300 - visible contrast on surface.two
     ),
     content: DoriContentColors(
       pure: Color(0xFF020617), // Slate 950
