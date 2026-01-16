@@ -13,20 +13,22 @@ import 'app/di/app_providers.dart';
 ///
 /// 1. Ensure Flutter bindings are initialized
 /// 2. Create async dependencies (LocalCacheSource)
-/// 3. Start app with ProviderScope and overrides
-///
-/// ## Performance Considerations
-///
-/// - Native splash shows during this initialization (~50-100ms)
-/// - All async work happens before `runApp` to avoid janks
-/// - Theme is loaded from cache in the first frame
+/// 3. Pre-load theme from cache to avoid visual flash
+/// 4. Start app with ProviderScope and overrides
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final localCache = await SharedPreferencesLocalCacheSource.create();
+  final savedTheme = await loadSavedTheme(localCache);
 
   runApp(
     ProviderScope(
-      overrides: [localCacheSourceProvider.overrideWithValue(localCache)],
+      overrides: [
+        localCacheSourceProvider.overrideWithValue(localCache),
+        themeModeProvider.overrideWith(
+          () => ThemeModeNotifier(initialTheme: savedTheme),
+        ),
+      ],
       child: const AppWidget(),
     ),
   );

@@ -1,9 +1,9 @@
 /// Governed export for go_router declarative routing.
 ///
-/// Use this export instead of importing `package:go_router` directly.
+/// This export is included in the main shared barrel, so use:
 ///
 /// ```dart
-/// import 'package:shared/libraries/go_router_export.dart';
+/// import 'package:shared/shared.dart';
 /// ```
 ///
 /// ## Basic Usage

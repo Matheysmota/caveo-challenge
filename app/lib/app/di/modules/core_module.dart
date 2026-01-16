@@ -8,16 +8,23 @@
 ///
 /// ## Initialization
 ///
-/// Some providers require async initialization. Use [createAsyncDependencies]
-/// in `main()` to pre-initialize critical dependencies:
+/// Some providers require async initialization. Pre-initialize them in
+/// `main()` before `runApp()` and provide them via `ProviderScope.overrides`:
 ///
 /// ```dart
 /// void main() async {
 ///   WidgetsFlutterBinding.ensureInitialized();
-///   final asyncDeps = await createAsyncDependencies();
+///
+///   // Pre-initialize async dependencies
+///   final localCache = await SharedPreferencesLocalCacheSource.create();
+///   final savedTheme = await _loadSavedTheme(localCache);
+///
 ///   runApp(
 ///     ProviderScope(
-///       overrides: asyncDeps.overrides,
+///       overrides: [
+///         localCacheSourceProvider.overrideWithValue(localCache),
+///         themeModeProvider.overrideWith(() => ThemeModeNotifier(savedTheme)),
+///       ],
 ///       child: const AppWidget(),
 ///     ),
 ///   );
@@ -71,13 +78,14 @@ final apiDataSourceDelegateProvider = Provider<ApiDataSourceDelegate>((ref) {
 /// Provides the local cache source for persistent storage.
 ///
 /// **Important:** This provider must be overridden with a pre-initialized
-/// instance in the ProviderScope. Use [createAsyncDependencies] to create
-/// the override.
+/// instance in the ProviderScope.
 ///
 /// ```dart
+/// final localCache = await SharedPreferencesLocalCacheSource.create();
+///
 /// ProviderScope(
 ///   overrides: [
-///     localCacheSourceProvider.overrideWithValue(preInitializedCache),
+///     localCacheSourceProvider.overrideWithValue(localCache),
 ///   ],
 ///   child: const AppWidget(),
 /// )
@@ -85,7 +93,7 @@ final apiDataSourceDelegateProvider = Provider<ApiDataSourceDelegate>((ref) {
 final localCacheSourceProvider = Provider<LocalCacheSource>((ref) {
   throw UnimplementedError(
     'localCacheSourceProvider must be overridden with a pre-initialized '
-    'instance. Use createAsyncDependencies() in main().',
+    'instance. Pre-initialize in main() before runApp().',
   );
 });
 

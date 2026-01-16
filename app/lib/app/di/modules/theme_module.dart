@@ -3,6 +3,29 @@
 /// This module provides state management for the app's theme (light/dark mode)
 /// with persistence to local cache.
 ///
+/// ## Initialization
+///
+/// The theme should be pre-loaded in `main()` to avoid visual flash:
+///
+/// ```dart
+/// void main() async {
+///   final localCache = await SharedPreferencesLocalCacheSource.create();
+///   final savedTheme = await loadSavedTheme(localCache);
+///
+///   runApp(
+///     ProviderScope(
+///       overrides: [
+///         localCacheSourceProvider.overrideWithValue(localCache),
+///         themeModeProvider.overrideWith(
+///           () => ThemeModeNotifier(initialTheme: savedTheme),
+///         ),
+///       ],
+///       child: const AppWidget(),
+///     ),
+///   );
+/// }
+/// ```
+///
 /// ## Usage
 ///
 /// ```dart
@@ -67,12 +90,29 @@ final themeModeProvider = NotifierProvider<ThemeModeNotifier, ThemeMode>(
 /// Notifier for managing theme mode state.
 ///
 /// Handles persistence and provides methods for changing the theme.
+///
+/// ## Pre-initialization
+///
+/// To avoid theme flash, create with initial theme from cache:
+///
+/// ```dart
+/// final savedTheme = await loadSavedTheme(localCache);
+/// themeModeProvider.overrideWith(() => ThemeModeNotifier(initialTheme: savedTheme));
+/// ```
 class ThemeModeNotifier extends Notifier<ThemeMode> {
+  /// Creates a notifier with an optional initial theme.
+  ///
+  /// If [initialTheme] is provided, it will be used as the starting value
+  /// instead of loading from cache (which would cause a flash).
+  ThemeModeNotifier({this.initialTheme});
+
+  /// The pre-loaded initial theme (if any).
+  final ThemeMode? initialTheme;
+
   @override
   ThemeMode build() {
-    // Load saved theme from cache
-    _loadSavedTheme();
-    return ThemeMode.system;
+    // Use pre-loaded theme if available, otherwise default to system
+    return initialTheme ?? ThemeMode.system;
   }
 
   /// Sets the theme mode and persists it to cache.
@@ -99,22 +139,6 @@ class ThemeModeNotifier extends Notifier<ThemeMode> {
     setTheme(newMode);
   }
 
-  /// Loads the saved theme from cache asynchronously.
-  Future<void> _loadSavedTheme() async {
-    try {
-      final cache = ref.read(localCacheSourceProvider);
-      final response = await cache.getModel(
-        LocalStorageKey.themeMode,
-        _ThemePreference.fromMap,
-      );
-      if (response != null) {
-        state = _parseThemeMode(response.data.mode);
-      }
-    } catch (_) {
-      // If cache read fails, keep default (system)
-    }
-  }
-
   /// Persists the theme to cache.
   Future<void> _persistTheme(ThemeMode mode) async {
     try {
@@ -128,15 +152,6 @@ class ThemeModeNotifier extends Notifier<ThemeMode> {
     }
   }
 
-  /// Parses a string to ThemeMode.
-  ThemeMode _parseThemeMode(String value) {
-    return switch (value) {
-      'light' => ThemeMode.light,
-      'dark' => ThemeMode.dark,
-      _ => ThemeMode.system,
-    };
-  }
-
   /// Converts DoriThemeMode to Flutter's ThemeMode.
   ThemeMode _toFlutterThemeMode(DoriThemeMode mode) {
     return switch (mode) {
@@ -145,6 +160,38 @@ class ThemeModeNotifier extends Notifier<ThemeMode> {
       DoriThemeMode.system => ThemeMode.system,
     };
   }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Pre-initialization Helper
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Loads the saved theme from cache.
+///
+/// Call this in `main()` before `runApp()` to avoid theme flash:
+///
+/// ```dart
+/// final savedTheme = await loadSavedTheme(localCache);
+/// ```
+///
+/// Returns [ThemeMode.system] if no theme is saved or if reading fails.
+Future<ThemeMode> loadSavedTheme(LocalCacheSource cache) async {
+  try {
+    final response = await cache.getModel(
+      LocalStorageKey.themeMode,
+      _ThemePreference.fromMap,
+    );
+    if (response != null) {
+      return switch (response.data.mode) {
+        'light' => ThemeMode.light,
+        'dark' => ThemeMode.dark,
+        _ => ThemeMode.system,
+      };
+    }
+  } catch (_) {
+    // If cache read fails, return default
+  }
+  return ThemeMode.system;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
