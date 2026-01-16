@@ -164,20 +164,23 @@ class DoriIconButton extends StatelessWidget {
     DoriColorScheme colors,
     bool isDisabled,
   ) {
-    final disabledOpacity = isDisabled ? 0.5 : 1.0;
-
     // Background color - use surface.three for visible contrast on any surface
-    final defaultBg = colors.surface.three.withValues(alpha: disabledOpacity);
+    // Apply opacity only when disabled to avoid redundant operations
+    final defaultBg = isDisabled
+        ? colors.surface.three.withValues(alpha: 0.5)
+        : colors.surface.three;
     final effectiveBg = backgroundColor != null
-        ? backgroundColor!.withValues(
-            alpha: (backgroundColor!.a * disabledOpacity).clamp(0.0, 1.0),
-          )
+        ? (isDisabled
+              ? backgroundColor!.withValues(
+                  alpha: (backgroundColor!.a * 0.5).clamp(0.0, 1.0),
+                )
+              : backgroundColor!)
         : defaultBg;
 
-    // Icon color
-    final effectiveIcon = iconColor?.withValues(
-      alpha: (iconColor!.a * disabledOpacity).clamp(0.0, 1.0),
-    );
+    // Icon color - apply opacity only when disabled
+    final effectiveIcon = iconColor != null && isDisabled
+        ? iconColor!.withValues(alpha: (iconColor!.a * 0.5).clamp(0.0, 1.0))
+        : iconColor;
 
     return (effectiveBg, effectiveIcon);
   }

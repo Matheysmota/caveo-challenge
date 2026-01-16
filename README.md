@@ -67,6 +67,35 @@ O projeto utiliza o **Dori** (D.O.R.I. — Design Oriented Reusable Interface), 
 - **HTTP Client:** Dio (via abstração em `shared`)
 - **Navegação:** GoRouter
 
+### Padrões Arquiteturais
+
+| Padrão | Descrição | ADR |
+|--------|-----------|-----|
+| **Result Pattern** | Métodos retornam `Result<S, F>`, sem exceções | [ADR 006](documents/adrs/006-command-pattern-e-tratamento-erros.md) |
+| **Repository Pattern** | Interface + Impl com fallback API → Cache | [ADR 004](documents/adrs/004-camada-de-abstracao-rede.md) |
+| **SyncStore** | Sincronização inicial desacoplada de features | [ADR 011](documents/adrs/011-sync-store.md) |
+| **Atomic Design** | Componentes UI organizados em Atoms/Molecules/Organisms | [ADR 009](documents/adrs/009-design-system-dori.md) |
+
+### SyncStore — Sincronização Inicial
+
+O projeto utiliza o **SyncStore** para sincronização de dados iniciais (splash screen). Isso permite que features como Splash não conheçam detalhes de outras features como Products:
+
+```dart
+// Products module registra seu syncer
+syncStore.registerSyncer<List<Product>>(
+  SyncStoreKey.products,
+  fetcher: () => repository.getProducts(),
+);
+
+// Splash observa o estado sem conhecer Products
+syncStore.watch<List<Product>>(SyncStoreKey.products).listen((state) {
+  if (state.isSuccess) navigateToHome();
+  if (state.isError) showRetry();
+});
+```
+
+📖 **Documentação completa:** [ADR 011 — SyncStore](documents/adrs/011-sync-store.md)
+
 ---
 
 ## 🚀 Como Rodar o Projeto

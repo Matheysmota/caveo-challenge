@@ -25,6 +25,9 @@ jobs:
         with:
           channel: 'stable'
           cache: true
+
+      - name: Install lcov
+        run: sudo apt-get update && sudo apt-get install -y lcov
       
       # Install dependencies for all packages
       - name: Install Dependencies (shared)
@@ -64,6 +67,13 @@ jobs:
       - name: Run Tests & Coverage - App (ADR 008)
         working-directory: app
         run: flutter test --coverage
+
+      - name: Remove DI from Coverage
+        working-directory: app
+        run: |
+          # Remove DI files from coverage (not sensible to unit test dependency injection setup)
+          # Remove main.dart from coverage (bootstrap code, not sensible to unit test)
+          lcov --remove coverage/lcov.info 'lib/app/di/*' 'lib/main.dart' -o coverage/lcov.info --ignore-errors unused
 
       - name: Check Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3

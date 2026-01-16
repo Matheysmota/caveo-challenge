@@ -173,6 +173,8 @@ class _DoriProductCardState extends State<DoriProductCard>
 
   /// Schedules the release animation, ensuring minimum press duration.
   void _scheduleRelease() {
+    _releaseTimer?.cancel();
+
     if (_pressStartTime == null) {
       _controller.reverse();
       return;

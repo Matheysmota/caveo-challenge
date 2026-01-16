@@ -23,7 +23,9 @@ class DoriColors {
       pure: Color(0xFFFFFFFF), // White
       one: Color(0xFFF8FAFC), // Slate 50
       two: Color(0xFFF1F5F9), // Slate 100
-      three: Color(0xFFCBD5E1), // Slate 300 - visible contrast on surface.two
+      three: Color(
+        0xFFCBD5E1,
+      ), // Slate 300 - tertiary surface for badges, buttons, and overlays with guaranteed contrast
     ),
     content: DoriContentColors(
       pure: Color(0xFF020617), // Slate 950
@@ -54,7 +56,9 @@ class DoriColors {
       pure: Color(0xFF020617), // Slate 950
       one: Color(0xFF0F172A), // Slate 900
       two: Color(0xFF1E293B), // Slate 800
-      three: Color(0xFF334155), // Slate 700 - higher contrast for badges
+      three: Color(
+        0xFF334155,
+      ), // Slate 700 - tertiary surface for badges, buttons, and overlays with guaranteed contrast
     ),
     content: DoriContentColors(
       pure: Color(0xFFFFFFFF), // White
