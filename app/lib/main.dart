@@ -22,8 +22,6 @@ import 'app/di/app_providers.dart';
 /// - Theme is loaded from cache in the first frame
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Pre-initialize async dependencies
   final localCache = await SharedPreferencesLocalCacheSource.create();
 
   runApp(

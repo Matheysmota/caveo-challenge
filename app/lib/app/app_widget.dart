@@ -1,3 +1,4 @@
+import 'package:caveo_challenge/app/app_strings.dart';
 import 'package:dori/dori.dart';
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
@@ -31,7 +32,7 @@ class AppWidget extends ConsumerWidget {
 
     return MaterialApp.router(
       // App Info
-      title: 'Fish',
+      title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
 
       // Theme Configuration
