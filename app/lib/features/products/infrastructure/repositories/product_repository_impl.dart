@@ -6,11 +6,7 @@ import '../../domain/repositories/product_repository.dart';
 import '../data_sources/product_local_data_source.dart';
 import '../data_sources/product_remote_data_source.dart';
 
-/// Implementation of [ProductRepository] with remote-first strategy.
-///
-/// Attempts to fetch from API first. On failure for page 1,
-/// falls back to local cache. Pagination failures (page > 1)
-/// are returned directly without cache fallback.
+/// Remote-first repository. Falls back to cache only for page 1 failures.
 class ProductRepositoryImpl implements ProductRepository {
   ProductRepositoryImpl({
     required ProductRemoteDataSource remote,

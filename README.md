@@ -119,7 +119,48 @@ cd app && flutter pub get
 
 3. Execute o projeto:
 ```bash
-flutter run
+# Opção 1: Script que lê .devEnv automaticamente (Recomendado)
+./scripts/run_dev.sh
+
+# Opção 2: Flutter run direto (usa fallback em debug)
+cd app && flutter run
+```
+
+### Configuração de Ambiente
+
+O projeto utiliza o arquivo `.devEnv` para configuração de variáveis de ambiente. Este arquivo é **versionado para conveniência de desenvolvimento**, mas em produção deve ser gerenciado via CI/CD secrets.
+
+```bash
+# .devEnv (já incluído no repositório)
+BASE_URL=https://fakestoreapi.com
+CONNECT_TIMEOUT=30000
+RECEIVE_TIMEOUT=30000
+SEND_TIMEOUT=30000
+```
+
+| Variável | Descrição | Default |
+|----------|-----------|---------|
+| `BASE_URL` | URL base da API | `https://fakestoreapi.com` |
+| `CONNECT_TIMEOUT` | Timeout de conexão (ms) | `30000` |
+| `RECEIVE_TIMEOUT` | Timeout de resposta (ms) | `30000` |
+| `SEND_TIMEOUT` | Timeout de envio (ms) | `30000` |
+
+#### Formas de Executar
+
+| Método | Comando | Quando Usar |
+|--------|---------|-------------|
+| **Script** | `./scripts/run_dev.sh` | Desenvolvimento local |
+| **VS Code** | `F5` | Debugging com breakpoints |
+| **Flutter direto** | `cd app && flutter run` | Quick run (usa fallback) |
+
+#### CI/CD
+
+Em pipelines de CI/CD, as variáveis são injetadas via `--dart-define`:
+
+```bash
+flutter build apk \
+  --dart-define=BASE_URL=${{ secrets.API_URL }} \
+  --dart-define=CONNECT_TIMEOUT=30000
 ```
 
 ---

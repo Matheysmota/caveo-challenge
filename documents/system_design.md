@@ -206,7 +206,7 @@ caveo-challenge/
 │  │  │  ┌─────────────────────┐  ┌─────────────────────────────┐    │  │  │
 │  │  │  │ SplashViewModel     │  │ ProductListViewModel         │    │  │  │
 │  │  │  │  • initCommand      │  │  • fetchProductsCommand      │    │  │  │
-│  │  │  └─────────┬───────────┘  │  • refreshCommand            │    │  │  │
+│  │  │  └─────────┬───────────┘  │  • loadNextPageCommand       │    │  │  │
 │  │  │            │              │  • searchCommand             │    │  │  │
 │  │  │            │              └─────────────┬─────────────────┘    │  │  │
 │  │  └────────────┼────────────────────────────┼──────────────────────┘  │  │
@@ -495,12 +495,12 @@ final productListViewModelProvider = ChangeNotifierProvider((ref) {
 
 class ProductListViewModel extends ChangeNotifier {
   late final Command0<List<Product>> fetchProductsCommand;
-  late final Command0<void> refreshCommand;
+  late final Command0<void> loadNextPageCommand;
   late final Command1<List<Product>, String> searchCommand;
   
   ProductListViewModel(this._repository, this._connectivity) {
     fetchProductsCommand = Command0(_fetchProducts);
-    refreshCommand = Command0(_refresh);
+    loadNextPageCommand = Command0(_loadNextPage);
     searchCommand = Command1(_search);
   }
   
@@ -651,12 +651,6 @@ syncStore.sync<List<Product>>(SyncStoreKey.products);
 ```dart
 // Reativo: UI escuta mudanças de conectividade
 connectivity.observe().listen((status) {
-  if (status == ConnectivityStatus.online) {
-    // Tenta refresh automático se dados são stale
-    if (_isDataStale) {
-      refreshCommand.execute();
-    }
-  }
   _updateOfflineBanner(status == ConnectivityStatus.offline);
 });
 ```

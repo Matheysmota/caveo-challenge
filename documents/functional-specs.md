@@ -135,18 +135,7 @@ A AppBar contém 3 elementos principais:
 
 ### Features e Comportamentos
 
-#### A. Pull to Refresh (Twitter-like UX)
-*   **Ação:** Usuário arrasta o topo da lista para baixo.
-*   **Comportamento:**
-    1.  O componente de refresh aparece.
-    2.  O app busca novas informações na API em background.
-    3.  A lista **NÃO** é atualizada imediatamente (para não perder a posição de scroll ou "pular" conteúdo).
-*   **Feedback:**
-    *   **Sucesso:** Um botão flutuante **"Ver novos produtos"** aparece no topo da lista (apenas se o usuário estiver no topo).
-    *   **Interação:** Ao clicar no botão, a lista é atualizada e o scroll volta ao topo.
-    *   **Conflito:** Se o usuário ignorar o botão e rolar para baixo (acionando paginação), o botão desaparece e os dados do "Pull to Refresh" são descartados em favor da consistência da paginação atual.
-
-#### B. Infinite Scroll (Paginação)
+#### A. Infinite Scroll (Paginação)
 *   **Ação:** Usuário rola próximo ao final da lista (Threshold pré-definido).
 *   **Comportamento:**
     *   App busca a próxima página em background.
@@ -155,14 +144,13 @@ A AppBar contém 3 elementos principais:
 *   **Tratamento de Erro:**
     *   Se a paginação falhar, o spinner no rodapé muda para um botão "Tentar novamente".
 
-#### C. Modo Offline e Resiliência
+#### B. Modo Offline e Resiliência
 *   **Detecção:** Se a conexão cair durante o uso.
 *   **Feedback:** Ver seção [Feedback Visual: Banners de Status](#feedback-visual-banners-de-status).
 *   **Comportamento da Lista:**
     *   Itens já carregados permanecem visíveis.
     *   Imagens em cache permanecem visíveis.
 *   **Tentativa de Ação Offline:**
-    *   *Pull to refresh:* Falha graciosamente (mantém lista atual e avisa erro via Toast/Banner).
     *   *Paginação:* Falha com opção de retry no rodapé.
 
 ---
@@ -203,7 +191,6 @@ O aplicativo possui **dois tipos distintos de banners** para comunicar estados a
 
 **Cenários:**
 - Usuário abre app, API retorna 500, cache existe → Banner aparece
-- Usuário faz pull-to-refresh com sucesso → Banner desaparece
 - Usuário dismiss manualmente → Banner desaparece (mas dados continuam stale)
 
 #### Diferença Fundamental
@@ -231,7 +218,7 @@ O aplicativo possui **dois tipos distintos de banners** para comunicar estados a
 └─────────────────────────────────────────┘
 ```
 
-#### D. Performance de Imagens
+#### C. Performance de Imagens
 *   Utilizar `cached_network_image` (ou abstração equivalente).
 *   Implementar `memCacheHeight` / `memCacheWidth` para decodificar imagens no tamanho exato do render, economizando memória RAM.
 *   Fade-in suave ao carregar.
