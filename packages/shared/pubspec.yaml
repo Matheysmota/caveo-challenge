@@ -22,6 +22,8 @@ dependencies:
   mocktail: 1.0.4
   # Equatable for value equality
   equatable: 2.0.7
+  # State management and dependency injection
+  flutter_riverpod: 3.1.0
 
 dev_dependencies:
   flutter_test:
