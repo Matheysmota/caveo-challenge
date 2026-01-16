@@ -48,6 +48,9 @@
 /// ```
 library;
 
+// Assets
+export 'src/assets/dori_assets.barrel.dart';
+
 // Tokens
 export 'src/tokens/dori_tokens.barrel.dart';
 
