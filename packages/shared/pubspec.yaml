@@ -26,6 +26,14 @@ dependencies:
   flutter_riverpod: 3.1.0
   # Declarative routing
   go_router: 17.0.1
+  # Infinite scroll pagination
+  infinite_scroll_pagination: 5.1.1
+  # Command pattern for state management
+  flutter_command: 5.0.0
+  # Result pattern for error handling
+  result_dart: ^2.1.1
+  # Cached network images with disk and memory caching
+  cached_network_image: 3.4.1
 
 dev_dependencies:
   flutter_test:

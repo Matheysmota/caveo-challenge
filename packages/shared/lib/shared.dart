@@ -21,6 +21,8 @@ export 'src/drivers/network/impl/api_data_source_delegate_impl.dart';
 export 'src/drivers/sync_store/sync_store_impl.dart';
 
 // Libraries
+export 'libraries/cached_network_image_export/cached_network_image_export.dart';
+export 'libraries/command_export/command_export.dart';
 export 'libraries/equatable_export/equatable_export.dart';
 export 'libraries/go_router_export/go_router_export.dart';
 export 'libraries/result_export/result_export.dart';

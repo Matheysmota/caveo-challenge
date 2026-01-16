@@ -12,11 +12,10 @@ import '../client/network_response.dart';
 import '../error/client_exception.dart';
 import '../error/network_failure_mapper.dart';
 
+/// Concrete implementation of [ApiDataSourceDelegate].
+///
+/// Handles HTTP requests, response normalization, and error mapping.
 class ApiDataSourceDelegateImpl implements ApiDataSourceDelegate {
-  final NetworkClient _client;
-  final NetworkConfigProvider _config;
-  final NetworkFailureMapper _failureMapper;
-
   ApiDataSourceDelegateImpl({
     required NetworkClient client,
     required NetworkConfigProvider config,
@@ -24,6 +23,10 @@ class ApiDataSourceDelegateImpl implements ApiDataSourceDelegate {
   }) : _client = client,
        _config = config,
        _failureMapper = failureMapper;
+
+  final NetworkClient _client;
+  final NetworkConfigProvider _config;
+  final NetworkFailureMapper _failureMapper;
 
   @override
   Future<Result<T, NetworkFailure>> request<T>({
@@ -45,14 +48,6 @@ class ApiDataSourceDelegateImpl implements ApiDataSourceDelegate {
     } catch (e) {
       return Failure(_mapGenericError(e));
     }
-  }
-
-  /// Maps generic errors to appropriate NetworkFailure types.
-  NetworkFailure _mapGenericError(Object error) {
-    return switch (error) {
-      TypeError() || FormatException() => ParseFailure(originalError: error),
-      _ => UnknownNetworkFailure(originalError: error),
-    };
   }
 
   String _buildUrl(String endpoint) {
@@ -79,9 +74,19 @@ class ApiDataSourceDelegateImpl implements ApiDataSourceDelegate {
     };
   }
 
+  /// Normalizes API response to always be a Map.
+  ///
+  /// If the API returns an array directly, wraps it in `{"data": [...]}`.
   Map<String, dynamic> _normalizeResponse(dynamic data) {
     if (data is Map<String, dynamic>) return data;
     return {'data': data};
+  }
+
+  NetworkFailure _mapGenericError(Object error) {
+    return switch (error) {
+      TypeError() || FormatException() => ParseFailure(originalError: error),
+      _ => UnknownNetworkFailure(originalError: error),
+    };
   }
 
   HttpFailure _mapHttpError(NetworkResponse response) {
