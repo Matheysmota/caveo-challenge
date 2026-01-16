@@ -37,9 +37,7 @@ void main() {
 
   runApp(
     ProviderScope(
-      overrides: [
-        syncStoreProvider.overrideWithValue(syncStore),
-      ],
+      overrides: [syncStoreProvider.overrideWithValue(syncStore)],
       child: const AppWidget(),
     ),
   );

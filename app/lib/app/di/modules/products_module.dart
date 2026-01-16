@@ -43,9 +43,7 @@ final productRemoteDataSourceProvider = Provider<ProductRemoteDataSource>((
 ///
 /// Caches products locally using [LocalCacheSource].
 /// Returns `null` if the cache is not yet initialized.
-final productLocalDataSourceProvider = Provider<ProductLocalDataSource?>((
-  ref,
-) {
+final productLocalDataSourceProvider = Provider<ProductLocalDataSource?>((ref) {
   final cacheAsync = ref.watch(localCacheSourceProvider);
   return cacheAsync.whenOrNull(
     data: (cache) => ProductLocalDataSourceImpl(cache: cache),
