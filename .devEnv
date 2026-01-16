@@ -1,0 +1,30 @@
+# ============================================================================
+# Development Environment Configuration
+# ============================================================================
+#
+# ⚠️ SECURITY WARNING:
+# This file is committed to version control ONLY for development convenience.
+# In a production environment, this file should NEVER be committed.
+# Use secure secret management (CI/CD secrets, HashiCorp Vault, etc.) instead.
+#
+# For staging/production, create separate files (.stagingEnv, .prodEnv)
+# and ensure they are listed in .gitignore.
+#
+# ============================================================================
+
+# API Configuration
+# The base URL for all API requests (without trailing slash)
+BASE_URL=https://fakestoreapi.com
+
+# Timeout Configuration (in milliseconds)
+# Maximum time to wait for establishing a connection
+CONNECT_TIMEOUT=30000
+
+# Maximum time to wait for receiving the response
+RECEIVE_TIMEOUT=30000
+
+# Maximum time to wait for sending the request
+SEND_TIMEOUT=30000
+
+# Optional: API Key for authentication (if required by the API)
+# API_KEY=your-api-key-here
