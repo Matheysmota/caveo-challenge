@@ -6,6 +6,7 @@ library;
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../drivers/local_cache/local_cache_source.dart';
@@ -118,10 +119,16 @@ class SharedPreferencesLocalCacheSource implements LocalCacheSource {
       return LocalStorageDataResponse<T>(data: model, storedAt: storedAt);
     } on FormatException {
       // JSON parsing failed: corrupted data
+      debugPrint(
+        'Cache corrupted for ${key.value} (FormatException), cleaning up',
+      );
       await delete(key);
       return null;
     } on TypeError {
       // Type casting failed: corrupted or incompatible data
+      debugPrint(
+        'Cache corrupted for ${key.value} (TypeError), cleaning up',
+      );
       await delete(key);
       return null;
     } catch (e) {

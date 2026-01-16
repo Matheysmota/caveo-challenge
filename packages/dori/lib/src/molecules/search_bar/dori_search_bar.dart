@@ -157,6 +157,9 @@ class _DoriSearchBarState extends State<DoriSearchBar> {
   /// Last searched query to avoid duplicate searches.
   String _lastSearchedQuery = '';
 
+  /// Tracks previous hasText state to optimize rebuilds.
+  bool _previousHasText = false;
+
   @override
   void initState() {
     super.initState();
@@ -257,8 +260,12 @@ class _DoriSearchBarState extends State<DoriSearchBar> {
       });
     }
 
-    // Trigger rebuild to show/hide clear button
-    setState(() {});
+    // Trigger rebuild only when hasText state changes (to show/hide clear button)
+    final hasText = text.isNotEmpty;
+    if (hasText != _previousHasText) {
+      _previousHasText = hasText;
+      setState(() {});
+    }
   }
 
   void _onSubmitted(String value) {
