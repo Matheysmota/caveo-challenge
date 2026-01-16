@@ -18,15 +18,27 @@ void main() {
       config = EnvironmentNetworkConfig(mockReader);
     });
 
-    test('baseUrl should call require on reader', () {
+    test('baseUrl should call get on reader and return value', () {
       when(
-        () => mockReader.require(EnvKey.baseUrl.key),
+        () => mockReader.get(EnvKey.baseUrl.key),
       ).thenReturn('https://api.test.com');
 
       final result = config.baseUrl;
 
       expect(result, equals('https://api.test.com'));
-      verify(() => mockReader.require(EnvKey.baseUrl.key)).called(1);
+      verify(() => mockReader.get(EnvKey.baseUrl.key)).called(1);
+    });
+
+    test('baseUrl should throw StateError when not configured', () {
+      when(() => mockReader.get(EnvKey.baseUrl.key)).thenReturn(null);
+
+      expect(() => config.baseUrl, throwsStateError);
+    });
+
+    test('baseUrl should throw StateError when empty', () {
+      when(() => mockReader.get(EnvKey.baseUrl.key)).thenReturn('');
+
+      expect(() => config.baseUrl, throwsStateError);
     });
 
     test('connectTimeout should use getDuration', () {
