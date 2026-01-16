@@ -1,7 +1,6 @@
 import 'package:dori/dori.dart';
 import 'package:flutter/material.dart';
-import 'package:shared/libraries/go_router_export/go_router_export.dart';
-import 'package:shared/libraries/riverpod_export/riverpod_export.dart';
+import 'package:shared/shared.dart';
 
 import '../../app/router/app_routes.dart';
 import 'presentation/splash_state.dart';
@@ -48,22 +47,24 @@ class _SplashPageState extends ConsumerState<SplashPage>
     final state = ref.watch(splashViewModelProvider);
 
     ref.listen<SplashState>(splashViewModelProvider, (_, next) {
-      if (next is SplashReady) context.go(AppRoutes.products);
+      if (next is SplashSuccess) context.go(AppRoutes.products);
     });
 
     return Scaffold(
       backgroundColor: context.dori.colors.surface.one,
       body: SafeArea(
         child: switch (state) {
-          SplashReady() => SplashContent(
+          SplashLoading() => SplashContent(
             fadeAnimation: _fade,
             scaleAnimation: _scale,
           ),
-          SplashError(:final failure) => Center(
-            child: SplashErrorContent(
-              failure: failure,
-              onRetry: ref.read(splashViewModelProvider.notifier).retry,
-            ),
+          SplashSuccess() => SplashContent(
+            fadeAnimation: _fade,
+            scaleAnimation: _scale,
+          ),
+          SplashError(:final failure) => SplashErrorContent(
+            failure: failure,
+            onRetry: ref.read(splashViewModelProvider.notifier).retry,
           ),
         },
       ),

@@ -6,6 +6,7 @@ export 'drivers/connectivity/connectivity_export.dart';
 export 'drivers/env/env_export.dart';
 export 'drivers/local_cache/local_cache_export.dart';
 export 'drivers/network/network_export.dart';
+export 'drivers/sync_store/sync_store_export.dart';
 
 // Drivers - Implementations
 export 'src/drivers/connectivity/connectivity_plus_observer.dart';
@@ -17,6 +18,7 @@ export 'src/drivers/network/client/network_client.dart';
 export 'src/drivers/network/client/network_response.dart';
 export 'src/drivers/network/config/environment_network_config.dart';
 export 'src/drivers/network/impl/api_data_source_delegate_impl.dart';
+export 'src/drivers/sync_store/sync_store_impl.dart';
 
 // Libraries
 export 'libraries/equatable_export/equatable_export.dart';

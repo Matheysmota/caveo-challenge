@@ -2,7 +2,7 @@
 
 > Documento de arquitetura que consolida decisões técnicas, fluxos de comunicação entre componentes e trade-offs do sistema.
 
-**Última atualização:** 15-01-2026  
+**Última atualização:** 16-01-2026  
 **Status:** Em evolução
 
 ---
@@ -535,6 +535,78 @@ Future<Result<List<Product>, ProductFailure>> getProducts({int page = 1}) async 
 }
 ```
 
+### SyncStore — Sincronização Inicial
+
+> Detalhes em [ADR 011](adrs/011-sync-store.md)
+
+O SyncStore é uma abstração em `packages/shared` que permite sincronização inicial de dados sem acoplar features:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                          main.dart                                  │
+│                    (Bootstrap & DI Setup)                           │
+│  • Cria SyncStoreImpl                                               │
+│  • Fornece via ProviderScope                                        │
+└──────────────────────────────┬──────────────────────────────────────┘
+                               │
+                               │ provides
+                               ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                          SyncStore                                  │
+│                     (packages/shared)                               │
+│  • registerSyncer<T>(key, fetcher)                                  │
+│  • sync<T>(key) → Future<SyncState<T>>                              │
+│  • watch<T>(key) → Stream<SyncState<T>>                             │
+│  • get<T>(key) → SyncState<T>                                       │
+└──────────────────────────────┬──────────────────────────────────────┘
+                               │
+           ┌───────────────────┼───────────────────┐
+           │                   │                   │
+           ▼                   ▼                   ▼
+┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
+│  Products Module │  │   Splash Screen  │  │  Future Features │
+│                  │  │                  │  │                  │
+│  • Registra      │  │  • watch()       │  │  • Podem usar    │
+│    syncer        │  │  • retry via     │  │    mesmo padrão  │
+│  • Usa get()     │  │    sync()        │  │                  │
+│    para dados    │  │  • Navega após   │  │                  │
+│    iniciais      │  │    success       │  │                  │
+└──────────────────┘  └──────────────────┘  └──────────────────┘
+```
+
+**Estados do Sync:**
+
+```dart
+sealed class SyncState<T> {
+  SyncStateIdle<T>()      // Estado inicial
+  SyncStateLoading<T>()   // Sync em progresso  
+  SyncStateSuccess<T>(T data)  // Sucesso com dados
+  SyncStateError<T>(NetworkFailure failure, {T? previousData})  // Falha
+}
+```
+
+**Fluxo de Uso:**
+
+```dart
+// 1. Products module registra syncer
+syncStore.registerSyncer<List<Product>>(
+  SyncStoreKey.products,
+  fetcher: () => repository.getProducts(),
+);
+
+// 2. Splash observa estado
+syncStore.watch<List<Product>>(SyncStoreKey.products).listen((state) {
+  switch (state) {
+    case SyncStateSuccess(): navigateToHome();
+    case SyncStateError(): showRetryButton();
+    case _: showLoading();
+  }
+});
+
+// 3. Splash trigga sync
+syncStore.sync<List<Product>>(SyncStoreKey.products);
+```
+
 ---
 
 ## Estratégias de Resiliência
@@ -671,6 +743,8 @@ connectivity.observe().listen((status) {
 - [ADR 007 — Cache Local](adrs/007-abstracao-cache-local.md)
 - [ADR 008 — Padrões de Testes](adrs/008-padroes-de-testes.md)
 - [ADR 009 — Design System Dori](adrs/009-design-system-dori.md)
+- [ADR 010 — Connectivity Observer](adrs/010-connectivity-observer.md)
+- [ADR 011 — SyncStore](adrs/011-sync-store.md)
 
 ### Documentos de Apoio
 

@@ -1,91 +1,157 @@
+/// Splash screen state management.
+///
+/// Handles the initialization flow by watching SyncStore state
+/// and coordinating minimum display time requirements.
+///
+/// ## Responsibilities
+///
+/// 1. Register product syncer and trigger initial sync
+/// 2. Wait for minimum display duration (branding requirements)
+/// 3. Watch sync state and transition to appropriate state
+/// 4. Handle timeout if sync takes too long
+/// 5. Support retry on error
+///
+/// ## State Flow
+///
+/// ```
+/// SplashLoading ──► (sync + min time) ──► SplashSuccess (navigate)
+///                                     └──► SplashError (retry)
+/// ```
+library;
+
 import 'dart:async';
 
-import 'package:shared/drivers/network/network_failure.dart';
-import 'package:shared/libraries/result_export/result_export.dart';
-import 'package:shared/libraries/riverpod_export/riverpod_export.dart';
+import 'package:shared/shared.dart';
 
 import '../../../app/app_strings.dart';
+import '../../../app/di/modules/products_module.dart';
+import '../../../main.dart';
+import '../../products/domain/entities/product.dart';
 import 'splash_state.dart';
 
+/// Configuration constants for splash screen behavior.
 abstract final class SplashConfig {
+  /// Minimum time to display splash screen for branding.
   static const minimumDisplayDuration = Duration(seconds: 1);
+
+  /// Maximum time to wait for sync before showing error.
   static const timeoutDuration = Duration(seconds: 10);
 }
 
+/// Provider for splash view model.
 final splashViewModelProvider = NotifierProvider<SplashViewModel, SplashState>(
   SplashViewModel.new,
 );
 
+/// Manages splash screen state during app initialization.
+///
+/// Uses [SyncStore] to observe initial data synchronization state
+/// while respecting minimum display duration requirements.
 class SplashViewModel extends Notifier<SplashState> {
   Timer? _minimumDisplayTimer;
   Timer? _timeoutTimer;
-  bool _initComplete = false;
+  StreamSubscription<SyncState<List<Product>>>? _syncSubscription;
+
+  bool _syncComplete = false;
   bool _minTimeElapsed = false;
-  Result<void, NetworkFailure>? _result;
+  SyncState<List<Product>>? _lastSyncState;
 
   @override
   SplashState build() {
-    ref.onDispose(_cancelTimers);
+    ref.onDispose(_dispose);
     _startInitialization();
-    return const SplashReady();
+    return const SplashLoading();
   }
 
+  /// Retries the sync operation after an error.
   void retry() {
     _reset();
-    state = const SplashReady();
+    state = const SplashLoading();
     _startInitialization();
   }
 
   void _reset() {
-    _cancelTimers();
-    _initComplete = false;
+    _dispose();
+    _syncComplete = false;
     _minTimeElapsed = false;
-    _result = null;
+    _lastSyncState = null;
   }
 
   void _startInitialization() {
+    // Start minimum display timer
     _minimumDisplayTimer = Timer(SplashConfig.minimumDisplayDuration, () {
       _minTimeElapsed = true;
       _tryFinalize();
     });
 
+    // Start timeout timer
     _timeoutTimer = Timer(SplashConfig.timeoutDuration, _handleTimeout);
 
-    _executeInit();
+    // Register syncer and start sync
+    _startSync();
   }
 
-  Future<void> _executeInit() async {
-    // TODO(PR3): Call ProductRepository.getProducts()
-    await Future<void>.delayed(const Duration(milliseconds: 100));
+  void _startSync() {
+    // Try to register syncer - it may return false if cache isn't ready yet
+    final isRegistered = ref.read(productSyncRegistrarProvider);
 
-    _initComplete = true;
-    _result = const Success(null);
-    _timeoutTimer?.cancel();
-    _tryFinalize();
+    if (!isRegistered) {
+      // Cache not ready yet, wait and retry
+      Future.delayed(const Duration(milliseconds: 50), () {
+        if (!_syncComplete) {
+          _startSync();
+        }
+      });
+      return;
+    }
+
+    final syncStore = ref.read(syncStoreProvider);
+
+    // Watch sync state
+    _syncSubscription = syncStore
+        .watch<List<Product>>(SyncStoreKey.products)
+        .listen((syncState) {
+          _lastSyncState = syncState;
+
+          // Mark complete when we get a terminal state
+          if (syncState.isSuccess || syncState.isError) {
+            _syncComplete = true;
+            _timeoutTimer?.cancel();
+            _tryFinalize();
+          }
+        });
+
+    // Trigger sync
+    syncStore.sync<List<Product>>(SyncStoreKey.products);
   }
 
   void _tryFinalize() {
-    if (!_minTimeElapsed || !_initComplete) return;
+    if (!_minTimeElapsed || !_syncComplete) return;
 
-    final result = _result;
-    if (result == null) return;
+    final syncState = _lastSyncState;
+    if (syncState == null) return;
 
-    state = result.fold(
-      (_) => const SplashReady(),
-      (failure) => SplashError(failure: failure),
-    );
+    state = switch (syncState) {
+      SyncStateSuccess() => const SplashSuccess(),
+      SyncStateError(:final failure) => SplashError(failure: failure),
+      _ => const SplashLoading(),
+    };
   }
 
   void _handleTimeout() {
-    _initComplete = true;
-    _result = const Failure(TimeoutFailure(message: SplashStrings.timeout));
+    _syncComplete = true;
+    _lastSyncState = const SyncStateError(
+      TimeoutFailure(message: SplashStrings.timeout),
+    );
     _tryFinalize();
   }
 
-  void _cancelTimers() {
+  void _dispose() {
     _minimumDisplayTimer?.cancel();
     _minimumDisplayTimer = null;
     _timeoutTimer?.cancel();
     _timeoutTimer = null;
+    _syncSubscription?.cancel();
+    _syncSubscription = null;
   }
 }
