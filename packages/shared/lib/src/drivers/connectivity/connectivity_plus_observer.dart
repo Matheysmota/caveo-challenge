@@ -84,19 +84,22 @@ class ConnectivityPlusObserver implements ConnectivityObserver {
   }
 
   Future<void> _onFirstListener() async {
+    // Always ensure subscription exists when there are listeners
+    _subscription ??= _connectivity.onConnectivityChanged.listen((results) {
+      final status = _mapToStatus(results);
+      _emitIfChanged(status);
+    });
+
+    // Emit last known status immediately for BehaviorSubject-like behavior
     if (_lastStatus != null) {
       _controller?.add(_lastStatus!);
       return;
     }
 
+    // First time: check current connectivity
     final currentResults = await _connectivity.checkConnectivity();
     final currentStatus = _mapToStatus(currentResults);
     _emitIfChanged(currentStatus);
-
-    _subscription ??= _connectivity.onConnectivityChanged.listen((results) {
-      final status = _mapToStatus(results);
-      _emitIfChanged(status);
-    });
   }
 
   void _onLastListenerCanceled() {

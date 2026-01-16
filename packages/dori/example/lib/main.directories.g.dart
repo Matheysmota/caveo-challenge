@@ -23,6 +23,8 @@ import 'package:widgetbook_caveo/stories/icon_button_story.dart'
     as _widgetbook_caveo_stories_icon_button_story;
 import 'package:widgetbook_caveo/stories/icon_story.dart'
     as _widgetbook_caveo_stories_icon_story;
+import 'package:widgetbook_caveo/stories/masonry_grid_story.dart'
+    as _widgetbook_caveo_stories_masonry_grid_story;
 import 'package:widgetbook_caveo/stories/product_card_story.dart'
     as _widgetbook_caveo_stories_product_card_story;
 import 'package:widgetbook_caveo/stories/radius_story.dart'
@@ -31,8 +33,12 @@ import 'package:widgetbook_caveo/stories/search_bar_story.dart'
     as _widgetbook_caveo_stories_search_bar_story;
 import 'package:widgetbook_caveo/stories/spacing_story.dart'
     as _widgetbook_caveo_stories_spacing_story;
+import 'package:widgetbook_caveo/stories/status_feedback_banner_story.dart'
+    as _widgetbook_caveo_stories_status_feedback_banner_story;
 import 'package:widgetbook_caveo/stories/text_story.dart'
     as _widgetbook_caveo_stories_text_story;
+import 'package:widgetbook_caveo/stories/toast_story.dart'
+    as _widgetbook_caveo_stories_toast_story;
 import 'package:widgetbook_caveo/stories/typography_story.dart'
     as _widgetbook_caveo_stories_typography_story;
 
@@ -98,6 +104,16 @@ final directories = <_widgetbook.WidgetbookNode>[
           ),
         ],
       ),
+      _widgetbook.WidgetbookComponent(
+        name: 'DoriToastShowcase',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Toast Showcase',
+            builder:
+                _widgetbook_caveo_stories_toast_story.buildDoriToastShowcase,
+          ),
+        ],
+      ),
     ],
   ),
   _widgetbook.WidgetbookCategory(
@@ -113,11 +129,31 @@ final directories = <_widgetbook.WidgetbookNode>[
           ),
         ],
       ),
+      _widgetbook.WidgetbookComponent(
+        name: 'DoriStatusFeedbackBannerShowcase',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Status Feedback Banner Showcase',
+            builder: _widgetbook_caveo_stories_status_feedback_banner_story
+                .buildDoriStatusFeedbackBannerShowcase,
+          ),
+        ],
+      ),
     ],
   ),
   _widgetbook.WidgetbookCategory(
     name: 'Organisms',
     children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'DoriMasonryGridShowcase',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Masonry Grid Showcase',
+            builder: _widgetbook_caveo_stories_masonry_grid_story
+                .buildDoriMasonryGridShowcase,
+          ),
+        ],
+      ),
       _widgetbook.WidgetbookComponent(
         name: 'DoriProductCardShowcase',
         useCases: [
