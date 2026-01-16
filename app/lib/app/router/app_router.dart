@@ -1,51 +1,18 @@
-/// App Router Configuration.
-///
-/// Configures go_router for declarative navigation throughout the app.
-/// Uses Riverpod for dependency injection, allowing easy testing and mocking.
-///
-/// ## Route Structure
-///
-/// ```
-/// /                    → SplashPage (initial)
-/// /products            → ProductsPage
-/// /products/:id        → ProductDetailsPage
-/// ```
-///
-/// ## Usage
-///
-/// ```dart
-/// // In AppWidget
-/// final router = ref.watch(appRouterProvider);
-/// return MaterialApp.router(routerConfig: router);
-///
-/// // Navigation
-/// context.go(AppRoutes.products);
-/// context.push(AppRoutes.productDetailsPath('123'));
-/// context.pop();
-/// ```
 library;
 
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 
+import '../../features/products/presentation/product_list_page.dart';
 import '../../features/splash/splash_page.dart';
 import 'app_routes.dart';
 import 'route_transitions.dart';
 
-/// Provider for the app router.
-///
-/// Using Riverpod allows:
-/// - Dependency injection of the router
-/// - Easy mocking in tests
-/// - Access to other providers if needed for redirects
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: AppRoutes.splash,
-    debugLogDiagnostics: true, // TODO: Disable in production
+    debugLogDiagnostics: true,
     routes: [
-      // ─────────────────────────────────────────────────────────────────────
-      // Splash (Initial Route)
-      // ─────────────────────────────────────────────────────────────────────
       GoRoute(
         path: AppRoutes.splash,
         name: 'splash',
@@ -56,46 +23,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           transitionDuration: RouteTransitions.defaultDuration,
         ),
       ),
-
-      // ─────────────────────────────────────────────────────────────────────
-      // Products
-      // ─────────────────────────────────────────────────────────────────────
       GoRoute(
         path: AppRoutes.products,
         name: 'products',
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
-          child:
-              const _ProductsPlaceholder(), // Will be replaced with ProductsPage
+          child: const ProductListPage(),
           transitionsBuilder: RouteTransitions.fade,
           transitionDuration: RouteTransitions.defaultDuration,
         ),
-        routes: [
-          // ─────────────────────────────────────────────────────────────────
-          // Product Details (Nested)
-          // ─────────────────────────────────────────────────────────────────
-          GoRoute(
-            path: ':id',
-            name: 'productDetails',
-            pageBuilder: (context, state) {
-              final productId = state.pathParameters['id']!;
-              return CustomTransitionPage(
-                key: state.pageKey,
-                child: _ProductDetailsPlaceholder(
-                  id: productId,
-                ), // Will be replaced with ProductDetailsPage
-                transitionsBuilder: RouteTransitions.slideUp,
-                transitionDuration: RouteTransitions.defaultDuration,
-              );
-            },
-          ),
-        ],
       ),
     ],
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // Error Handler
-    // ─────────────────────────────────────────────────────────────────────────
     errorPageBuilder: (context, state) => MaterialPage(
       key: state.pageKey,
       child: Scaffold(
@@ -121,37 +59,3 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ),
   );
 });
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Placeholder Widgets (to be replaced with actual pages)
-// ─────────────────────────────────────────────────────────────────────────────
-
-/// Placeholder for Products page.
-/// TODO: Replace with actual ProductsPage in future PR.
-class _ProductsPlaceholder extends StatelessWidget {
-  const _ProductsPlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Products')),
-      body: const Center(child: Text('Products Page Placeholder')),
-    );
-  }
-}
-
-/// Placeholder for Product Details page.
-/// TODO: Replace with actual ProductDetailsPage in future PR.
-class _ProductDetailsPlaceholder extends StatelessWidget {
-  final String id;
-
-  const _ProductDetailsPlaceholder({required this.id});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Product $id')),
-      body: Center(child: Text('Product Details Placeholder\nID: $id')),
-    );
-  }
-}
