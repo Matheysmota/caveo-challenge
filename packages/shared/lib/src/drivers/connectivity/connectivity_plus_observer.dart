@@ -84,7 +84,7 @@ class ConnectivityPlusObserver implements ConnectivityObserver {
   }
 
   Future<void> _onFirstListener() async {
-    if (_controller?.hasListener == true && _lastStatus != null) {
+    if (_lastStatus != null) {
       _controller?.add(_lastStatus!);
       return;
     }
@@ -149,7 +149,6 @@ class ConnectivityPlusObserver implements ConnectivityObserver {
       return ConnectivityStatus.offline;
     }
 
-    // Check if we have any connection that provides internet access
     final hasInternetConnection = results.any(
       (result) => _internetConnectionTypes.contains(result),
     );

@@ -43,11 +43,16 @@ class ApiDataSourceDelegateImpl implements ApiDataSourceDelegate {
     } on ClientException catch (e) {
       return Failure(_failureMapper.map(e));
     } catch (e) {
-      if (e is TypeError || e is FormatException) {
-        return Failure(ParseFailure(originalError: e));
-      }
-      return Failure(UnknownNetworkFailure(originalError: e));
+      return Failure(_mapGenericError(e));
     }
+  }
+
+  /// Maps generic errors to appropriate NetworkFailure types.
+  NetworkFailure _mapGenericError(Object error) {
+    return switch (error) {
+      TypeError() || FormatException() => ParseFailure(originalError: error),
+      _ => UnknownNetworkFailure(originalError: error),
+    };
   }
 
   String _buildUrl(String endpoint) {
