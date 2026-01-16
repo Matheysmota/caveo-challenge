@@ -181,42 +181,45 @@ class _DoriSearchBarState extends State<DoriSearchBar> {
   void didUpdateWidget(DoriSearchBar oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    // Handle controller change
-    if (widget.controller != oldWidget.controller) {
-      // Remove listener from old controller
-      if (oldWidget.controller != null) {
-        oldWidget.controller!.removeListener(_onTextChanged);
-      } else {
-        _internalController?.removeListener(_onTextChanged);
-      }
+    _handleControllerChange(oldWidget);
+    _handleFocusNodeChange(oldWidget);
+  }
 
-      // Dispose internal controller if we had one and now have external
-      if (oldWidget.controller == null && widget.controller != null) {
-        _internalController?.dispose();
-        _internalController = null;
-      }
+  /// Handles controller lifecycle when widget updates.
+  void _handleControllerChange(DoriSearchBar oldWidget) {
+    if (widget.controller == oldWidget.controller) return;
 
-      // Create internal controller if we had external and now have none
-      if (oldWidget.controller != null && widget.controller == null) {
-        _internalController = TextEditingController();
-      }
+    // Remove listener from old controller
+    final oldController = oldWidget.controller ?? _internalController;
+    oldController?.removeListener(_onTextChanged);
 
-      // Add listener to new controller
-      _controller.addListener(_onTextChanged);
+    // Transition: external -> internal
+    if (oldWidget.controller != null && widget.controller == null) {
+      _internalController = TextEditingController();
     }
 
-    // Handle focus node change
-    if (widget.focusNode != oldWidget.focusNode) {
-      // Dispose internal focus node if we had one and now have external
-      if (oldWidget.focusNode == null && widget.focusNode != null) {
-        _internalFocusNode?.dispose();
-        _internalFocusNode = null;
-      }
+    // Transition: internal -> external
+    if (oldWidget.controller == null && widget.controller != null) {
+      _internalController?.dispose();
+      _internalController = null;
+    }
 
-      // Create internal focus node if we had external and now have none
-      if (oldWidget.focusNode != null && widget.focusNode == null) {
-        _internalFocusNode = FocusNode();
-      }
+    _controller.addListener(_onTextChanged);
+  }
+
+  /// Handles focus node lifecycle when widget updates.
+  void _handleFocusNodeChange(DoriSearchBar oldWidget) {
+    if (widget.focusNode == oldWidget.focusNode) return;
+
+    // Transition: internal -> external
+    if (oldWidget.focusNode == null && widget.focusNode != null) {
+      _internalFocusNode?.dispose();
+      _internalFocusNode = null;
+    }
+
+    // Transition: external -> internal
+    if (oldWidget.focusNode != null && widget.focusNode == null) {
+      _internalFocusNode = FocusNode();
     }
   }
 
@@ -243,29 +246,44 @@ class _DoriSearchBarState extends State<DoriSearchBar> {
 
     // Handle empty input immediately
     if (text.isEmpty) {
-      if (_lastSearchedQuery.isNotEmpty) {
-        _lastSearchedQuery = '';
-        widget.onSearch('');
-      }
+      _handleEmptyInput();
       return;
     }
 
-    // Only debounce if we have minimum characters
-    if (text.length >= widget.minCharacters) {
-      _debounceTimer = Timer(widget.debounceDuration, () {
-        if (text != _lastSearchedQuery && mounted) {
-          _lastSearchedQuery = text;
-          widget.onSearch(text);
-        }
-      });
-    }
+    // Schedule debounced search if minimum characters met
+    _scheduleSearchIfEligible(text);
 
-    // Trigger rebuild only when hasText state changes (to show/hide clear button)
-    final hasText = text.isNotEmpty;
-    if (hasText != _previousHasText) {
-      _previousHasText = hasText;
-      setState(() {});
-    }
+    // Update hasText state for clear button visibility
+    _updateHasTextState(text.isNotEmpty);
+  }
+
+  /// Handles the case when input becomes empty.
+  void _handleEmptyInput() {
+    if (_lastSearchedQuery.isEmpty) return;
+
+    _lastSearchedQuery = '';
+    widget.onSearch('');
+    _updateHasTextState(false);
+  }
+
+  /// Schedules a debounced search if text meets minimum character requirement.
+  void _scheduleSearchIfEligible(String text) {
+    if (text.length < widget.minCharacters) return;
+
+    _debounceTimer = Timer(widget.debounceDuration, () {
+      if (text == _lastSearchedQuery || !mounted) return;
+
+      _lastSearchedQuery = text;
+      widget.onSearch(text);
+    });
+  }
+
+  /// Updates hasText state and triggers rebuild only when state changes.
+  void _updateHasTextState(bool hasText) {
+    if (hasText == _previousHasText) return;
+
+    _previousHasText = hasText;
+    setState(() {});
   }
 
   void _onSubmitted(String value) {

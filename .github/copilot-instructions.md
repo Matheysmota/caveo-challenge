@@ -64,6 +64,82 @@ O projeto segue uma **estrutura híbrida de monorepo**:
 - **Documentação:** Use `///` para Classes e Métodos públicos.
 - **Finalização:** Execute `dart fix --apply` ao final.
 
+## Regras de Controle de Fluxo (CRÍTICO)
+
+### Early Return (Guard Clauses)
+**SEMPRE** prefira early returns para evitar ifs aninhados:
+
+```dart
+// ✅ CORRETO - Early return
+void processData(Data? data) {
+  if (data == null) return;
+  if (!data.isValid) return;
+  
+  // Lógica principal com certeza de data válido
+  doSomething(data);
+}
+
+// ❌ ERRADO - Ifs aninhados
+void processData(Data? data) {
+  if (data != null) {
+    if (data.isValid) {
+      doSomething(data);
+    }
+  }
+}
+```
+
+### Switch Expression (Dart 3+)
+**USE** switch expressions para múltiplas condições de tipo:
+
+```dart
+// ✅ CORRETO - Switch expression
+NetworkFailure _mapError(Object error) {
+  return switch (error) {
+    TypeError() || FormatException() => ParseFailure(originalError: error),
+    ClientException e => _failureMapper.map(e),
+    _ => UnknownFailure(originalError: error),
+  };
+}
+
+// ❌ ERRADO - Ifs encadeados
+NetworkFailure _mapError(Object error) {
+  if (error is TypeError || error is FormatException) {
+    return ParseFailure(originalError: error);
+  }
+  if (error is ClientException) {
+    return _failureMapper.map(error);
+  }
+  return UnknownFailure(originalError: error);
+}
+```
+
+### Extração de Métodos
+Quando uma condição complexa é necessária, **EXTRAIA** para um método helper:
+
+```dart
+// ✅ CORRETO - Método extraído
+if (_isExpired(storedAt: storedAt, ttlMs: ttlMs)) {
+  await delete(key);
+  return null;
+}
+
+bool _isExpired({required DateTime storedAt, int? ttlMs}) {
+  if (ttlMs == null) return false;
+  final expiresAt = storedAt.add(Duration(milliseconds: ttlMs));
+  return DateTime.now().isAfter(expiresAt);
+}
+
+// ❌ ERRADO - If aninhado inline
+if (ttlMs != null) {
+  final expiresAt = storedAt.add(Duration(milliseconds: ttlMs));
+  if (DateTime.now().isAfter(expiresAt)) {
+    await delete(key);
+    return null;
+  }
+}
+```
+
 ## Validação Obrigatória Antes de Finalizar Tarefas (CRÍTICO)
 **ANTES de informar ao usuário que a tarefa está concluída**, execute os seguintes comandos para garantir que a CI/CD passará:
 

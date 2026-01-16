@@ -81,64 +81,58 @@ class SharedPreferencesLocalCacheSource implements LocalCacheSource {
   ) async {
     try {
       final jsonString = _prefs.getString(key.value);
-
-      if (jsonString == null) {
-        return null; // Cache miss: key not found
-      }
+      if (jsonString == null) return null; // Cache miss
 
       final envelope = jsonDecode(jsonString) as Map<String, dynamic>;
 
       final storedAtMs = envelope[_MetadataKeys.storedAt] as int?;
       if (storedAtMs == null) {
-        // Corrupted data: missing timestamp
-        await delete(key);
+        await delete(key); // Corrupted: missing timestamp
         return null;
       }
 
       final storedAt = DateTime.fromMillisecondsSinceEpoch(storedAtMs);
       final ttlMs = envelope[_MetadataKeys.ttlMilliseconds] as int?;
 
-      // Check TTL expiration
-      if (ttlMs != null) {
-        final expiresAt = storedAt.add(Duration(milliseconds: ttlMs));
-        if (DateTime.now().isAfter(expiresAt)) {
-          // Data expired: clean up and return null
-          await delete(key);
-          return null;
-        }
+      if (_isExpired(storedAt: storedAt, ttlMs: ttlMs)) {
+        await delete(key); // Data expired
+        return null;
       }
 
       final data = envelope[_MetadataKeys.data] as Map<String, dynamic>?;
       if (data == null) {
-        // Corrupted data: missing data field
-        await delete(key);
+        await delete(key); // Corrupted: missing data
         return null;
       }
 
-      final model = fromMap(data);
-      return LocalStorageDataResponse<T>(data: model, storedAt: storedAt);
+      return LocalStorageDataResponse<T>(
+        data: fromMap(data),
+        storedAt: storedAt,
+      );
     } on FormatException {
-      // JSON parsing failed: corrupted data
       debugPrint(
         'Cache corrupted for ${key.value} (FormatException), cleaning up',
       );
       await delete(key);
       return null;
     } on TypeError {
-      // Type casting failed: corrupted or incompatible data
-      debugPrint(
-        'Cache corrupted for ${key.value} (TypeError), cleaning up',
-      );
+      debugPrint('Cache corrupted for ${key.value} (TypeError), cleaning up');
       await delete(key);
       return null;
     } catch (e) {
-      // Other errors (e.g., fromMap threw)
-      // Don't delete data, let caller handle
       throw LocalCacheException(
         'Failed to retrieve model for key: ${key.value}',
         e,
       );
     }
+  }
+
+  /// Returns true if data has expired based on TTL.
+  bool _isExpired({required DateTime storedAt, int? ttlMs}) {
+    if (ttlMs == null) return false;
+
+    final expiresAt = storedAt.add(Duration(milliseconds: ttlMs));
+    return DateTime.now().isAfter(expiresAt);
   }
 
   @override
