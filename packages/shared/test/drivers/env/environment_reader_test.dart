@@ -29,16 +29,21 @@ void main() {
       verify(() => mockReader.get(EnvKey.baseUrl.key)).called(1);
     });
 
-    test('baseUrl should throw StateError when not configured', () {
-      when(() => mockReader.get(EnvKey.baseUrl.key)).thenReturn(null);
+    test(
+      'baseUrl should return fallback URL in debug mode when not configured',
+      () {
+        when(() => mockReader.get(EnvKey.baseUrl.key)).thenReturn(null);
 
-      expect(() => config.baseUrl, throwsStateError);
-    });
+        // In debug mode, fallback URL is returned for development convenience
+        expect(config.baseUrl, equals('https://fakestoreapi.com'));
+      },
+    );
 
-    test('baseUrl should throw StateError when empty', () {
+    test('baseUrl should return fallback URL in debug mode when empty', () {
       when(() => mockReader.get(EnvKey.baseUrl.key)).thenReturn('');
 
-      expect(() => config.baseUrl, throwsStateError);
+      // In debug mode, fallback URL is returned for development convenience
+      expect(config.baseUrl, equals('https://fakestoreapi.com'));
     });
 
     test('connectTimeout should use getDuration', () {
