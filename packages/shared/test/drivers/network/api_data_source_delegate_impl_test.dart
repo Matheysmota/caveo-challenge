@@ -35,8 +35,6 @@ void main() {
           any(),
           queryParams: any(named: 'queryParams'),
           headers: any(named: 'headers'),
-          connectTimeout: any(named: 'connectTimeout'),
-          receiveTimeout: any(named: 'receiveTimeout'),
         ),
       ).thenAnswer(
         (_) async => const NetworkResponse(
@@ -59,8 +57,6 @@ void main() {
           any(),
           queryParams: any(named: 'queryParams'),
           headers: any(named: 'headers'),
-          connectTimeout: any(named: 'connectTimeout'),
-          receiveTimeout: any(named: 'receiveTimeout'),
         ),
       ).thenAnswer(
         (_) async => const NetworkResponse(
@@ -87,8 +83,6 @@ void main() {
           any(),
           queryParams: any(named: 'queryParams'),
           headers: any(named: 'headers'),
-          connectTimeout: any(named: 'connectTimeout'),
-          receiveTimeout: any(named: 'receiveTimeout'),
         ),
       ).thenThrow(
         const ClientException(type: ClientExceptionType.connectionError),
@@ -112,8 +106,6 @@ void main() {
           any(),
           queryParams: any(named: 'queryParams'),
           headers: any(named: 'headers'),
-          connectTimeout: any(named: 'connectTimeout'),
-          receiveTimeout: any(named: 'receiveTimeout'),
         ),
       ).thenThrow(
         const ClientException(type: ClientExceptionType.connectionTimeout),
@@ -137,8 +129,6 @@ void main() {
           any(),
           queryParams: any(named: 'queryParams'),
           headers: any(named: 'headers'),
-          connectTimeout: any(named: 'connectTimeout'),
-          receiveTimeout: any(named: 'receiveTimeout'),
         ),
       ).thenAnswer(
         (_) async => const NetworkResponse(

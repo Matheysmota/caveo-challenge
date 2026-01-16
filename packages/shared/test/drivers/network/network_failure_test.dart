@@ -40,6 +40,11 @@ void main() {
       expect(failure.message, equals('An unexpected error occurred.'));
     });
 
+    test('CancelledFailure default message', () {
+      const failure = CancelledFailure();
+      expect(failure.message, equals('Request was cancelled.'));
+    });
+
     test('pattern matching exhaustive', () {
       NetworkFailure failure = const HttpFailure(statusCode: 404);
       final message = switch (failure) {
@@ -47,6 +52,7 @@ void main() {
         ConnectionFailure() => 'Connection',
         TimeoutFailure() => 'Timeout',
         ParseFailure() => 'Parse',
+        CancelledFailure() => 'Cancelled',
         UnknownNetworkFailure() => 'Unknown',
       };
       expect(message, equals('HTTP 404'));

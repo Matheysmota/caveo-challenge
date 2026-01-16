@@ -27,9 +27,7 @@ class NetworkFailureMapper {
       ClientExceptionType.badCertificate => const ConnectionFailure(
         message: 'Security certificate error.',
       ),
-      ClientExceptionType.cancel => const UnknownNetworkFailure(
-        message: 'Request was cancelled.',
-      ),
+      ClientExceptionType.cancel => const CancelledFailure(),
       ClientExceptionType.unknown => UnknownNetworkFailure(
         message: exception.message ?? 'An unexpected error occurred.',
         originalError: exception.originalError,

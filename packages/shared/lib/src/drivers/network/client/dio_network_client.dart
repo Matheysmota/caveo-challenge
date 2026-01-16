@@ -4,16 +4,25 @@ library;
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../../../drivers/network/network_config_provider.dart';
 import '../error/client_exception.dart';
 import 'network_client.dart';
 import 'network_response.dart';
 
 class DioNetworkClient implements NetworkClient {
-  static Dio? _dioInstance;
+  final Dio _dio;
 
-  static Dio get _dio {
-    _dioInstance ??= Dio(
+  DioNetworkClient(NetworkConfigProvider config) : _dio = _createDio(config);
+
+  @visibleForTesting
+  DioNetworkClient.withDio(this._dio);
+
+  static Dio _createDio(NetworkConfigProvider config) {
+    return Dio(
       BaseOptions(
+        connectTimeout: config.connectTimeout,
+        receiveTimeout: config.receiveTimeout,
+        sendTimeout: config.sendTimeout,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -22,17 +31,6 @@ class DioNetworkClient implements NetworkClient {
         responseType: ResponseType.json,
       ),
     );
-    return _dioInstance!;
-  }
-
-  @visibleForTesting
-  static void setDioInstanceForTesting(Dio dio) {
-    _dioInstance = dio;
-  }
-
-  @visibleForTesting
-  static void resetDioInstance() {
-    _dioInstance = null;
   }
 
   @override
@@ -40,14 +38,12 @@ class DioNetworkClient implements NetworkClient {
     String url, {
     Map<String, String>? queryParams,
     Map<String, String>? headers,
-    Duration? connectTimeout,
-    Duration? receiveTimeout,
   }) async {
     try {
       final response = await _dio.get<dynamic>(
         url,
         queryParameters: queryParams,
-        options: Options(headers: headers, receiveTimeout: receiveTimeout),
+        options: Options(headers: headers),
       );
       return _mapResponse(response);
     } on DioException catch (e) {
@@ -61,20 +57,13 @@ class DioNetworkClient implements NetworkClient {
     Object? body,
     Map<String, String>? queryParams,
     Map<String, String>? headers,
-    Duration? connectTimeout,
-    Duration? receiveTimeout,
-    Duration? sendTimeout,
   }) async {
     try {
       final response = await _dio.post<dynamic>(
         url,
         data: body,
         queryParameters: queryParams,
-        options: Options(
-          headers: headers,
-          receiveTimeout: receiveTimeout,
-          sendTimeout: sendTimeout,
-        ),
+        options: Options(headers: headers),
       );
       return _mapResponse(response);
     } on DioException catch (e) {

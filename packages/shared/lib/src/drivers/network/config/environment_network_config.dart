@@ -12,17 +12,23 @@ class EnvironmentNetworkConfig implements NetworkConfigProvider {
   const EnvironmentNetworkConfig(this._reader);
 
   @override
-  String get baseUrl => _reader.require('BASE_URL');
+  String get baseUrl => _reader.require(EnvKey.baseUrl.key);
 
   @override
-  Duration get connectTimeout =>
-      _reader.getDuration('CONNECT_TIMEOUT', defaultValue: _defaultTimeout);
+  Duration get connectTimeout => _reader.getDuration(
+    EnvKey.connectTimeout.key,
+    defaultValue: _defaultTimeout,
+  );
 
   @override
-  Duration get receiveTimeout =>
-      _reader.getDuration('RECEIVE_TIMEOUT', defaultValue: _defaultTimeout);
+  Duration get receiveTimeout => _reader.getDuration(
+    EnvKey.receiveTimeout.key,
+    defaultValue: _defaultTimeout,
+  );
 
   @override
-  Duration get sendTimeout =>
-      _reader.getDuration('SEND_TIMEOUT', defaultValue: _defaultTimeout);
+  Duration get sendTimeout => _reader.getDuration(
+    EnvKey.sendTimeout.key,
+    defaultValue: _defaultTimeout,
+  );
 }

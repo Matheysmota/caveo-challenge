@@ -74,6 +74,21 @@ final class ParseFailure extends NetworkFailure {
   List<Object?> get props => [message];
 }
 
+final class CancelledFailure extends NetworkFailure {
+  @override
+  final String message;
+  @override
+  final Object? originalError;
+
+  const CancelledFailure({
+    this.message = 'Request was cancelled.',
+    this.originalError,
+  });
+
+  @override
+  List<Object?> get props => [message];
+}
+
 final class UnknownNetworkFailure extends NetworkFailure {
   @override
   final String message;

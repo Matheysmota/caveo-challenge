@@ -3,13 +3,15 @@ library;
 
 import 'network_response.dart';
 
+/// HTTP client abstraction.
+///
+/// Timeouts are configured at client initialization level via
+/// [NetworkConfigProvider], not per-request.
 abstract class NetworkClient {
   Future<NetworkResponse> get(
     String url, {
     Map<String, String>? queryParams,
     Map<String, String>? headers,
-    Duration? connectTimeout,
-    Duration? receiveTimeout,
   });
 
   Future<NetworkResponse> post(
@@ -17,8 +19,5 @@ abstract class NetworkClient {
     Object? body,
     Map<String, String>? queryParams,
     Map<String, String>? headers,
-    Duration? connectTimeout,
-    Duration? receiveTimeout,
-    Duration? sendTimeout,
   });
 }

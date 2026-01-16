@@ -59,28 +59,17 @@ class ApiDataSourceDelegateImpl implements ApiDataSourceDelegate {
   }
 
   Future<NetworkResponse> _executeRequest(String url, RequestParams params) {
-    final connectTimeout =
-        params.options?.connectTimeout ?? _config.connectTimeout;
-    final receiveTimeout =
-        params.options?.receiveTimeout ?? _config.receiveTimeout;
-    final sendTimeout = params.options?.sendTimeout ?? _config.sendTimeout;
-
     return switch (params.method) {
       HttpMethod.get => _client.get(
         url,
         queryParams: params.queryParams,
         headers: params.headers,
-        connectTimeout: connectTimeout,
-        receiveTimeout: receiveTimeout,
       ),
       HttpMethod.post => _client.post(
         url,
         body: params.body,
         queryParams: params.queryParams,
         headers: params.headers,
-        connectTimeout: connectTimeout,
-        receiveTimeout: receiveTimeout,
-        sendTimeout: sendTimeout,
       ),
     };
   }

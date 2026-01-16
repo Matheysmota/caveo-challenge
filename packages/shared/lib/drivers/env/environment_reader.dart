@@ -1,6 +1,17 @@
 /// Environment variable reader abstraction for dependency injection.
 library;
 
+/// Known environment variable keys.
+enum EnvKey {
+  baseUrl('BASE_URL'),
+  connectTimeout('CONNECT_TIMEOUT'),
+  receiveTimeout('RECEIVE_TIMEOUT'),
+  sendTimeout('SEND_TIMEOUT');
+
+  final String key;
+  const EnvKey(this.key);
+}
+
 /// Contract for reading environment variables.
 abstract class EnvironmentReader {
   String? get(String key);

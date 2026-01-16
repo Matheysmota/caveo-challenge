@@ -20,19 +20,19 @@ void main() {
 
     test('baseUrl should call require on reader', () {
       when(
-        () => mockReader.require('BASE_URL'),
+        () => mockReader.require(EnvKey.baseUrl.key),
       ).thenReturn('https://api.test.com');
 
       final result = config.baseUrl;
 
       expect(result, equals('https://api.test.com'));
-      verify(() => mockReader.require('BASE_URL')).called(1);
+      verify(() => mockReader.require(EnvKey.baseUrl.key)).called(1);
     });
 
     test('connectTimeout should use getDuration', () {
       when(
         () => mockReader.getDuration(
-          'CONNECT_TIMEOUT',
+          EnvKey.connectTimeout.key,
           defaultValue: any(named: 'defaultValue'),
         ),
       ).thenReturn(const Duration(seconds: 15));
@@ -45,7 +45,7 @@ void main() {
     test('should use default timeout when not configured', () {
       when(
         () => mockReader.getDuration(
-          'RECEIVE_TIMEOUT',
+          EnvKey.receiveTimeout.key,
           defaultValue: any(named: 'defaultValue'),
         ),
       ).thenReturn(const Duration(seconds: 30));
