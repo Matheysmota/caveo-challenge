@@ -271,4 +271,17 @@ Este projeto possui scripts de *Compliance* que rodam no CI. Para garantir que s
 4. O Merge só é permitido se todos os checks passarem.
 
 ---
+
+## 🎬 Evidências
+
+### Demo do Aplicativo
+
+O vídeo abaixo demonstra as principais funcionalidades do aplicativo Fish em ação:
+
+https://github.com/user-attachments/assets/d0f2d227-40b3-4ef7-be48-5fc3ed73887b
+
+---
 *Developed by Matheus Mota as part of Caveo Tech Challenge.*
+
+
+
