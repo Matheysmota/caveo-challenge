@@ -168,29 +168,75 @@ void main() {
       expect(states.first, isA<SplashLoading>());
     });
 
-    test('should reset to SplashLoading on retry', () async {
+    test(
+      'should set isRetrying true when retry is called from error state',
+      () async {
+        // Arrange
+        const failure = ConnectionFailure(message: 'No connection');
+        when(
+          () => mockSyncStore.watch<List<Product>>(SyncStoreKey.products),
+        ).thenAnswer((_) => streamController.stream);
+        when(
+          () => mockSyncStore.sync<List<Product>>(SyncStoreKey.products),
+        ).thenAnswer((_) async {
+          // First call fails, subsequent calls also fail (for retry test)
+          streamController.add(const SyncStateError<List<Product>>(failure));
+          return const SyncStateError<List<Product>>(failure);
+        });
+
+        final container = createContainer();
+        addTearDown(container.dispose);
+
+        final states = <SplashState>[];
+        container.listen(
+          splashViewModelProvider,
+          (_, next) => states.add(next),
+          fireImmediately: true,
+        );
+
+        // Wait for error state
+        await Future<void>.delayed(
+          SplashConfig.minimumDisplayDuration +
+              const Duration(milliseconds: 200),
+        );
+
+        // Verify we're in error state
+        expect(states.last, isA<SplashError>());
+        expect((states.last as SplashError).isRetrying, isFalse);
+
+        final notifier = container.read(splashViewModelProvider.notifier);
+
+        // Act - Trigger retry
+        notifier.retry();
+
+        // Assert - Should be SplashError with isRetrying true immediately after retry
+        final stateAfterRetry = container.read(splashViewModelProvider);
+        expect(stateAfterRetry, isA<SplashError>());
+        expect((stateAfterRetry as SplashError).isRetrying, isTrue);
+      },
+    );
+
+    test('should ignore retry when not in error state', () async {
       // Arrange
       when(
         () => mockSyncStore.watch<List<Product>>(SyncStoreKey.products),
       ).thenAnswer((_) => streamController.stream);
       when(
         () => mockSyncStore.sync<List<Product>>(SyncStoreKey.products),
-      ).thenAnswer((_) async => const SyncStateSuccess<List<Product>>([]));
+      ).thenAnswer((_) async => const SyncStateLoading<List<Product>>());
 
       final container = createContainer();
       addTearDown(container.dispose);
 
       final notifier = container.read(splashViewModelProvider.notifier);
 
-      // Act - Wait for sync completion
-      await Future<void>.delayed(
-        SplashConfig.minimumDisplayDuration + const Duration(milliseconds: 200),
-      );
+      // State is SplashLoading initially
+      expect(container.read(splashViewModelProvider), isA<SplashLoading>());
 
-      // Trigger retry
+      // Act - Try retry when not in error
       notifier.retry();
 
-      // Assert
+      // Assert - Should still be loading
       expect(container.read(splashViewModelProvider), isA<SplashLoading>());
     });
   });

@@ -65,6 +65,13 @@ jobs:
         working-directory: app
         run: flutter test --coverage
 
+      - name: Remove DI from Coverage
+        working-directory: app
+        run: |
+          # Remove DI files from coverage (not sensible to unit test dependency injection setup)
+          # Remove main.dart from coverage (bootstrap code, not sensible to unit test)
+          lcov --remove coverage/lcov.info 'lib/app/di/*' 'lib/main.dart' -o coverage/lcov.info --ignore-errors unused
+
       - name: Check Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:

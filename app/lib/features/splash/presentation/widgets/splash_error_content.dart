@@ -8,11 +8,13 @@ class SplashErrorContent extends StatelessWidget {
   const SplashErrorContent({
     required this.failure,
     required this.onRetry,
+    this.isRetrying = false,
     super.key,
   });
 
   final NetworkFailure failure;
   final VoidCallback onRetry;
+  final bool isRetrying;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +41,10 @@ class SplashErrorContent extends StatelessWidget {
           DoriButton(
             label: SplashStrings.retryButton,
             isExpanded: true,
-            onPressed: onRetry,
+            onPressed: isRetrying ? null : onRetry,
             variant: DoriButtonVariant.primary,
             size: DoriButtonSize.md,
+            isLoading: isRetrying,
           ),
         ],
       ),

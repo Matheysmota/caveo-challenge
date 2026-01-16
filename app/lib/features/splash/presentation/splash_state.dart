@@ -7,6 +7,8 @@ import 'package:shared/libraries/equatable_export/equatable_export.dart';
 /// ```
 /// SplashLoading ──► SplashSuccess (navigate to products)
 ///               └──► SplashError (show retry)
+///                        │
+///                        └──► SplashError(isRetrying: true) ──► SplashLoading...
 /// ```
 sealed class SplashState extends Equatable {
   const SplashState();
@@ -35,11 +37,16 @@ final class SplashSuccess extends SplashState {
 /// Sync failed with an error.
 ///
 /// Shows error message and retry button.
+/// When [isRetrying] is true, the retry button shows a loading indicator.
 final class SplashError extends SplashState {
-  const SplashError({required this.failure});
+  const SplashError({required this.failure, this.isRetrying = false});
 
   final NetworkFailure failure;
 
+  /// Whether a retry is in progress.
+  /// When true, the retry button should show a loading state.
+  final bool isRetrying;
+
   @override
-  List<Object?> get props => [failure];
+  List<Object?> get props => [failure, isRetrying];
 }

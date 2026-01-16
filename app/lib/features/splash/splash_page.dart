@@ -62,8 +62,9 @@ class _SplashPageState extends ConsumerState<SplashPage>
             fadeAnimation: _fade,
             scaleAnimation: _scale,
           ),
-          SplashError(:final failure) => SplashErrorContent(
+          SplashError(:final failure, :final isRetrying) => SplashErrorContent(
             failure: failure,
+            isRetrying: isRetrying,
             onRetry: ref.read(splashViewModelProvider.notifier).retry,
           ),
         },
