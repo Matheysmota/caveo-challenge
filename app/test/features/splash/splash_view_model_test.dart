@@ -69,37 +69,41 @@ void main() {
       expect(state, isA<SplashLoading>());
     });
 
-    test('should transition to SplashSuccess after sync and min time', () async {
-      // Arrange
-      when(
-        () => mockSyncStore.watch<List<Product>>(SyncStoreKey.products),
-      ).thenAnswer((_) => streamController.stream);
-      when(
-        () => mockSyncStore.sync<List<Product>>(SyncStoreKey.products),
-      ).thenAnswer((_) async {
-        streamController.add(const SyncStateSuccess<List<Product>>([]));
-        return const SyncStateSuccess<List<Product>>([]);
-      });
+    test(
+      'should transition to SplashSuccess after sync and min time',
+      () async {
+        // Arrange
+        when(
+          () => mockSyncStore.watch<List<Product>>(SyncStoreKey.products),
+        ).thenAnswer((_) => streamController.stream);
+        when(
+          () => mockSyncStore.sync<List<Product>>(SyncStoreKey.products),
+        ).thenAnswer((_) async {
+          streamController.add(const SyncStateSuccess<List<Product>>([]));
+          return const SyncStateSuccess<List<Product>>([]);
+        });
 
-      final container = createContainer();
-      addTearDown(container.dispose);
+        final container = createContainer();
+        addTearDown(container.dispose);
 
-      final states = <SplashState>[];
-      container.listen(
-        splashViewModelProvider,
-        (_, next) => states.add(next),
-        fireImmediately: true,
-      );
+        final states = <SplashState>[];
+        container.listen(
+          splashViewModelProvider,
+          (_, next) => states.add(next),
+          fireImmediately: true,
+        );
 
-      // Act - Wait for minimum display time
-      await Future<void>.delayed(
-        SplashConfig.minimumDisplayDuration + const Duration(milliseconds: 200),
-      );
+        // Act - Wait for minimum display time
+        await Future<void>.delayed(
+          SplashConfig.minimumDisplayDuration +
+              const Duration(milliseconds: 200),
+        );
 
-      // Assert
-      expect(states.first, isA<SplashLoading>());
-      expect(states.last, isA<SplashSuccess>());
-    });
+        // Assert
+        expect(states.first, isA<SplashLoading>());
+        expect(states.last, isA<SplashSuccess>());
+      },
+    );
 
     test('should transition to SplashError on sync failure', () async {
       // Arrange

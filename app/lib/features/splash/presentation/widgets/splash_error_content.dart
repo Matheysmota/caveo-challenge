@@ -19,10 +19,10 @@ class SplashErrorContent extends StatelessWidget {
     final dori = context.dori;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: dori.spacing.lg),
+      padding: EdgeInsets.symmetric(horizontal: dori.spacing.xs),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          SizedBox(height: dori.spacing.sm),
           DoriIcon(
             icon: DoriIconData.error,
             size: DoriIconSize.lg,
@@ -35,9 +35,10 @@ class SplashErrorContent extends StatelessWidget {
             color: dori.colors.content.two,
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: dori.spacing.md),
+          Spacer(),
           DoriButton(
             label: SplashStrings.retryButton,
+            isExpanded: true,
             onPressed: onRetry,
             variant: DoriButtonVariant.primary,
             size: DoriButtonSize.md,
